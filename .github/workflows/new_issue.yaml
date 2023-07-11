@@ -2,9 +2,7 @@ name: New Issue
 
 on:
   issues:
-    types:
-      - opened
-      - edited
+    types: [opened]
 
 jobs:
   add-assignee:
@@ -12,26 +10,37 @@ jobs:
     permissions:
       issues: write
     steps:
-      - uses: actions/github-script@v6
-        with:
-          script: |
-            const issueNumber = context.issue.number;
-            const owner = context.repo.owner;
-            const repo = context.repo.repo;
-            const actor = context.actor;
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        run: npm install
+      - name: Add assignee and create project card
+        run: |
+          const { Octokit } = require("@octokit/rest");
+          const issueNumber = process.env.GITHUB_ISSUE_NUMBER;
+          const owner = process.env.GITHUB_REPOSITORY_OWNER;
+          const repo = process.env.GITHUB_REPOSITORY_NAME;
+          const actor = process.env.GITHUB_ACTOR;
+          const token = process.env.ACTION_SECRET_TOKEN;
 
-            const octokit = new github.GitHub('${{ secrets.ACTION_SECRET }}');
+          const octokit = new Octokit({ auth: token });
 
-            octokit.rest.issues.addAssignees({
-              issue_number: issueNumber,
-              owner: owner,
-              repo: repo,
-              assignees: [actor]
-            });
+          octokit.issues.addAssignees({
+            issue_number: issueNumber,
+            owner: owner,
+            repo: repo,
+            assignees: [actor]
+          });
 
-            const projectNumber = 4;
-            octokit.rest.projects.createCard({
-              column_id: projectNumber,
-              content_id: issueNumber,
-              content_type: "Issue"
-            });
+          const projectNumber = 4;
+          octokit.projects.createCard({
+            column_id: projectNumber,
+            content_id: issueNumber,
+            content_type: "Issue"
+          });
+        env:
+          GITHUB_ISSUE_NUMBER: ${{ github.event.issue.number }}
+          GITHUB_REPOSITORY_OWNER: ${{ github.repository_owner }}
+          GITHUB_REPOSITORY_NAME: ${{ github.repository_name }}
+          GITHUB_ACTOR: ${{ github.actor }}
+          ACTION_SECRET_TOKEN: ${{ secrets.ACTION_SECRET_TOKEN }}
