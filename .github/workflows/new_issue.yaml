@@ -1,34 +1,37 @@
-name: Assign issues
+name: New Issue
+
 on:
-    issues:
-        types:
-            - opened
-            - edited
+  issues:
+    types:
+      - opened
+      - edited
 
 jobs:
-    assign_issues:
-        runs-on: ubuntu-latest
-        permissions:
-            issues: write
-        steps:
-            - uses: actions/github-script@v6
-              with:
-                script: |
-                    const issueNumber = context.issue.number;
-                    const owner = context.repo.owner;
-                    const repo = context.repo.repo;
-                    const actor = context.actor;
+  add-assignee:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - uses: actions/github-script@v6
+        with:
+          script: |
+            const issueNumber = context.issue.number;
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const actor = context.actor;
 
-                    github.rest.issues.addAssignees({
-                        issue_number: issueNumber,
-                        owner: owner,
-                        repo: repo,
-                        assignees: [actor]
-                    });
+            const octokit = new github.GitHub('${{ secrets.ACTION_SECRET }}');
 
-                    const projectNumber = 4;
-                    github.rest.projects.createCard({
-                        column_id: projectNumber,
-                        content_id: issueNumber,
-                        content_type: "Issue"
-                    });
+            octokit.rest.issues.addAssignees({
+              issue_number: issueNumber,
+              owner: owner,
+              repo: repo,
+              assignees: [actor]
+            });
+
+            const projectNumber = 4;
+            octokit.rest.projects.createCard({
+              column_id: projectNumber,
+              content_id: issueNumber,
+              content_type: "Issue"
+            });
