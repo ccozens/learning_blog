@@ -19,7 +19,7 @@ jobs:
                     const repo = context.repo.repo;
                     const actor = context.actor;
 
-                    github.issues.addAssignees({
+                    github.rest.issues.addAssignees({
                         issue_number: issueNumber,
                         owner: owner,
                         repo: repo,
@@ -27,7 +27,7 @@ jobs:
                     });
 
                     const projectNumber = 4;
-                    github.projects.createCard({
+                    github.rest.projects.createCard({
                         column_id: projectNumber,
                         content_id: issueNumber,
                         content_type: "Issue"
