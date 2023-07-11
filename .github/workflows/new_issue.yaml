@@ -1,0 +1,34 @@
+name: Assign issues
+on:
+    issues:
+        types:
+            - opened
+            - edited
+
+jobs:
+    assign_issues:
+        runs-on: ubuntu-latest
+        permissions:
+            issues: write
+        steps:
+            - uses: actions/github-script@v6
+              with:
+                script: |
+                    const issueNumber = context.issue.number;
+                    const owner = context.repo.owner;
+                    const repo = context.repo.repo;
+                    const actor = context.actor;
+
+                    github.issues.addAssignees({
+                        issue_number: issueNumber,
+                        owner: owner,
+                        repo: repo,
+                        assignees: [actor]
+                    });
+
+                    const projectNumber = 4;
+                    github.projects.createCard({
+                        column_id: projectNumber,
+                        content_id: issueNumber,
+                        content_type: "Issue"
+                    });
