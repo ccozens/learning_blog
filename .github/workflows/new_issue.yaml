@@ -19,7 +19,7 @@ jobs:
             const repo = context.repo.repo;
             const actor = context.actor;
 
-            github.issues.updateAssignees({
+            github.issues.addAssignees({
                 issue_number: issueNumber,
                 owner: owner,
                 repo: repo,
