@@ -14,12 +14,9 @@ jobs:
       - uses: actions/github-script@v6
         with:
           script: |
-            console.log(context);
-            github.rest.issues.addAssignee({
+          github.issues.addAssignees({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              addAssignee: context.repo.owner
-            })
-
-
+              assignees: [context.actor]
+          });
