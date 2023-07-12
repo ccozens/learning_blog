@@ -22,9 +22,4 @@ jobs:
               addAssignee: context.repo.owner
             })
 
-            # github.rest.projects.createCard({
-            #     column_id: ,
-            #     note: ,
-            #     content_id: ,
-            #     content_type:
-            # })
+
