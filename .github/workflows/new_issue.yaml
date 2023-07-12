@@ -19,9 +19,18 @@ jobs:
             const repo = context.repo.repo;
             const actor = context.actor;
 
-            github.issues.addAssignees({
-                issue_number: context.issue.number,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                assignees: [context.actor]
+            github.issues.updateAssignees({
+                issue_number: issueNumber,
+                owner: owner,
+                repo: repo,
+                assignees: [actor]
+            });
+
+            const projectName = "svelte learning blog";
+            const cardTitle = context.issue.title;
+
+            github.projects.createCard({
+                project_name: projectName,
+                card_title: cardTitle,
+                issue_number: issueNumber
             });
