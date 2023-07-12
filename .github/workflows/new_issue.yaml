@@ -1,46 +1,21 @@
-name: New Issue
-
+name: Label issues
 on:
   issues:
-    types: [opened]
-
+    types:
+      - reopened
+      - opened
 jobs:
-  add-assignee:
+  label_issues:
     runs-on: ubuntu-latest
     permissions:
       issues: write
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Install dependencies
-        run: npm install
-      - name: Add assignee and create project card
-        run: |
-          const { Octokit } = require("@octokit/rest");
-          const issueNumber = process.env.GITHUB_ISSUE_NUMBER;
-          const owner = process.env.GITHUB_REPOSITORY_OWNER;
-          const repo = process.env.GITHUB_REPOSITORY_NAME;
-          const actor = process.env.GITHUB_ACTOR;
-          const token = process.env.ACTION_SECRET_TOKEN;
-
-          const octokit = new Octokit({ auth: token });
-
-          octokit.issues.addAssignees({
-            issue_number: issueNumber,
-            owner: owner,
-            repo: repo,
-            assignees: [actor]
-          });
-
-          const projectNumber = 4;
-          octokit.projects.createCard({
-            column_id: projectNumber,
-            content_id: issueNumber,
-            content_type: "Issue"
-          });
-        env:
-          GITHUB_ISSUE_NUMBER: ${{ github.event.issue.number }}
-          GITHUB_REPOSITORY_OWNER: ${{ github.repository_owner }}
-          GITHUB_REPOSITORY_NAME: ${{ github.repository_name }}
-          GITHUB_ACTOR: ${{ github.actor }}
-          ACTION_SECRET_TOKEN: ${{ secrets.ACTION_SECRET_TOKEN }}
+      - uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ["triage"]
+            })
