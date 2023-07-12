@@ -1,4 +1,4 @@
-name: Label issues
+name: Assign issues and create cards
 on:
   issues:
     types:
@@ -9,13 +9,22 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       issues: write
+      repository-projects: write
     steps:
       - uses: actions/github-script@v6
         with:
           script: |
-            github.rest.issues.addLabels({
+            console.log(context);
+            github.rest.issues.addAssignee({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              labels: ["triage"]
+              addAssignee: context.repo.owner
             })
+
+            # github.rest.projects.createCard({
+            #     column_id: ,
+            #     note: ,
+            #     content_id: ,
+            #     content_type:
+            # })
