@@ -28,7 +28,7 @@ jobs:
 
       - name: Create project card
         if: steps.check_author.outputs.is_owner == 'true'
-        uses: peter-evans/create-issue-card@v3
+        uses: peter-evans/create-or-update-project-card@v2
         with:
           column_id: f75ad846
           content_id: ${{ github.event.issue.node_id }}
