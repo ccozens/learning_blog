@@ -15,19 +15,7 @@ jobs:
         run: echo "::set-output name=is_owner::${{ github.repository_owner == github.event.issue.user.login }}"
 
 
-      - name: Assign issue to repository owner
-        if: steps.check_author.outputs.is_owner == 'true'
-        env:
-          GITHUB_TOKEN: ${{ secrets.ACTION_TOKEN }}
-        uses: octokit/request-action@v2.x       
-        with:
-          route: POST /repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/assignees
-          headers: |
-            Authorization: token ${{ env.GITHUB_TOKEN }}
-          body: |
-            {
-              "assignees": ["${{ github.repository_owner }}"]
-            }
+ 
 
       - name: Create project card
         if: steps.check_author.outputs.is_owner == 'true'
