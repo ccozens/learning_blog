@@ -1,14 +1,37 @@
-name: Assign issues and create cards
+name: Assign Issue and Create Project Card
 on:
   issues:
-    types: [opened]
+    types:
+      - opened
+      - reopened
+
 jobs:
-  createCard:
+  assignAndCreateCard:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Create or Update Project Card
-        uses: peter-evans/create-or-update-project-card@v2
+      - name: Check if issue creator is the repository owner
+        id: check_author
+        run: echo "::set-output name=is_owner::${{ github.repository_owner == github.event.issue.user.login }}"
+
+      - name: Assign issue to repository owner
+        if: steps.check_author.outputs.is_owner == 'true'
+        uses: octokit/request-action@v2.x
         with:
-          project-name: svelte learning blog
-          column-name: Todo
-          token: ${{ secrets.ACTION_SECRET_TOKEN }}
+          route: POST /repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/assignees
+          headers: |
+            Authorization: token ${{ secrets.ACTION_TOKEN }}
+          body: |
+            {
+              "assignees": ["${{ github.repository_owner }}"]
+            }
+
+      - name: Create project card
+        if: steps.check_author.outputs.is_owner == 'true'
+        uses: peter-evans/create-issue-card@v3
+        with:
+          column_id: f75ad846
+          content_id: ${{ github.event.issue.node_id }}
+          content_type: Issue
+          mediaType: '{"previews":["inertia"]}'
+          token: ${{ secrets.ACTION_TOKEN }}
