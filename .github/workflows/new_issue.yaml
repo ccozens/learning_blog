@@ -14,13 +14,17 @@ jobs:
         id: check_author
         run: echo "::set-output name=is_owner::${{ github.repository_owner == github.event.issue.user.login }}"
 
+ 
+      - name: Set up environment variables
+        run: echo "ACTION_TOKEN=${{ secrets.ACTION_TOKEN }}" >> $GITHUB_ENV
+
       - name: Assign issue to repository owner
         if: steps.check_author.outputs.is_owner == 'true'
-        uses: octokit/request-action@v2.x
+        uses: octokit/request-action@v2.x       
         with:
           route: POST /repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/assignees
           headers: |
-            Authorization: token ${{ secrets.ACTION_TOKEN }}
+            Authorization: token ${{ env.ACTION_TOKEN }}
           body: |
             {
               "assignees": ["${{ github.repository_owner }}"]
@@ -34,4 +38,4 @@ jobs:
           content_id: ${{ github.event.issue.node_id }}
           content_type: Issue
           mediaType: '{"previews":["inertia"]}'
-          token: ${{ secrets.ACTION_TOKEN }}
+          token: ${{ env.ACTION_TOKEN }}
