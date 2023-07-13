@@ -23,7 +23,7 @@ jobs:
         with:
           route: POST /repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/assignees
           headers: |
-            Authorization: token ${{ GITHUB_TOKEN }}
+            Authorization: token ${{ env.GITHUB_TOKEN }}
           body: |
             {
               "assignees": ["${{ github.repository_owner }}"]
@@ -39,4 +39,4 @@ jobs:
           content_id: ${{ github.event.issue.node_id }}
           content_type: Issue
           mediaType: '{"previews":["inertia"]}'
-          token: ${{ GITHUB_TOKEN }}
+          token: ${{ env.GITHUB_TOKEN }}
