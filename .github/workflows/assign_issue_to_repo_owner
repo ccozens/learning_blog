@@ -4,6 +4,9 @@ on:
     types:
       - opened
       - reopened
+permissions:
+  issues: write
+  repository-projects: write
 
 jobs:
   assignToRepoOwner:
