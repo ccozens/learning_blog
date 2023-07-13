@@ -11,3 +11,4 @@ jobs:
         with:
           project-name: svelte learning blog
           column-name: Todo
+          token: ${{ secrets.ACTION_SECRET_TOKEN }}
