@@ -1,20 +1,13 @@
 name: Assign issues and create cards
 on:
   issues:
-    types: [opened, reopened]
+    types: [opened]
 jobs:
-  assignAuthor:
-    name: Assign author to issue
-    runs-on: ubuntu-latest
-    steps:
-      - name: Assign author to issue
-        uses: technote-space/assign-author@v1
   createCard:
-    name: Assign issues to project
     runs-on: ubuntu-latest
     steps:
-      - name: Assign issues to project
-        uses: technote-space/create-project-card-action@v1
+      - name: Create or Update Project Card
+        uses: peter-evans/create-or-update-project-card@v2
         with:
-          PROJECT: svelte learning blog
-          COLUMN: To do
+          project-name: svelte learning blog
+          column-name: Todo
