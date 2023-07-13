@@ -1,36 +1,20 @@
 name: Assign issues and create cards
 on:
   issues:
-    types:
-      - reopened
-      - opened
+    types: [opened, reopened]
 jobs:
-  label_issues:
+  assignAuthor:
+    name: Assign author to issue
     runs-on: ubuntu-latest
-    permissions:
-      issues: write
-      repository-projects: write
     steps:
-      - uses: actions/github-script@v6
+      - name: Assign author to issue
+        uses: technote-space/assign-author@v1
+  createCard:
+    name: Assign issues to project
+    runs-on: ubuntu-latest
+    steps:
+      - name: Assign issues to project
+        uses: technote-space/create-project-card-action@v1
         with:
-          script: |
-            const issueNumber = context.issue.number;
-            const owner = context.repo.owner;
-            const repo = context.repo.repo;
-            const actor = context.actor;
-
-            github.issues.addAssignees({
-                issue_number: issueNumber,
-                owner: owner,
-                repo: repo,
-                assignees: [actor]
-            });
-
-            const projectName = "svelte learning blog";
-            const cardTitle = context.issue.title;
-
-            github.projects.createCard({
-                project_name: projectName,
-                card_title: cardTitle,
-                issue_number: issueNumber
-            });
+          PROJECT: svelte learning blog
+          COLUMN: To do
