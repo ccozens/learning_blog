@@ -1,7 +1,17 @@
+<script lang="ts">
+    import { page } from "$app/stores"
+  </script>
+
+{#if $page.data.session}
 <div class="whole">
 	<h1>Test</h1>
 </div>
 
+{:else}
+    <div>
+        <h1>Test</h1>
+    </div>
+{/if}
 <style>
 	.whole {
 		min-width: 100vw;
