@@ -1,41 +1,26 @@
-<script lang="ts">
-	import type { PageData } from './$types';
+<script>
+	import { signIn, signOut } from '@auth/sveltekit/client';
+	import { page } from '$app/stores';
 
-	export let data: PageData;
-
-
+/* The data for the current session in this example was made available through the $page store which
+can be set through the root +page.server.ts file. It is not necessary to store the data there,
+however, this makes it globally accessible throughout your application simplifying state management.
+*/
 </script>
 
-<div class="heading-container">
-	<h1 class="standout-heading">You're ready. Start making stuff.</h1>
-</div>
-
-<div>
-
-	<h2>working on</h2>
-
-	</div>
-
-<style>
-	/* Styling for the container of the heading */
-	.heading-container {
-		background: radial-gradient(
-			at center top,
-			rgb(180, 83, 9),
-			rgb(253, 186, 116),
-			rgb(159, 18, 57)
-		);
-		padding: 20px;
-		border-radius: 10px;
-		box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-		text-align: center;
-	}
-
-	.standout-heading {
-		colour: #333; /* Dark writing colour */
-		font-size: 36px;
-		text-transform: uppercase;
-		letter-spacing: 2px;
-		text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Creating a 3D effect with a dark shadow */
-	}
-</style>
+<h1>SvelteKit Auth Example</h1>
+<p>
+	{#if $page.data.session}
+		{#if $page.data.session.user?.image}
+			<span style="background-image: url('{$page.data.session.user.image}')" class="avatar" />
+		{/if}
+		<span class="signedInText">
+			<small>Signed in as</small><br />
+			<strong>{$page.data.session.user?.name ?? 'User'}</strong>
+		</span>
+		<button on:click={() => signOut()} class="button">Sign out</button>
+	{:else}
+		<span class="notSignedInText">You are not signed in</span>
+		<button on:click={() => signIn('github')}>Sign In with GitHub</button>
+	{/if}
+</p>
