@@ -1,11 +1,24 @@
-<script>
-	export let data;
-	export let field;
+<script lang="ts">
+	import type { Colour } from '$lib/types';
+
+	export let colourData: Colour[] = [];
+
+	// tells TS that field is a key of Colour and so can be used to index item (which is type Colour)
+	export let field: keyof Colour;
 
 	let search = '';
 
 	$: regex = search ? new RegExp(search, 'i') : null;
-	$: matches = (item) => regex ? regex.test(item[field]) : true;
+	// $: matches = (item: Colour) => regex ? regex.test(item[field]) : true;
+	$: matches = (item: Colour) => {
+		if (field === 'both') {
+			const nameMatch = regex ? regex.test(item.name) : true;
+			const hexMatch = regex ? regex.test(item.hex) : true;
+			return nameMatch || hexMatch;
+		} else {
+			return regex ? regex.test(item[field]) : true;
+		}
+	};
 </script>
 
 <div class="list">
@@ -14,11 +27,11 @@
 	</label>
 
 	<div class="header">
-		<slot name="header"/>
+		<slot name="header" />
 	</div>
 
 	<div class="content">
-		{#each data.filter(matches) as item}
+		{#each colourData.filter(matches) as item}
 			<slot {item} />
 		{/each}
 	</div>

@@ -6,4 +6,5 @@ export interface ColourData {
 export interface Colour extends ColourData {
     rgb: string;
     hsl: string;
+    both: string;
 }

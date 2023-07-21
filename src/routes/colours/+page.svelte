@@ -7,10 +7,9 @@
 		let contrast = getContrastRatio(colour, 'rgb(0, 0, 0)');
 		return contrast ? 'black' : 'white';
 	}
-
 </script>
 
-<FilterableList data={colours} field="name" let:item={row}>
+<FilterableList colourData={colours} field="both" let:item={row}>
 	<header slot="header" class="row">
 		<span class="colour" />
 		<span class="name">name</span>
@@ -19,11 +18,7 @@
 		<span class="hsl">hsl</span>
 	</header>
 
-	<div
-		class="row"
-		style="--rowBackgroundColor: {row.rgb}; --textColour: {textContrast(row.rgb)};"
-	>
-
+	<div class="row" style="--rowBackgroundColor: {row.rgb}; --textColour: {textContrast(row.rgb)};">
 		<span class="colour" style="background-color: {row.hex}" />
 		<span class="name">{row.name}</span>
 		<span class="hex">{row.hex}</span>
