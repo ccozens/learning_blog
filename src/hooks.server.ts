@@ -16,3 +16,4 @@ export const handle: Handle = SvelteKitAuth(async () => {
 	};
 	return authOptions;
 });
+
