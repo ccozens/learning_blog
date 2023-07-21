@@ -1,5 +1,5 @@
 <script lang="ts">
-	import GitHubIssuesInProgress from '$lib/types/components/GitHubIssuesInProgress.svelte';
+	import GitHubIssuesInProgress from '$lib/components/GitHubIssuesInProgress.svelte';
 	import type { GitHubIssue } from '$lib/types';
 	import { signIn, signOut } from '@auth/sveltekit/client';
 	import type { PageData } from './$types';
