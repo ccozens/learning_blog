@@ -1,4 +1,6 @@
-const data = [
+import type { ColourData, Colour } from "$lib/types";
+
+const colourData: ColourData[] = [
 	{ hex: '#f0f8ff', name: 'AliceBlue' },
 	{ hex: '#faebd7', name: 'AntiqueWhite' },
 	{ hex: '#00ffff', name: 'Aqua' },
@@ -149,7 +151,7 @@ const data = [
 	{ hex: '#9acd32', name: 'YellowGreen' }
 ];
 
-export const colours = data.map(({ hex, name }) => {
+export const colours: Colour[] = colourData.map(({ hex, name }) => {
 	// calculate rgb
 	let r = parseInt(hex.slice(1, 3), 16);
 	let g = parseInt(hex.slice(3, 5), 16);

@@ -1,9 +1,9 @@
-<script>
+<script lang="ts">
 	import FilterableList from './FilterableList.svelte';
 	import { colours } from './Colours';
 	import { getContrastRatio } from './GetContrastRatio';
 
-	function textContrast(colour) {
+	function textContrast(colour: string) {
 		let contrast = getContrastRatio(colour, 'rgb(0, 0, 0)');
 		return contrast ? 'black' : 'white';
 	}
