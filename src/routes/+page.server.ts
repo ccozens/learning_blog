@@ -24,6 +24,19 @@ const query = `query issues_in_progress {
 }
 `;
 
+interface GitHubIssue {
+  title: string;
+  url: string;
+  body: string;
+  comments: GitHubIssueComment[];
+}
+
+interface GitHubIssueComment {
+  node: {
+    body: string;
+  };
+}
+
 
 export const load: PageServerLoad = async ({ fetch }) => {
     const res = await fetch('https://api.github.com/graphql', {
@@ -34,8 +47,17 @@ export const load: PageServerLoad = async ({ fetch }) => {
         },
         body: JSON.stringify({ query })
     });
-    const data = await res.json();
+    // const data = await res.json();
 
+    const data: {
+      repository: {
+        issues: {
+          edges: {
+            node: GitHubIssue;
+          }[];
+        };
+      };
+    } = await res.json();
 
     return {
         issues: data
