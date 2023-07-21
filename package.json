@@ -30,6 +30,7 @@
 	"type": "module",
 	"dependencies": {
 		"@auth/core": "^0.10.0",
-		"@auth/sveltekit": "^0.3.6"
+		"@auth/sveltekit": "^0.3.6",
+		"@octokit/core": "^5.0.0"
 	}
 }
