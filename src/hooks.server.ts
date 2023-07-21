@@ -1,11 +1,9 @@
 import { SvelteKitAuth } from '@auth/sveltekit';
 import GitHub from '@auth/core/providers/github';
 import { GITHUB_ID, GITHUB_SECRET, AUTH_SECRET } from '$env/static/private';
-import { redirect, type Handle } from '@sveltejs/kit';
-import { sequence } from '@sveltejs/kit/hooks';
+import type { Handle } from '@sveltejs/kit';
 
-
-export const handle = SvelteKitAuth(async (event) => {
+export const handle: Handle = SvelteKitAuth(async () => {
 	const authOptions = {
 		providers: [
 			GitHub({
@@ -17,4 +15,4 @@ export const handle = SvelteKitAuth(async (event) => {
 		trustHost: true
 	};
 	return authOptions;
-}) satisfies Handle;
+});
