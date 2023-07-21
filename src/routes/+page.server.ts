@@ -1,6 +1,7 @@
 
 import { ACTION_SECRET } from '$env/static/private';
 import type { PageServerLoad } from './$types';
+import type { GitHubIssue } from '$lib/types';
 
 const query = `query issues_in_progress {
   repository(owner: "ccozens", name: "learning_blog") {
@@ -23,19 +24,6 @@ const query = `query issues_in_progress {
   }
 }
 `;
-
-interface GitHubIssue {
-  title: string;
-  url: string;
-  body: string;
-  comments: GitHubIssueComment[];
-}
-
-interface GitHubIssueComment {
-  node: {
-    body: string;
-  };
-}
 
 
 export const load: PageServerLoad = async ({ fetch }) => {

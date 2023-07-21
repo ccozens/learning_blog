@@ -6,9 +6,14 @@
 
 	export let data: PageData;
 
+	let issues: GitHubIssue[] = [];
+	issues = data.issues;
+	// filter issues for open issues
+	const openIssues = issues.filter((issue: GitHubIssue) => issue.state === 'open');
 	// filter data.issues for labels = in_progress
-	const issues: GitHubIssue[] = data.issues.filter((issue: GitHubIssue) =>
+	const issuesInProgress: GitHubIssue[] = openIssues.filter((issue: GitHubIssue) =>
 		issue.labels.some((label) => label.name === 'in_progress')
+
 	);
 
 	/* The data for the current session in this example was made available through the $page store which
@@ -21,7 +26,7 @@ however, this makes it globally accessible throughout your application simplifyi
 
 <h2>Currently working on</h2>
 
-{#each issues as issue}
+{#each issuesInProgress as issue}
 	<a class="issue" href={issue.html_url} target="_blank">{issue.title}</a>
 {/each}
 
