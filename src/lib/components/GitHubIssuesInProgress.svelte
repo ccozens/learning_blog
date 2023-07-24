@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { GitHubIssue } from '$lib/types';
 
+	// api call is in src/routes/+page.server.ts
 	export let issues: GitHubIssue[] = [];
 	// filter issues for open issues
 	const openIssues = issues.filter((issue: GitHubIssue) => issue.state === 'open');
