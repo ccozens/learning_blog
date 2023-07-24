@@ -8,9 +8,6 @@
 
 	let issues: GitHubIssue[] = data.issues;
 
-	// fetch from api
-
-
 	/* The data for the current session was made available through the $page store which can be set through the root +page.server.ts file. It is not necessary to store the data there, however, this makes it globally accessible throughout your application simplifying state management.
 */
 </script>
