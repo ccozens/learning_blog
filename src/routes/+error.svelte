@@ -1,5 +1,5 @@
-<!-- /src/routes/+error.svelte -->
 <script>
+	import { error } from '@sveltejs/kit';
 	export let status;
 	export let error;
 </script>
