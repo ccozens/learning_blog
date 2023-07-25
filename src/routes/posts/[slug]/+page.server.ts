@@ -6,7 +6,7 @@ import type { PostData } from '$lib/types';
 // export async function load({ params }) {
 export const load: PageServerLoad = async ({ params }) => {
 	const post = await import(`../${params.slug}.md`);
-	const { title, date } = post.metadata;
+	const { title, date, tags } = post.metadata;
 	const content = await post.default.render();
     const dateFormatted = await formatDate(date);
 
@@ -14,6 +14,7 @@ export const load: PageServerLoad = async ({ params }) => {
 	const postData: PostData = {
 		content,
 		title,
+		tags,
 		dateFormatted
 	};
 

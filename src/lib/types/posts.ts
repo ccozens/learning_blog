@@ -6,6 +6,7 @@ export interface PostData {
 	};
 	title: string;
 	dateFormatted: string;
+	tags: string[];
 }
 
 export interface Metadata {
@@ -17,13 +18,14 @@ export interface Metadata {
 	};
 }
 
+import type { RouteParams } from './$types';
 export interface AllPosts {
 	slug: string;
 	metadata: {
 		title: string;
 		description: string;
 		date: string;
-		tags: string[];
+		tags: string[] | RouteParams;
 	};
 	path: string;
 	date: string;
