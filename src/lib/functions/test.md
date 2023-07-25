@@ -20,8 +20,10 @@ A link! [link](http://google.com)
 
 Code!
 
-```javascript
-var test = 'test';
+```js
+const test = 'test';
+const test2 = 'test2';
+const test + test2 = 'test3';
 ```
 
 

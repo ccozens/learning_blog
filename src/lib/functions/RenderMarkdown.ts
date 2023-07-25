@@ -1,11 +1,14 @@
-import { unified } from 'unified';
-import remarkParse from 'remark-parse';
-import remarkFrontmatter from 'remark-frontmatter';
-import remarkParseFrontmatter from 'remark-parse-frontmatter';
-import remarkRehype from 'remark-rehype';
-import rehypeStringify from 'rehype-stringify';
-import remarkGfm from 'remark-gfm';
-import remarkToc from 'remark-toc';
+
+import { unified } from 'unified'; // core interface
+import remarkParse from 'remark-parse'; // parse markdown to mdast
+import remarkFrontmatter from 'remark-frontmatter'; // separate frontmatter
+import remarkParseFrontmatter from 'remark-parse-frontmatter'; // parse frontmatter
+import remarkGfm from 'remark-gfm'; // gfm support
+import rehypePrism from 'rehype-prism-plus'; // syntax highlighting
+import remarkRehype from 'remark-rehype'; // mdast to hast
+import rehypeStringify from 'rehype-stringify'; // hast to html
+
+import type { Frontmatter } from '$lib/types';
 
 const processor = unified()
 	.use(remarkParse)
@@ -13,19 +16,34 @@ const processor = unified()
 	.use(remarkParseFrontmatter, { type: 'yaml', marker: '-' })
 	.use(remarkGfm)
 	.use(remarkRehype)
-	.use(remarkToc)
-	.use(rehypeStringify);
+	.use(rehypeStringify)
+	.use(rehypePrism, { showLineNumbers: true });
+
+
+function isFrontmatter(obj: unknown): obj is Frontmatter {
+	const fm = obj as Frontmatter;
+	return (
+		typeof fm.title === 'string' &&
+		typeof fm.description === 'string' &&
+		Array.isArray(fm.tags) &&
+		fm.tags.every((tag) => typeof tag === 'string')
+	);
+}
 
 export const renderMarkdown = async (
 	markdown: string
-): Promise<{ frontmatter: any; html: string }> => {
-	return new Promise<{ frontmatter: any; html: string }>((resolve, reject) => {
+): Promise<{ frontmatter: Frontmatter; html: string }> => {
+	return new Promise<{ frontmatter: Frontmatter; html: string }>((resolve, reject) => {
 		processor.process(markdown, (err, file) => {
 			if (file) {
 				if (err) {
 					reject(err);
 					return;
 				} else {
+					if (!isFrontmatter(file.data.frontmatter)) {
+						reject(new Error('Frontmatter is invalid'));
+						return;
+					}
 					resolve({
 						frontmatter: file.data.frontmatter,
 						html: file.toString()

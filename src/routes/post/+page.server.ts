@@ -16,3 +16,4 @@ export const load:PageServerLoad = async ( { fetch} ) => {
 		html: data.html
 	}
 }
+
