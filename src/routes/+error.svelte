@@ -1,10 +1,7 @@
 <script>
-	import { error } from '@sveltejs/kit';
-	export let status;
-	export let error;
+	import { page } from '$app/stores';
 </script>
 
-<main>
-	<h1>Error {status}</h1>
-	<p>{error.message}</p>
-</main>
+{#if $page.error}
+	<h1>{$page.error.message}</h1>
+{/if}
