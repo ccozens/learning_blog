@@ -1,40 +1,46 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 
-  $: session = $page.data.session;
-  $: image = $page.data.session?.user?.image;
-  $: name = $page.data.session?.user?.name;
+	$: session = $page.data.session;
+	$: image = $page.data.session?.user?.image;
+	$: name = $page.data.session?.user?.name;
 
+	// Initialize a writable store to handle errors
+	import { writable } from 'svelte/store';
+	export const error = writable(null);
 </script>
 
-<div>
-	<header>
-		<div class="signedInStatus">
-			<p class="nojs-show loaded">
-				{#if session}
-					{#if image}
-						<span style="background-image: url('{image}')" class="avatar" />
-					{/if}
-					<span class="signedInText">
-						<small>Signed in as</small>
-						<strong>{name}</strong>
-					</span>
-					<a href="/auth/signout" class="button" data-sveltekit-preload-data="off">Sign out</a>
-				{:else}
-					<span class="notSignedInText">You are not signed in</span>
-					<a href="/auth/signin" class="buttonPrimary" data-sveltekit-preload-data="off">Sign in</a>
+<header>
+	<div class="signedInStatus">
+		<p class="nojs-show loaded">
+			{#if session}
+				{#if image}
+					<span style="background-image: url('{image}')" class="avatar" />
 				{/if}
-			</p>
-		</div>
-		<nav>
-			<ul class="navItems">
-				<li class="navItem"><a href="/">Home</a></li>
-				<li class="navItem"><a href="/protected">Protected</a></li>
-			</ul>
-		</nav>
-	</header>
-	<slot />
-</div>
+				<span class="signedInText">
+					<small>Signed in as</small>
+					<strong>{name}</strong>
+				</span>
+				<a href="/auth/signout" class="button" data-sveltekit-preload-data="off">Sign out</a>
+			{:else}
+				<span class="notSignedInText">You are not signed in</span>
+				<a href="/auth/signin" class="buttonPrimary" data-sveltekit-preload-data="off">Sign in</a>
+			{/if}
+		</p>
+	</div>
+	<nav>
+		<ul class="navItems">
+			<li class="navItem"><a href="/">Home</a></li>
+			<li class="navItem"><a href="/protected">Protected</a></li>
+		</ul>
+	</nav>
+</header>
+<slot />
+
+{#if $error}
+	<p>Error</p>
+	<pre>{$error.message}</pre>
+{/if}
 
 <style>
 	:global(body) {
@@ -147,7 +153,7 @@
 		margin-right: 1rem;
 	}
 
-  :global(a) {
-    color: #0ddacd;
-  }
+	:global(a) {
+		color: #0ddacd;
+	}
 </style>
