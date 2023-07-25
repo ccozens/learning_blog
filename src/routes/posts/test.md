@@ -2,7 +2,7 @@
 title: Test
 description: This is a test
 date: 2023-07-24
-categories:
+tags:
     - test
     - test2
     - this_site

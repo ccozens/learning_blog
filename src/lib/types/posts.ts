@@ -13,7 +13,7 @@ export interface Metadata {
 		title: string;
 		description: string;
 		date: string;
-		categories: string[];
+		tags: string[];
 	};
 }
 
@@ -23,7 +23,7 @@ export interface AllPosts {
 		title: string;
 		description: string;
 		date: string;
-		categories: string[];
+		tags: string[];
 	};
 	path: string;
 	date: string;
