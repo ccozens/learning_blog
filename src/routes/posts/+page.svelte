@@ -5,15 +5,12 @@
     import PostListWithPreview from '$lib/components/PostListWithPreview.svelte';
     import TagCloud from '$lib/components/TagCloud.svelte';
     //  data
-    import { page } from '$app/stores';
-
 
     export let data: PageData;
-    $: sortedPosts = data.sortedPosts;
+    const {sortedPosts, allTags} = data;
 
 </script>
 
 
-
 <PostListWithPreview posts={sortedPosts} />
-<!-- <TagCloud tags={data.allTags} /> -->
+<TagCloud tags={allTags} />

@@ -1,13 +1,8 @@
 import type { PageServerLoad } from './$types';
-import type { AllPosts } from '$lib/types';
-import { getAllTags } from '$lib/functions/getAllTags';
 
-export const load: PageServerLoad = async ({ fetch, params }) => {
-	const response = await fetch(`/api/posts`);
-	const allPosts: AllPosts[] = await response.json();
+export const load: PageServerLoad = async ({ parent }) => {
+    // access allTags from parent layout
+    const { allTags } = await parent();
 
-	// extract tags from all posts
-	const allTags = await getAllTags(allPosts);
-
-	return { allTags };
-};
+    return {allTags};
+}
