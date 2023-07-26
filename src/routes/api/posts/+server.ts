@@ -3,6 +3,7 @@ import { formatDate } from '$lib/functions/FormatDate';
 import type { AllPosts, Metadata } from '$lib/types';
 import { error } from '@sveltejs/kit';
 
+
 async function getAllPosts() {
 	const allFiles = import.meta.glob('/src/routes/posts/**/*.md');
 	const iterableFiles = Object.entries(allFiles);
