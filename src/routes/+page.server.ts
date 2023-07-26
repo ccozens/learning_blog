@@ -10,7 +10,7 @@ const states = 'OPEN';
 const orderByField = 'UPDATED_AT';
 const orderByDirection = 'DESC';
 
-const query = `query issues_in_progress {
+const query = `query {
   repository(owner: "${owner}", name: "${name}") {
     issues(first: ${first}, labels: ["${labels}"], states: ${states}, orderBy: { field: ${orderByField}, direction: ${orderByDirection} }) {
       edges {
@@ -42,17 +42,29 @@ export const load: PageServerLoad = async ({ fetch }) => {
 		body: JSON.stringify({ query })
 	});
 
-	const data: {
-		repository: {
-			issues: {
-				edges: {
-					node: GitHubIssue;
-				}[];
+	const gitHubData: {
+		data: {
+			repository: {
+				issues: {
+					edges: {
+						node: GitHubIssue;
+					}[];
+				};
 			};
 		};
 	} = await res.json();
 
+	async function parseGitHubData() {
+		const issues = gitHubData.data.repository.issues.edges.map((edge) => edge.node);
+		return {
+			issues
+		};
+	}
+
+	const issues = await parseGitHubData();
 	return {
-		issues: data
+		issues
 	};
 };
+
+// gitHubData { data: { repository: { issues: [Object] } } }
