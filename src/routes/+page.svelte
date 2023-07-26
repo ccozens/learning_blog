@@ -5,8 +5,8 @@
 	import type { PageData } from './$types';
 
 	export let data: PageData;
-
-	let issues: GitHubIssue[] = data.issues;
+	let issues: GitHubIssue[] = [];
+	$: issues = data.issues;
 
 	/* The data for the current session was made available through the $page store which can be set through the root +page.server.ts file. It is not necessary to store the data there, however, this makes it globally accessible throughout your application simplifying state management.
 */
