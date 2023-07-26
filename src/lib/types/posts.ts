@@ -18,14 +18,13 @@ export interface Metadata {
 	};
 }
 
-import type { RouteParams } from './$types';
 export interface AllPosts {
 	slug: string;
 	metadata: {
 		title: string;
 		description: string;
 		date: string;
-		tags: string[] | RouteParams;
+		tags: string[];
 	};
 	path: string;
 	date: string;

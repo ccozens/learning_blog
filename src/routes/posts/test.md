@@ -24,17 +24,17 @@ A link! [link](http://google.com)
 
 Code!
 
-```js
+```javascript:test.js
 const test = 'test';
 const test2 = 'test2';
 const test + test2 = 'test3';
 ```
 
 
-```typescript
+```typescript:TSturn.ts
 var test:string = 'test';
 ```
 
-```python
+```python:snake.py
 test = 'test'
 ```

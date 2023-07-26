@@ -14,4 +14,6 @@
 
 <h1>You're ready: start doing</h1>
 
+
+<h2>Remove +page.ts and fix the graphql query, then rewrite data fetching!</h2>
 <GitHubIssuesInProgress {issues} />
