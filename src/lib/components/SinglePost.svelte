@@ -1,8 +1,8 @@
 <script lang="ts">
-    import '$lib/styles/code-prism-night-owl.css';
-    export let postContent;
+	import '$lib/styles/code-prism-night-owl.css';
+	export let postContent;
 
-    const { title, dateFormatted, body } = postContent;
+	const { title, dateFormatted, body } = postContent;
 </script>
 
 <article>
