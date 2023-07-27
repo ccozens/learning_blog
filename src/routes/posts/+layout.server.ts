@@ -1,6 +1,6 @@
 import type { LayoutServerLoad } from './$types';
 import type { AllPosts } from '$lib/types';
-import { getAllTags } from '$lib/functions/getAllTags';
+import { getAllTags } from '$lib/functions/GetAllTags';
 
 export const load: LayoutServerLoad = async ({ fetch }) => {
 	// get all posts, sorted by data
