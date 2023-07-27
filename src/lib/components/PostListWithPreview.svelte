@@ -14,7 +14,7 @@ import type { AllPosts } from '$lib/types';
 {#each posts as post}
     <article>
         <!-- note the /posts in the <a> element - makes it absolute link (/posts/slug) rather than relative (/posts/tags/posts/slug) -->
-        <h1><a href="posts/{post.slug}">{post.metadata.title}</a></h1>
+        <h1><a href="/posts/{post.slug}">{post.metadata.title}</a></h1>
         <p>{post.metadata.description}</p>
         <p>Posted on {post.dateFormatted}</p>
         <ul>
