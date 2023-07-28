@@ -1,5 +1,4 @@
 import type { PageServerLoad } from './$types';
-import type { AllPosts } from '$lib/types';
 
 export const load: PageServerLoad = async ({ params, parent }) => {
 	// extract tag string from params
