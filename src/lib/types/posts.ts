@@ -1,14 +1,26 @@
-export interface PostData {
-	content: {
-		html: string;
-		css: { code: string; map: null };
-		head: string;
+export interface RawPost {
+	metadata: {
+		title: string;
+		date: string;
+		tags: string[];
 	};
+	default: {
+		render: () => Content;
+	};
+}
+
+export interface PostData {
+	content: Content;
 	title: string;
 	dateFormatted: string;
 	tags: string[];
 }
 
+export interface Content {
+	html: string;
+	css: { code: string; map: null };
+	head: string;
+}
 export interface Metadata {
 	metadata: {
 		title: string;

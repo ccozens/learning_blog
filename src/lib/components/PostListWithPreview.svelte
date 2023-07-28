@@ -1,11 +1,7 @@
 <!-- script -->
 <script lang='ts'>
-
-import type { AllPosts } from '$lib/types';
-
+    import type { AllPosts } from '$lib/types';
     export let posts: AllPosts[] = [];
-
-
 </script>
 
 <!-- html -->

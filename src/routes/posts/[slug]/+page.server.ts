@@ -1,23 +1,28 @@
 import type { PageServerLoad } from './$types';
+import type { RawPost, Content, PostData } from '$lib/types';
 import { formatDate } from '$lib/functions/FormatDate';
-import type { PostData } from '$lib/types';
 
-// add error handling
+
+
 export const load: PageServerLoad = async ({ params }) => {
-	const post = await import(`../${params.slug}.md`);
+	// import post file
+	const post: RawPost = await import(`../${params.slug}.md`);
+	// extract metadata
 	const { title, date, tags } = post.metadata;
-	const content = await post.default.render();
-    const dateFormatted = await formatDate(date);
+	// extract and format body text (content)
+	const content: Content = post.default.render();
+	// format date
+	const dateFormatted = await formatDate(date);
 
 	// create post object from content, title, date
 	const postData: PostData = {
 		content,
 		title,
 		tags,
-		dateFormatted
+		dateFormatted,
 	};
 
 	return {
-		postData
+		postData,
 	};
 };
