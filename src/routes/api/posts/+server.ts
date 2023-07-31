@@ -12,7 +12,8 @@ async function getAllPosts() {
 		iterableFiles.map(async ([path, resolver]) => {
 			const { metadata } = (await resolver()) as Metadata;
 			if (!metadata) throw error(404, { message: `No metadata found in ${path}` });
-			const slug: string = path.split('/')?.pop()?.split('.').shift() ?? '';
+			const slug: string = path.split(']/')?.pop()?.split('.').shift() ?? '';
+			// const slug: string = path.split(']/')?.pop()?.split('.').shift() ?? '';
 			if (!slug) throw error(404, { message: `No slug found in ${path}` });
 			const date = metadata.date;
 			if (!date) throw error(404, { message: `No date found in ${path}` });
