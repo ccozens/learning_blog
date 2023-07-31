@@ -10,7 +10,7 @@ export interface RawPost {
 }
 
 export interface PostData {
-	content: Content;
+	escapedContent: string;
 	title: string;
 	dateFormatted: string;
 	tags: string[];

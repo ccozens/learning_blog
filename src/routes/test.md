@@ -27,13 +27,6 @@ const test2 = 'test2';
 const test + test2 = 'test3';
 ```
 
-```javascript:testsvelte.js
-<script>
-    const test = 'Svelte element test';
-</script>
-
-{test}
-```
 
 ```typescript:TSturn.ts
 var test:string = 'test';

@@ -3,9 +3,9 @@
 	import TagCloud from '$lib/components/TagCloud.svelte';
 	export let data;
 	// destructure props and create postContent object
-	const { content, title, dateFormatted, tags } = data.postData;
-	const body = content.html;
-	const postContent = { title, dateFormatted, body };
+	const { escapedContent, title, dateFormatted, tags } = data.postData;
+	const postContent = { title, dateFormatted, escapedContent };
+
 </script>
 
 <SinglePost {postContent} />
