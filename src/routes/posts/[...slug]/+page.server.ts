@@ -9,7 +9,6 @@ export const load: PageServerLoad = async ({ params }) => {
 // export const load: LayoutServerLoad = async ({ params }) => {
 	// import post file
 	const post: RawPost = await import(`./${params.slug}.md`);
-	console.log('params.slug', params.slug);
 	// extract metadata
 	const { title, date, tags } = post.metadata;
 	// extract and format body text (content)
