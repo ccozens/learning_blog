@@ -8,7 +8,10 @@ import { escapeSvelte } from 'mdsvex';
 export const load: PageServerLoad = async ({ params }) => {
 // export const load: LayoutServerLoad = async ({ params }) => {
 	// import post file
-	const post: RawPost = await import(`./${params.slug}.md`);
+	const [folder, slug] = params.slug.split('/');
+	 // ignoring this import because dynamic import is not importing from same folder
+	// const post: RawPost = await import(`./${params.slug}.md`);
+	const post: RawPost = await import(`./${folder}/${slug}.md`);
 	// extract metadata
 	const { title, date, tags } = post.metadata;
 	// extract and format body text (content)
