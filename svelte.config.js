@@ -7,7 +7,10 @@ import codeTitle from 'remark-code-titles';
 const config = {
 	// Consult https://kit.svelte.dev/docs/integrations#preprocessors
 	// for more information about preprocessors
-	preprocess: [vitePreprocess(), mdsvex({ extensions: ['.md'], remarkPlugins: [codeTitle] })],
+	preprocess: [vitePreprocess(), mdsvex(
+		{ extensions: ['.md'],
+		remarkPlugins: [codeTitle]
+	})],
 	extensions: ['.svelte', '.md'],
 	kit: {
 		// adapter-auto only supports some environments, see https://kit.svelte.dev/docs/adapter-auto for a list.
