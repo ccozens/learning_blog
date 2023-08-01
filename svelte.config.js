@@ -2,8 +2,7 @@ import adapter from '@sveltejs/adapter-auto';
 import { vitePreprocess } from '@sveltejs/kit/vite';
 import { mdsvex } from 'mdsvex';
 import codeTitle from 'remark-code-titles';
-import remarkPresetLintConsistent from 'remark-preset-lint-consistent';
-import lintFencedCodeFlagCase from 'remark-lint-fenced-code-flag-case';
+
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -11,7 +10,7 @@ const config = {
 	// for more information about preprocessors
 	preprocess: [vitePreprocess(), mdsvex(
 		{ extensions: ['.md'],
-		remarkPlugins: [codeTitle, remarkPresetLintConsistent, lintFencedCodeFlagCase]
+		remarkPlugins: [codeTitle]
 	})],
 	extensions: ['.svelte', '.md'],
 	kit: {
