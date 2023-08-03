@@ -4,14 +4,11 @@ import type { RawPost, Content, PostData } from '$lib/types';
 import { formatDate } from '$lib/functions/FormatDate';
 import { escapeSvelte } from 'mdsvex';
 
-
 export const load: PageServerLoad = async ({ params }) => {
 // export const load: LayoutServerLoad = async ({ params }) => {
 	// import post file
-	const [folder, slug] = params.slug.split('/');
 	 // ignoring this import because dynamic import is not importing from same folder
-	// const post: RawPost = await import(`./${params.slug}.md`);
-	const post: RawPost = await import(`./${folder}/${slug}.md`);
+	const post: RawPost = await import(`./${params.slug}.md`);
 	// extract metadata
 	const { title, date, tags } = post.metadata;
 	// extract and format body text (content)
@@ -20,6 +17,7 @@ export const load: PageServerLoad = async ({ params }) => {
 	const escapedContent = escapeSvelte(content.html);
 	// format date
 	const dateFormatted = await formatDate(date);
+
 
 	// create post object from content, title, date
 	const postData: PostData = {

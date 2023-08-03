@@ -12,7 +12,7 @@ Notes on [Kevin Powell's video](https://www.youtube.com/watch?v=3elGSZSWTbM)
 [My fork](https://codepen.io/ccozens/pen/OJBREwL?editors=0100)
 
 <hr />
-#### Do I want to be relying on intrinsic sizing of content, or do I want structured control from the parent's perspective?
+<h4> Do I want to be relying on intrinsic sizing of content, or do I want structured control from the parent's perspective? </h4>
 <hr />
 
 ## What's the difference?

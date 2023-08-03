@@ -122,7 +122,7 @@ This can be done various ways - tutorial uses `global.css` that is then imported
 1. Create `src/styles/global.css`
 2. Add CSS
 
-```raw
+```css
 html {
   background-color: #f1f5f9;
   font-family: sans-serif;

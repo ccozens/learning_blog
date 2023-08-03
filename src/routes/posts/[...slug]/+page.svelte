@@ -5,7 +5,6 @@
 	// destructure props and create postContent object
 	const { escapedContent, title, dateFormatted, tags } = data.postData;
 	const postContent = { title, dateFormatted, escapedContent };
-
 </script>
 
 <SinglePost {postContent} />

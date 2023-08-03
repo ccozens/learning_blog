@@ -1,5 +1,5 @@
 ---
-title: ''
+title: 'chatGPT colour function'
 date: '2023-07-31'
 description: description
 tags:

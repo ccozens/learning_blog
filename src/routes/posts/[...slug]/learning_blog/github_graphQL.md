@@ -154,7 +154,7 @@ export const load: PageServerLoad = async ({ fetch }) => {
 
 9. Now create a component: `src/lib/components/GitHubIssuesInProgress.svelte`:
 
-``` GitHubIssuesInProgress.svelte
+```typescript GitHubIssuesInProgress.svelte
 <script lang="ts">
 	import type { GitHubIssue } from '$lib/types';
 
@@ -198,7 +198,7 @@ Note:
 
 10. Render the component! In`src/+page.svelte`, create a prop to access the data and define the component:
 
-```
+```typescript
 <script lang="ts">
 	import GitHubIssuesInProgress from '$lib/components/GitHubIssuesInProgress.svelte';
 	import type { GitHubIssue } from '$lib/types';
