@@ -1,6 +1,6 @@
 import adapter from '@sveltejs/adapter-auto';
 import { vitePreprocess } from '@sveltejs/kit/vite';
-import { mdsvex, escapeSvelte } from 'mdsvex';
+import { mdsvex } from 'mdsvex';
 import codeTitle from 'remark-code-titles';
 
 
