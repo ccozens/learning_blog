@@ -3,12 +3,11 @@
 	export let postContent;
 
 	const { title, dateFormatted, escapedContent } = postContent;
-
+</script>
 
 <article>
 	<h1>{title}</h1>
 	<p>Posted on {dateFormatted}</p>
-	<p>escapedContent</p>
 	{@html escapedContent}
 
 </article>

@@ -2,8 +2,7 @@ import adapter from '@sveltejs/adapter-auto';
 import { vitePreprocess } from '@sveltejs/kit/vite';
 import { mdsvex, escapeSvelte } from 'mdsvex';
 import codeTitle from 'remark-code-titles';
-import shiki from 'shiki';
-import escapeHtml from 'escape-html';
+
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -14,7 +13,7 @@ const config = {
 		mdsvex(
 		{ extensions: ['.md'],
 		remarkPlugins: [codeTitle],
-		
+
 	}),
 	vitePreprocess()
 ],
