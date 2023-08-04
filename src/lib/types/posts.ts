@@ -1,14 +1,3 @@
-export interface RawPost {
-	metadata: {
-		title: string;
-		date: string;
-		tags: string[];
-	};
-	default: {
-		render: () => Content;
-	};
-}
-
 export interface PostData {
 	escapedContent: string;
 	title: string;
