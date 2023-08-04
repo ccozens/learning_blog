@@ -1,7 +1,7 @@
 ---
 title: 'Github Action'
 date: '2023-07-31'
-description: description
+description: Github Action for project management
 tags:
   - sveltekit
   - learning_blog

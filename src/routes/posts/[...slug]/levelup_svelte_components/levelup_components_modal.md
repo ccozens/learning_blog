@@ -1,7 +1,7 @@
 ---
 title: Making a modal
 date: '2023-08-03'
-description: description
+description: What is a modal and how to make one
 tags:
   - levelup
   - sveltekit

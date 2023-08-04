@@ -1,7 +1,7 @@
 ---
 title: Typing props in svelte
 date: '2023-08-03'
-description: description
+description: typing props in sveltekit
 tags:
   - levelup
   - sveltekit

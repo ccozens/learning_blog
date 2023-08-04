@@ -1,7 +1,7 @@
 ---
 title: 'to go back to'
 date: '2023-07-31'
-description: description
+description: websites/snippets I've found and want to go back to - basically bookmarks
 tags:
   - gems
 ---

@@ -1,7 +1,7 @@
 ---
 title: Basic toggle
 date: '2023-08-03'
-description: description
+description: DIY toggle
 tags:
   - levelup
   - sveltekit

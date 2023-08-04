@@ -1,7 +1,7 @@
 ---
 title: 'sveltekit files basics'
 date: '2023-07-02'
-description: description
+description: Basics walkthrough of sveltekit files
 tags:
   - levelup
   - sveltekit

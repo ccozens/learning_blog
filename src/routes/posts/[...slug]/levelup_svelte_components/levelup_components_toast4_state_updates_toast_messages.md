@@ -1,7 +1,7 @@
 ---
 title: Complex State Updates With Toast Messages
 date: '2023-08-03'
-description: description
+description: Intro to complex state updates with toast messages
 tags:
   - levelup
   - sveltekit

@@ -1,7 +1,7 @@
 ---
 title: 'sveltekit hooks'
 date: '2023-07-04'
-description: description
+description: Intro to hooks in sveltekit
 tags:
   - levelup
   - sveltekit

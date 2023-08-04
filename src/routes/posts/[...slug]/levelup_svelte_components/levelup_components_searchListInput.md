@@ -1,7 +1,7 @@
 ---
 title: Search List Input
 date: '2023-08-03'
-description: description
+description: Making a search filter
 tags:
   - levelup
   - sveltekit

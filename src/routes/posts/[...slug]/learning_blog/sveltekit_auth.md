@@ -1,7 +1,7 @@
 ---
 title: 'SvelteKit auth using Auth.js'
 date: '2023-07-31'
-description: description
+description: Enable auth in SvelteKit using Auth.js, with GitHub OAuth. 
 tags:
   - sveltekit
   - learning_blog

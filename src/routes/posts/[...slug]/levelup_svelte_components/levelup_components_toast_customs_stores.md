@@ -1,13 +1,13 @@
 ---
 title: Advanced Custom Stores With a Toast Message
 date: '2023-08-03'
-description: description
+description: Custom stores with a toast message
 tags:
   - levelup
   - sveltekit
   - components
 ---
-#[Advanced Custom Stores With a Toast Message](https://levelup.video/tutorials/building-svelte-components/advanced-custom-stores-with-a-toast-message)
+## [Advanced Custom Stores With a Toast Message](https://levelup.video/tutorials/building-svelte-components/advanced-custom-stores-with-a-toast-message)
 
 [Toast messages](https://www.magicbell.com/blog/what-is-a-toast-message-and-how-do-you-use-it) help to deliver simple feedback to the user. They are informative, have a lifespan of just a few seconds and take up a very small portion of the screen.
 

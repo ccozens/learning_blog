@@ -1,7 +1,7 @@
 ---
 title: Context
 date: '2023-08-03'
-description: description
+description: typing context in sveltekit
 tags:
   - levelup
   - sveltekit

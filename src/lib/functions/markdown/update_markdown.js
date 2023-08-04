@@ -1,54 +1,3 @@
----
-title: 'Batch update frontmatter'
-date: '2023-07-31'
-description: Node script to add frontmatter to markdown files
-tags:
-  - sveltekit
-  - learning_blog
-  - markdown
-  - javascript
----
-
-## Why?
-
-I started keeping markdown notes while taking courses and developing this blog, that I wanted as a learning resource. Rather than try to second-guess the final yaml frontmatter structure I would want, I left them blank and figured I can run a script to batch-update when finished.
-
-## How?
-
-Develop and run a script that will:
-
-- create frontmatter in the format:
-
-    ---
-
-    title:
-
-    description:
-
-    date: yyyy-mm-dd
-
-    tabs:
-
-        - tag1
-
-        - tag2
-
-- extract the top level heading from the file and (1) set it as title (2) convert to second level heading
-
-- if it is a link, extract the text only (not the URL)
-
-- set date as the date the file was last updated
-
-- set description to 'description'
-
-- allow input params, so I can choose input direcory and set custom tags.
-
-
-### What?
-
-Here it is:
-
-```javascript
 const fs = require("fs");
 const path = require("path");
 const matter = require("gray-matter");
@@ -114,8 +63,8 @@ mdFiles.forEach((file) => {
   // Set the description
   const description = "description";
   // Set tags to provided tags or "todo"
-  const tags = inputTags.length > 0 ? inputTags : ["todo"];
-  // note that inputTags is always present, so without the length test this returns an empty array if no tags give, and that doesn't format properly
+  const tags = inputTags ? inputTags : ["todo"];
+
   // Generate the output content with front matter
   const newFrontMatterData = { title, date, description, tags };
   const outputContent = data
@@ -134,22 +83,3 @@ mdFiles.forEach((file) => {
 
 // output number of files processed
 console.log(`${count} out of ${mdFiles.length} files processed`);
-```
-
-Usage:
-
-`node update-markdown.js
-
-I created a folder called in posts called `reformatting` to put this in, so for example to modify all contents of `posts/astro` I ran:
-
-```bash
-node reformatting/update-markdown.js astro astro
-```
-
-This created `posts/output` so I could verify the output and customise any tags, then:
-
-```bash
-mv -f ./output/* ./astro
-```
-
-moved everything in `/output` into `/astro` and overwrote the original files. I had a copy of the original elsewhere in case of crisis.

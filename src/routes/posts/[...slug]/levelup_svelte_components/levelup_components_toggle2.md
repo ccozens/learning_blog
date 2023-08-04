@@ -1,7 +1,7 @@
 ---
 title: Advanced toggle
 date: '2023-08-03'
-description: description
+description: More on toggles
 tags:
   - levelup
   - sveltekit

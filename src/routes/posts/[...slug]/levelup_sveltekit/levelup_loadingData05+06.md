@@ -1,10 +1,11 @@
 ---
 title: 'Sveltekit data: server only loading'
 date: '2023-07-03'
-description: description
+description: Intro to server only loading in sveltekit
 tags:
   - levelup
   - sveltekit
+  - data
 ---
 ## [Server only loading video](https://levelup.video/tutorials/sveltekit/server-only-loading)
 

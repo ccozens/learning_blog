@@ -1,7 +1,7 @@
 ---
 title: Context vs stores
 date: '2023-07-31'
-description: description
+description: Summary of context vs stores in sveltekit
 tags:
   - todo
   - sveltekit

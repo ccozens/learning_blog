@@ -1,11 +1,12 @@
 ---
 title: Storybook with Svelte Kit
 date: '2023-08-03'
-description: description
+description: Intro to Storybook to manage components
 tags:
   - levelup
   - sveltekit
   - components
+  - storybook
 ---
 #[Storybook with Svelte Kit](https://levelup.video/tutorials/building-svelte-components/storybook-with-svelte-kit)
 

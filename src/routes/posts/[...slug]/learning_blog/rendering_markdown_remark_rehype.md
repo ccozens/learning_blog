@@ -3,7 +3,11 @@ title: Rendering markdown Rendering markdown with remark
 description: Using remark and rehype to render svelte pages from markdown
 date: 2023-07-25
 tags:
-    - markdown    - learning    - this_site
+    - markdown
+    - learning
+    - this_site
+    - remark
+    - rehype
 ---
 
 Version 1 of markdown rendering for this site used the [unified ecosystem](https://unifiedjs.com). I moved onto [mdsvex](https://mdsvex.pngwn.io/), as it was simpler to pre-render the markdown, allows extensability (should I ever want to make us of full mdx capabilities, good to know its there ready) and frankly I found far more posts helping me get it up and running.

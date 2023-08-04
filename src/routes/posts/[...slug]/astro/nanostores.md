@@ -1,7 +1,7 @@
 ---
 title: On nanostores
 date: '2023-07-31'
-description: description
+description: Intro to Astro global state management with nanostores
 tags:
   - astro
   - nanostores

@@ -1,7 +1,7 @@
 ---
 title: Throwing errors in Sveltekit
 date: '2023-07-04'
-description: description
+description: Intro to throwing errors in Sveltekit
 tags:
   - levelup
   - sveltekit

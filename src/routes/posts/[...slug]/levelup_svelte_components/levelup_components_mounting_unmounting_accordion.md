@@ -1,7 +1,7 @@
 ---
 title: Accordion with Mounting and Unmounting
 date: '2023-08-03'
-description: description
+description: Mounting and unmounting components
 tags:
   - levelup
   - sveltekit

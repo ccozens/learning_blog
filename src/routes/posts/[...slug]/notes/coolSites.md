@@ -1,7 +1,7 @@
 ---
 title: Cool sites
 date: '2023-07-31'
-description: description
+description: Websites I've found useful
 tags:
   - gems
 ---

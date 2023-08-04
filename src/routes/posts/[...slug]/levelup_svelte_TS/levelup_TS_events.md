@@ -1,7 +1,7 @@
 ---
 title: Typing events
 date: '2023-08-03'
-description: description
+description: typing events in sveltekit
 tags:
   - levelup
   - sveltekit

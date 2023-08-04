@@ -3,7 +3,11 @@ title: Rendering markdown with mdsvex
 description: Using mdxvex to render svelte pages from markdown
 date: 2023-07-26
 tags:
-    - markdown    - learning    - this_site
+    - markdown
+    - learning
+    - this_site
+    - mdsvex
+    - sveltekit
 ---
 
 This is v2 of markdown rendering, using mdsvex, largely as [Josh Collinsworth's great tutorial](https://joshcollinsworth.com/blog/build-static-sveltekit-markdown-blog) explained the basics of exactly what I was trying to do: namely, set up a blog that renders markdown files in sveltekit with slugs and tags (or categories, as he calls them).
@@ -924,7 +928,7 @@ A markdown file I used to test rendering. If of interest:
 
 ### Code lines
 
-Absolutely essential to getting this to work is demarcating inline code with triple backticks (&#96;&#96;&#96;code&#96;&#96;&#96;), as opposed to single (&#96;code&#96;). 
+Absolutely essential to getting this to work is demarcating inline code with triple backticks (&#96;&#96;&#96;code&#96;&#96;&#96;), as opposed to single (&#96;code&#96;).
 ### Styling code blocks
 
 mdsvex automatically creates [code blocks with syntax highlighting](https://mdsvex.pngwn.io/docs#highlight), but with no theme. So:

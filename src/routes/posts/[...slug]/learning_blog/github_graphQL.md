@@ -1,7 +1,7 @@
 ---
 title: GitHub GraphQL query.
 date: '2023-07-31'
-description: description
+description: Making a GraphQL query to GitHub to pull out issues labelled in_progress.
 tags:
   - sveltekit
   - learning_blog

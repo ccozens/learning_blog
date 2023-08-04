@@ -1,7 +1,7 @@
 ---
 title: Sveltekit Navigation module
 date: '2023-07-07'
-description: description
+description: Intro to sveletekit navigation module
 tags:
   - levelup
   - sveltekit

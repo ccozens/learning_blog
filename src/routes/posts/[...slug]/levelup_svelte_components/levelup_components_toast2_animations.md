@@ -1,7 +1,7 @@
 ---
 title: Flip and Transition Animations with Toast Messages
 date: '2023-08-03'
-description: description
+description: FLIP and transition animations with toast messages
 tags:
   - levelup
   - sveltekit

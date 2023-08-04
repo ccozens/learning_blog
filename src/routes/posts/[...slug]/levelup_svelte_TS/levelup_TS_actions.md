@@ -1,11 +1,12 @@
 ---
 title: Actions
 date: '2023-08-03'
-description: description
+description: Typing actions in SvelteKit
 tags:
   - levelup
   - sveltekit
   - typescript
+  - actions
 ---
 ## [video](https://levelup.video/tutorials/svelte-and-typescript/actions)
 

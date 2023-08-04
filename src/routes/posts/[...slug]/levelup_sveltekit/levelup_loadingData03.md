@@ -1,10 +1,11 @@
 ---
 title: 'Sveltekit data: parameter-based routes'
 date: '2023-07-03'
-description: description
+description: Intro to parameter-based routes in sveltekit
 tags:
   - levelup
   - sveltekit
+  - data
 ---
 
 [Parameter-based routes](https://levelup.video/tutorials/sveltekit/parameter-based-routes)

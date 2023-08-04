@@ -1,7 +1,7 @@
 ---
 title: 'Sveltekit data: basic loading'
 date: '2023-07-24'
-description: description
+description: Intro to loading data in sveltekit
 tags:
   - levelup
   - sveltekit

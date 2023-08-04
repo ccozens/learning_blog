@@ -1,7 +1,7 @@
 ---
 title: Using Tweened As a Timeout
 date: '2023-08-03'
-description: description
+description: Intro to tweened
 tags:
   - levelup
   - sveltekit

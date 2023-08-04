@@ -1,7 +1,7 @@
 ---
 title: 'Sveltekit data: Destructuring data in a reactive statement'
 date: '2023-07-03'
-description: description
+description: Intro to destructuring data in sveltekit
 tags:
   - levelup
   - sveltekit

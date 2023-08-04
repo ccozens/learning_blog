@@ -1,7 +1,7 @@
 ---
 title: Using props to style components
 date: '2023-07-31'
-description: description
+description: Intro to styling components with props
 tags:
   - sveltekit
   - notes

@@ -1,7 +1,7 @@
 ---
-title: 'Sveltekit data: laoding in layouts'
+title: 'Sveltekit data: loading in layouts'
 date: '2023-07-26'
-description: description
+description: Intro to loading data in layouts in sveltekit
 tags:
   - levelup
   - sveltekit

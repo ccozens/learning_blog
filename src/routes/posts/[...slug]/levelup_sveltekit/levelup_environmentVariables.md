@@ -1,7 +1,7 @@
 ---
 title: Environment Variables
 date: '2023-07-07'
-description: description
+description: Intro to environment variables in SvelteKit
 tags:
   - levelup
   - sveltekit

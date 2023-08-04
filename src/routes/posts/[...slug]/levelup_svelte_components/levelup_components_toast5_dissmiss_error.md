@@ -1,7 +1,7 @@
 ---
 title: Dismiss-able Toasts and Error Toasts
 date: '2023-08-03'
-description: description
+description: Dissmiss-able Toasts messages - click to dismiss
 tags:
   - levelup
   - sveltekit

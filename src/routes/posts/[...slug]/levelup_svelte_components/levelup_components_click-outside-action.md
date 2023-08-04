@@ -1,11 +1,12 @@
 ---
 title: Click Outside Action
 date: '2023-08-03'
-description: description
+description: Adding a click outside action to close modal
 tags:
   - levelup
   - sveltekit
   - components
+  - actions
 ---
 #[Click Outside Action](https://levelup.video/tutorials/building-svelte-components/click-outside-action)
 

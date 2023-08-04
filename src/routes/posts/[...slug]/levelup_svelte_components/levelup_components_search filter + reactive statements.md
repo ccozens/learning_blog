@@ -1,7 +1,7 @@
 ---
 title: Search Filter with Reactive Statements
 date: '2023-08-03'
-description: description
+description: Making a search filter with reactive statements
 tags:
   - levelup
   - sveltekit

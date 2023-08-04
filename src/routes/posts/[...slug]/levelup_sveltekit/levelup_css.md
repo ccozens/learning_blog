@@ -1,7 +1,7 @@
 ---
 title: 'CSS in sveltekit'
 date: '2023-07-03'
-description: description
+description: Intro to CSS in sveltekit
 tags:
   - levelup
   - sveltekit

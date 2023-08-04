@@ -1,7 +1,7 @@
 ---
 title: 'sveltekit intro'
 date: '2023-07-03'
-description: description
+description: Intro to sveltekit
 tags:
   - levelup
   - sveltekit

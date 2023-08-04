@@ -1,11 +1,12 @@
 ---
 title: Markdown input
 date: '2023-08-03'
-description: description
+description: Making a markdown input component, and rendering with marked
 tags:
   - levelup
   - sveltekit
   - components
+  - markdown
 ---
 #[Markdown input](https://levelup.video/tutorials/building-svelte-components/markdown-input)
 

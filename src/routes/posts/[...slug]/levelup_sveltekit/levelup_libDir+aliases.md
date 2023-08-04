@@ -1,7 +1,7 @@
 ---
 title: 'Configuring aliases'
 date: '2023-07-03'
-description: description
+description: Intro to aliases in sveltekit
 tags:
   - levelup
   - sveltekit

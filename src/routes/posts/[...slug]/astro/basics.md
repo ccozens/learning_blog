@@ -1,7 +1,7 @@
 ---
 title: Astro components
 date: '2023-07-31'
-description: description
+description: Intro to Astro components, including JS in frontmatter, styling and CSS variables
 tags:
   - astro
   - components
@@ -152,3 +152,4 @@ h1 {
 ---
 import '../styles/global.css';
 ```
+*

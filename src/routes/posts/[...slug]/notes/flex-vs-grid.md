@@ -1,7 +1,7 @@
 ---
 title: Flexbox vs grid
 date: '2023-07-31'
-description: description
+description: Notes on flexbox vs grid tutorial from Kevin Powell
 tags:
   - css
 ---

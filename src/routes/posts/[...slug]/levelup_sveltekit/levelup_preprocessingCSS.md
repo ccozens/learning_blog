@@ -1,7 +1,7 @@
 ---
 title: Preprocessing CSS in Sveltekit
 date: '2023-07-07'
-description: description
+description: Intro to preprocessing CSS in sveltekit
 tags:
   - levelup
   - sveltekit

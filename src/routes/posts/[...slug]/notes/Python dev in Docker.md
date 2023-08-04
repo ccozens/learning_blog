@@ -1,7 +1,7 @@
 ---
 title: Python dev in Docker
 date: '2023-07-31'
-description: description
+description: Tutorial on how to set up a python dev environment in Docker
 tags:
   - python
   - docker

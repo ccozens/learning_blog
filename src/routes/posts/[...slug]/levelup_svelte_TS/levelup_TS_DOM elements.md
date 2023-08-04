@@ -1,7 +1,7 @@
 ---
 title: DOM Element Reference
 date: '2023-08-03'
-description: description
+description: typing DOM elements in sveltekit
 tags:
   - levelup
   - sveltekit

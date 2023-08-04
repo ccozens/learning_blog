@@ -1,7 +1,7 @@
 ---
 title: Failing Forms and the Form Prop
 date: '2023-07-06'
-description: description
+description: Intro to forms in sveltekit
 tags:
   - levelup
   - sveltekit

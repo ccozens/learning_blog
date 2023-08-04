@@ -1,7 +1,7 @@
 ---
 title: Sveltekit Stores
 date: '2023-07-26'
-description: description
+description: Intro to stores in sveltekit
 tags:
   - levelup
   - sveltekit

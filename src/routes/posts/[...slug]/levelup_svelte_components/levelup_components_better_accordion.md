@@ -1,7 +1,7 @@
 ---
 title: Better Accordion
 date: '2023-08-03'
-description: description
+description:    Making a better accordion component
 tags:
   - levelup
   - sveltekit

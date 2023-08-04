@@ -1,7 +1,7 @@
 ---
 title: Fancy Input
 date: '2023-08-03'
-description: description
+description: Using an input component to create a fancy input
 tags:
   - levelup
   - sveltekit
