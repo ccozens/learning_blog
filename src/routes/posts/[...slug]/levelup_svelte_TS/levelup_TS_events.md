@@ -160,7 +160,7 @@ This dispatches a function called play. So, create it:
 ```typescript
 <script lang="ts">
 	function on_play(event) {
-		console.log('event': event);
+		console.log('event:' event);
 	}
 </script>
 

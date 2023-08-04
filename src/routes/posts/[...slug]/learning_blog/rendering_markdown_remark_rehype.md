@@ -1,7 +1,7 @@
 ---
 title: Rendering markdown Rendering markdown with remark
 description: Using remark and rehype to render svelte pages from markdown
-date: 2023-07-25
+date: '2023-07-25'
 tags:
     - markdown
     - learning

@@ -53,16 +53,17 @@ I ended up with:
     └── posts
         ├── +layout.server.ts
         ├── +page.svelte
-        ├── [slug]
+        ├── [...slug]
         │   ├── +page.server.ts
         │   └── +page.svelte
-        ├── tags
-        │   ├── +page.server.ts
-        │   ├── +page.svelte
-        │   └── [tag]
-        │       ├── +page.server.ts
-        │       └── +page.svelte
-        └── test.md
+        │   └── testDir
+        │       └── test.md
+        └── tags
+            ├── +page.server.ts
+            ├── +page.svelte
+            └── [tag]
+                ├── +page.server.ts
+                └── +page.svelte
 ```
 
 ## File summary
@@ -78,7 +79,6 @@ This config file is used by svelte and other tooling in the project. Contains [s
 - [mdsvex](https://mdsvex.pngwn.io/docs#mdsvex-1) is a markdown preprocessor and so runs here. It requires adding as a plugin and extensions specifying. I also added [remark code titles]([GitHub - mottox2/remark-code-titles](https://github.com/mottox2/remark-code-titles#readme)) here to allow parsing of file names in code fences.
 
 - the extensions array lists the file types that should be treated as Svelte components. By default, this is only ```.svelte```.
-
 
 ```javascript:svelte.config.js
 import adapter from '@sveltejs/adapter-auto';
@@ -111,7 +111,6 @@ A svelte project is a vite project with the [@svelte/kit/svelte plugin](https://
 - They will be excluded from the plugin transform pipeline when referenced from HTML or directly requested over ```fetch``` or XHR.
 
 - Importing them from JS will return their resolved URL string (this can be overwritten if you have a ```enforce: 'pre'``` plugin to handle the asset type differently).
-
 
 Default extensions are: ```.mjs```, ```.js```, ```.mts```, ```.ts```, ```.jsx```, ```.tsx```, ```.json```
 
@@ -153,10 +152,13 @@ Components used for displaying data.
 
 Displays a list of posts with title, description and data from frontmatter
 
-```svelte
+```typescript:PostListWithPreview.svelte
 <!-- script -->
 <script lang='ts'>
     import type { AllPosts } from '$lib/types';
+	import {sortUserPlugins} from 'vite';
+	import TagCloud from './TagCloud.svelte';
+
     export let posts: AllPosts[] = [];
 </script>
 
@@ -167,10 +169,18 @@ Displays a list of posts with title, description and data from frontmatter
     <article>
         <!-- note the /posts in the <a> element - makes it absolute link (/posts/slug) rather than relative (/posts/tags/posts/slug) -->
         <h1><a href="/posts/{post.slug}">{post.metadata.title}</a></h1>
-        <p>{post.metadata.description}</p>
+        <p class="preview">{post.metadata.description}</p>
         <p>Posted on {post.dateFormatted}</p>
+        <TagCloud tags={post.metadata.tags} />
     </article>
 {/each}
+
+
+<style>
+    .preview {
+        text-transform: capitalize;
+    }
+</style>
 ```
 
 #### SinglePost.svelte
@@ -182,13 +192,13 @@ Displays a single post (an indiidual transformed and rendered markdown file):
     import '$lib/styles/code-prism-night-owl.css'; // theme for code blocks
     export let postContent;
 
-    const { title, dateFormatted, body } = postContent;
+    const { title, dateFormatted, escapedContent } = postContent;
 </script>
 
 <article>
     <h1>{title}</h1>
     <p>Posted on {dateFormatted}</p>
-    {@html body}
+    {@html escapedContent}
 </article>
 ```
 
@@ -235,7 +245,7 @@ export async function formatDate(date: string): Promise<string> {
 
 Async function that runs through all posts (transformed markdown files) and creates a list of unique tags:
 
-```typescript:GetAllTags.ts
+```typescript
 import type { AllPosts } from '$lib/types';
 
 export async function getAllTags(allPosts: AllPosts[]) {
@@ -451,7 +461,7 @@ export interface RawPost {
 }
 
 export interface PostData {
-    content: content;
+    escapedContent: content;
     title: string;
     dateFormatted: string;
     tags: string[];
@@ -534,7 +544,7 @@ export const GET = async () => {
     const sortedPosts = allPosts.sort((a, b) => {
         return +new Date(b.date) - +new Date(a.date); // the + operator converts the date to a number by calling getTime(), which returns a unix timestamp
     });
-    return json(sor6tedPosts);
+    return json(sortedPosts);
 };
 ```
 
@@ -545,20 +555,25 @@ export const GET = async () => {
   - ```import { json } from '@sveltejs/kit';```
 
     - [json is a sveltekit module](https://kit.svelte.dev/docs/modules#sveltejs-kit-json) that creates a JSON Response from the supplied data.
+
   - ```import { formatDate } from 'lib/functions/FormatDate';```
 
     - This is the formatDate function above
+
   - ```import type { AllPosts, Metadata } from 'lib/types';```
 
     - type imports, detailed above
+
   - ```import { error } from '@sveltejs/kit';```
 
     - [sveltekit's srror function](https://kit.svelte.dev/docs/modules#sveltejs-kit-error)
+
 - async function getAllPosts()
 
   - ```const allFiles = import.meta.glob('/src/routes/posts/**/*.md');```
 
     - ```allFiles``` calls [vite's glob import](https://vitejs.dev/guide/features.html#glob-import) to bulk-import markdown files from all subfolders of ```src/routes/posts/```
+
   - ```const iterableFiles = Object.entries(allFiles);```
 
     - iterableFiles then calls [the Object.entries() static method](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/entries) to return an array of keys-value pairs, for example:
@@ -579,6 +594,7 @@ export const GET = async () => {
 
   - allPosts calls the [static method Promise.all](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all), which takes an iterable of promises as a input and returns a single Promise. This promise fulfills when all of the input's promises fulfill, and rejects when and of the input's promises rejects.
   - In other words, allPosts will return a single promise only if all the promises called within it successfully resolve.
+
 - ```iterableFiles.map(async ([path, resolver]) => {```
 
   - the [map array method](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map) creates a new array based on the calling function passed in
@@ -591,7 +607,6 @@ export const GET = async () => {
     './dir/bar.js': () => import('./dir/bar.js'),
   }
   ```
-
 
         So here, ```path = './dir/foo.js'```, and ```resolver = () => import('./dir/foo.js'```
 
@@ -624,7 +639,6 @@ export const GET = async () => {
   }
   ```
 
-
 The second function declares this to be an API [GET endpoint](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/GET), calls getAllPosts, sorts them by date and returns a a json of the pots sorted by date:
 
 ```javascript
@@ -638,7 +652,7 @@ export const GET = async () => {
 };
 ```
 
-### /[slug]
+### /[...slug]
 
 The square bracket notation here denotes a dynamic route. Given 3 pages, the static routing method to access ```blog/one```, ```blog/two``` and ```blog/three``` would be:
 
@@ -662,86 +676,99 @@ blog
         └── +page.svelte
 ```
 
+Here we have a rest parameter.
+
+# TODO
+
 So, we know the [slug] is a dynamic route. It has 2 files: one that generates the data serverside, and one that renders clientside:
 
 #### +page.server.ts
 
+# TODO
+
+also have another go at proper import syntax
+
 ```typescript
+// import type { LayoutServerLoad } from './$types';
 import type { PageServerLoad } from './$types';
 import type { RawPost, Content, PostData } from '$lib/types';
 import { formatDate } from '$lib/functions/FormatDate';
+import { escapeSvelte } from 'mdsvex';
 
 export const load: PageServerLoad = async ({ params }) => {
-    // import post file
-    const post: RawPost = await import(`../${params.slug}.md`);
-    // extract metadata
-    const { title, date, tags } = post.metadata;
-    // extract and format body text (content)
-    const content: Content = post.default.render();
-    // format date
-    const dateFormatted = await formatDate(date);
+// export const load: LayoutServerLoad = async ({ params }) => {
+	// import post file
+	const post: RawPost = await import(`./${params.slug}.md`);
+	// extract metadata
+	const { title, date, tags } = post.metadata;
+	// extract and format body text (content)
+	const content: Content = post.default.render();
+	// escape svelte syntax
+	const escapedContent = escapeSvelte(content.html);
+	// format date
+	const dateFormatted = await formatDate(date);
 
-    // create post object from content, title, date
-    const postData: PostData = {
-        content,
-        title,
-        tags,
-        dateFormatted,
-    };
 
-    return {
-        postData,
-    };
+	// create post object from content, title, date
+	const postData: PostData = {
+		escapedContent,
+		title,
+		tags,
+		dateFormatted,
+	};
+
+	return {
+		postData,
+	};
 };
+
 ```
 
 ##### walkthrough
 
 1. imports.
 
-  Type ```PageServerLoad``` is imported from [sveltekit's generated types](https://kit.svelte.dev/docs/types#public-types-serverload).
+   Type ```PageServerLoad``` is imported from [sveltekit's generated types](https://kit.svelte.dev/docs/types#public-types-serverload).
 
-  Types ```RawPost, Content, PostData``` are defined types imported locally.
+   Types ```RawPost, Content, PostData``` are defined types imported locally.
 
-  ```formatDate``` is a function (described above) to format the date.
+   ```formatDate``` is a function (described above) to format the date.
 
-  Of note is ```RawPost```, which specifies that the render function will return data of structure ```Content```.
+   Of note is ```RawPost```, which specifies that the render function will return data of structure ```Content```.
 
 2. ```load``` function
 
-  - ```export const load: PageServerLoad = async ({ params }) => {```: the function is defined as type ```PageServerLoad```, is async, and takes in [params](https://kit.svelte.dev/docs/load#using-url-data-params). Params is defined form the url visited and so tells the load function which markdown file to load
+   - ```export const load: PageServerLoad = async ({ params }) => {```: the function is defined as type ```PageServerLoad```, is async, and takes in [params](https://kit.svelte.dev/docs/load#using-url-data-params). Params is defined form the url visited and so tells the load function which markdown file to load
 
-  - ```const post: RawPost = await import(`../${params.slug}.md`);```: the file is imported based on params
+   - ```const post: RawPost = await import(`../${params.slug}.md`);```: the file is imported based on params
 
-  - ```const { title, date, tags } = post.metadata;``` : title, data and tags are assigned from imported metadata
+   - ```const { title, date, tags } = post.metadata;``` : title, data and tags are assigned from imported metadata
 
-  - ```const content: Content = post.default.render();``` : Sveltekit's render funciton is called to parse the markdown into HTML and CSS.
+   - ```const content: Content = post.default.render();``` : Sveltekit's render funciton is called to parse the markdown into HTML and CSS.
 
-  - ```const dateFormatted = await formatDate(date);``` : the date is formatted
+   - ```const dateFormatted = await formatDate(date);``` : the date is formatted
 
-  - finally, a ```postData``` object is assembled and returned
-
+   - finally, a ```postData``` object is assembled and returned
 
 #### +page.svelte
 
-```svelte
+```typescript
 <script>
-    import SinglePost from '$lib/components/SinglePost.svelte';
-    import TagCloud from '$lib/components/TagCloud.svelte';
-
-    export let data;
-    // destructure props and create postContent object
-    const { content, title, dateFormatted, tags } = data.postData;
-    const body = content.html;
-    const postContent = { title, dateFormatted, body };
+	import SinglePost from '$lib/components/SinglePost.svelte';
+	import TagCloud from '$lib/components/TagCloud.svelte';
+	export let data;
+	// destructure props and create postContent object
+	const { escapedContent, title, dateFormatted, tags } = data.postData;
+	const postContent = { title, dateFormatted, escapedContent };
 </script>
 
 <SinglePost {postContent} />
 
 {#if tags.length}
-    <h2>Posted in:</h2>
-    <TagCloud {tags} />
+	<h2>Posted in:</h2>
+	<TagCloud {tags} />
 {/if}
+
 ```
 
 ##### walkthrough
@@ -759,7 +786,6 @@ export const load: PageServerLoad = async ({ params }) => {
 6. ```<SinglePost {postContent} />``` passes ```postContent``` to ```SinglePost``` to render the content
 
 7. And finally if there are tags then tags are passed to ```TagCloud``` to render tags.
-
 
 ### /[tags]
 
@@ -797,7 +823,6 @@ Here, a ```load``` function is defined that accepts both [params](https://kit.sv
   ```const { sortedPosts } = await parent();```
 
   The posts are then filtered by tag and ```postsByTag``` returned along with the ```tag``` itself
-
 
 #### +page.svelte
 
@@ -919,16 +944,14 @@ A markdown file I used to test rendering. If of interest:
     ```python:snake.py
     test = 'test'
     ```
-
 ```
 
-
 ## Notes
-
 
 ### Code lines
 
 Absolutely essential to getting this to work is demarcating inline code with triple backticks (&#96;&#96;&#96;code&#96;&#96;&#96;), as opposed to single (&#96;code&#96;).
+
 ### Styling code blocks
 
 mdsvex automatically creates [code blocks with syntax highlighting](https://mdsvex.pngwn.io/docs#highlight), but with no theme. So:
@@ -958,7 +981,7 @@ const config = {
         adapter: adapter()
     }
 };
-````
+```
 
 7. This separates out code titles when placed immediately after language declarations in code fences, eg: `javascript:svelte.config.js`
 8. I now added a selector to ``code-prism-night-owl.css``` to style the code title:

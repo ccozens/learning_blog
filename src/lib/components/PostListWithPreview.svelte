@@ -1,7 +1,6 @@
 <!-- script -->
 <script lang='ts'>
     import type { AllPosts } from '$lib/types';
-	import {sortUserPlugins} from 'vite';
 	import TagCloud from './TagCloud.svelte';
 
     export let posts: AllPosts[] = [];
