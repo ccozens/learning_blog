@@ -30,7 +30,7 @@ export interface Metadata {
 	};
 }
 
-export interface AllPosts {
+export interface Post {
 	slug: string;
 	metadata: {
 		title: string;
@@ -41,4 +41,5 @@ export interface AllPosts {
 	path: string;
 	date: string;
 	dateFormatted: string;
+	escapedContent: string;
 }

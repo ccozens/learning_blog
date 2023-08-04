@@ -155,11 +155,11 @@ Displays a list of posts with title, description and data from frontmatter
 ```typescript:PostListWithPreview.svelte
 <!-- script -->
 <script lang='ts'>
-    import type { AllPosts } from '$lib/types';
+    import type { Post } from '$lib/types';
 	import {sortUserPlugins} from 'vite';
 	import TagCloud from './TagCloud.svelte';
 
-    export let posts: AllPosts[] = [];
+    export let posts: Post[] = [];
 </script>
 
 <!-- html -->
@@ -246,11 +246,11 @@ export async function formatDate(date: string): Promise<string> {
 Async function that runs through all posts (transformed markdown files) and creates a list of unique tags:
 
 ```typescript
-import type { AllPosts } from '$lib/types';
+import type { Post } from '$lib/types';
 
-export async function getAllTags(allPosts: AllPosts[]) {
+export async function getAllTags(Post: Post[]) {
     const allTags: string[] = [];
-    allPosts.forEach((post) => {
+    Post.forEach((post) => {
         post.metadata.tags.forEach((tag) => {
             if (!allTags.includes(tag)) allTags.push(tag);
         });
@@ -482,7 +482,7 @@ export interface Metadata {
     };
 }
 
-export interface AllPosts {
+export interface Post {
     slug: string;
     metadata: {
         title: string;
@@ -507,15 +507,15 @@ This file is based on [Josh Collinsworth's post on mdsvex and SvelteKit blogs](h
 ```typescript
 import { json } from '@sveltejs/kit';
 import { formatDate } from '$lib/functions/FormatDate';
-import type { AllPosts, Metadata } from '$lib/types';
+import type { Post, Metadata } from '$lib/types';
 import { error } from '@sveltejs/kit';
 
 
-async function getAllPosts() {
+async function getPost() {
     const allFiles = import.meta.glob('/src/routes/posts/**/*.md');
     const iterableFiles = Object.entries(allFiles);
 
-    const allPosts = await Promise.all(
+    const Post = await Promise.all(
         iterableFiles.map(async ([path, resolver]) => {
             const { metadata } = (await resolver()) as Metadata;
             if (!metadata) throw error(404, { message: `No metadata found in ${path}` });
@@ -535,13 +535,13 @@ async function getAllPosts() {
         })
     );
 
-    return allPosts;
+    return Post;
 }
 
 export const GET = async () => {
-    const allPosts: AllPosts[] = await getAllPosts();
+    const Post: Post[] = await getPost();
 
-    const sortedPosts = allPosts.sort((a, b) => {
+    const sortedPosts = Post.sort((a, b) => {
         return +new Date(b.date) - +new Date(a.date); // the + operator converts the date to a number by calling getTime(), which returns a unix timestamp
     });
     return json(sortedPosts);
@@ -560,7 +560,7 @@ export const GET = async () => {
 
     - This is the formatDate function above
 
-  - ```import type { AllPosts, Metadata } from 'lib/types';```
+  - ```import type { Post, Metadata } from 'lib/types';```
 
     - type imports, detailed above
 
@@ -568,7 +568,7 @@ export const GET = async () => {
 
     - [sveltekit's srror function](https://kit.svelte.dev/docs/modules#sveltejs-kit-error)
 
-- async function getAllPosts()
+- async function getPost()
 
   - ```const allFiles = import.meta.glob('/src/routes/posts/**/*.md');```
 
@@ -590,10 +590,10 @@ export const GET = async () => {
     // > Array [Array ["a", "somestring"], Array ["b", 42]]
     ```
 
--    ```const allPosts = await Promise.all(```
+-    ```const Post = await Promise.all(```
 
-  - allPosts calls the [static method Promise.all](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all), which takes an iterable of promises as a input and returns a single Promise. This promise fulfills when all of the input's promises fulfill, and rejects when and of the input's promises rejects.
-  - In other words, allPosts will return a single promise only if all the promises called within it successfully resolve.
+  - Post calls the [static method Promise.all](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all), which takes an iterable of promises as a input and returns a single Promise. This promise fulfills when all of the input's promises fulfill, and rejects when and of the input's promises rejects.
+  - In other words, Post will return a single promise only if all the promises called within it successfully resolve.
 
 - ```iterableFiles.map(async ([path, resolver]) => {```
 
@@ -622,7 +622,7 @@ export const GET = async () => {
             const dateFormatted: string = await formatDate(date);
 ```
 
-- then there is a return statement from ```allPosts```, and finally allPosts itself is returned from ```getAllPosts```:
+- then there is a return statement from ```Post```, and finally Post itself is returned from ```getPost```:
 
   ```javascript
               return {
@@ -635,17 +635,17 @@ export const GET = async () => {
           })
       );
 
-      return allPosts;
+      return Post;
   }
   ```
 
-The second function declares this to be an API [GET endpoint](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/GET), calls getAllPosts, sorts them by date and returns a a json of the pots sorted by date:
+The second function declares this to be an API [GET endpoint](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/GET), calls getPost, sorts them by date and returns a a json of the pots sorted by date:
 
 ```javascript
 export const GET = async () => {
-    const allPosts: AllPosts[] = await getAllPosts();
+    const Post: Post[] = await getPost();
 
-    const sortedPosts = allPosts.sort((a, b) => {
+    const sortedPosts = Post.sort((a, b) => {
         return +new Date(b.date) - +new Date(a.date); // the + operator converts the date to a number by calling getTime(), which returns a unix timestamp
     });
     return json(sortedPosts);
@@ -856,13 +856,13 @@ And so we come to the actual page and server pages for the blog, or rather ```/p
 
 ```typescript
 import type { LayoutServerLoad } from './$types';
-import type { AllPosts } from '$lib/types';
+import type { Post } from '$lib/types';
 import { getAllTags } from '$lib/functions/GetAllTags';
 
 export const load: LayoutServerLoad = async ({ fetch }) => {
     // get all posts, sorted by data
     const response = await fetch(`/api/posts`);
-    const sortedPosts: AllPosts[] = await response.json();
+    const sortedPosts: Post[] = await response.json();
 
     // extract tags
     const allTags = await getAllTags(sortedPosts);
@@ -874,7 +874,7 @@ export const load: LayoutServerLoad = async ({ fetch }) => {
 };
 ```
 
-This defines a ```load``` function that makes a [fetch request using sveltekit's modified fetch method](https://kit.svelte.dev/docs/load#making-fetch-requests) request to the internal ```/api/posts``` defined in ```/api/posts/+server.ts```, which returns a list of all posts with slug, metadata, path, date as input into frontmatter and formatted, sorted into date order: ```const response = await fetch('/api/posts');```and calls [Response: json()](https://developer.mozilla.org/en-US/docs/Web/API/Response/json)```const sortedPosts: AllPosts[] = await response.json();```to read the Response stream to completion and resolve to json.
+This defines a ```load``` function that makes a [fetch request using sveltekit's modified fetch method](https://kit.svelte.dev/docs/load#making-fetch-requests) request to the internal ```/api/posts``` defined in ```/api/posts/+server.ts```, which returns a list of all posts with slug, metadata, path, date as input into frontmatter and formatted, sorted into date order: ```const response = await fetch('/api/posts');```and calls [Response: json()](https://developer.mozilla.org/en-US/docs/Web/API/Response/json)```const sortedPosts: Post[] = await response.json();```to read the Response stream to completion and resolve to json.
 
 ```const allTags = await getAllTags(sortedPosts);``` then calls ```getAllTags``` to make a list of unique tags and ```allTags``` and ```sortedPosts``` are returned.
 

@@ -1,8 +1,8 @@
-import type { AllPosts } from '$lib/types';
+import type { Post } from '$lib/types';
 
-export async function getAllTags(allPosts: AllPosts[]) {
+export async function getAllTags(Post: Post[]) {
 	const allTags: string[] = [];
-	allPosts.forEach((post) => {
+	Post.forEach((post) => {
 		post.metadata.tags.forEach((tag) => {
 			if (!allTags.includes(tag)) allTags.push(tag);
 		});
