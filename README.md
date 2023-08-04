@@ -1,3 +1,5 @@
+[![DeepScan grade](https://deepscan.io/api/teams/21109/projects/25228/branches/786049/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=21109&pid=25228&bid=786049)
+
 # create-svelte
 
 Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
