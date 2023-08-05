@@ -1,7 +1,7 @@
 ---
 title: Rendering markdown with mdsvex
-description: Using mdxvex to render svelte pages from markdown
-date: 2023-07-26
+description: Using mdsvex to render svelte pages from markdown
+date: 2023-08-05
 tags:
     - markdown
     - learning
@@ -659,7 +659,7 @@ export const escape_svelty = (str: string): string =>
 		)
 		.replace(/\\([trn])/g, '&#92;$1');
 ```
-    This replaces the characters {, }, and ` with their html entity equivalents, and replaces \t, \r, and \n with their html entity equivalents.
+    This replaces the characters ```{```, ```}```, and ` with their html entity equivalents, and adds a backslash to escape \t, \r, and \n.
 
 - then there is a return statement from ```Post```, and finally Post itself is returned from ```getPost```:
 
