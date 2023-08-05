@@ -3,30 +3,31 @@ title: DOM Element Reference
 date: '2023-08-03'
 description: typing DOM elements in sveltekit
 tags:
-  - levelup
-  - sveltekit
-  - typescript
+    - levelup
+    - sveltekit
+    - typescript
 ---
+
 ## [video](https://levelup.video/tutorials/svelte-and-typescript/html-element-reference)
 
 You can access HTML elements (ie DOM nodes) really easily in svelte and SK by [binding](https://svelte.dev/docs/element-directives#bind-this). From the docs:
 
 ```svelte
 <script lang="ts">
-  import { onMount } from 'svelte';
+	import { onMount } from 'svelte';
 
-  let canvasElement: HTMLCanvasElement;
+	let canvasElement: HTMLCanvasElement;
 
-  onMount(() => {
-    const ctx = canvasElement.getContext('2d');
-    drawStuff(ctx);
-  });
+	onMount(() => {
+		const ctx = canvasElement.getContext('2d');
+		drawStuff(ctx);
+	});
 </script>
 
 <canvas bind:this={canvasElement} />
 ```
 
-1. In ```Header.svelte```
+1. In `Header.svelte`
 
 ```
 <script lang="ts">
@@ -48,7 +49,7 @@ _Header.svelte:10 <header class=​"s-Cmt25qOMERl7">​…​</header>​flex_ -
 
 2. Types!
 
-Update: ```	let header_element: HTMLElement | undefined```;
+Update: `	let header_element: HTMLElement | undefined`;
 
 _undefined_ as it will be undefined on first load.
 

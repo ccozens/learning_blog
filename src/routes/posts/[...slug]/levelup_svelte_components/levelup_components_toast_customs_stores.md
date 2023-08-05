@@ -3,31 +3,31 @@ title: Advanced Custom Stores With a Toast Message
 date: '2023-08-03'
 description: Custom stores with a toast message
 tags:
-  - levelup
-  - sveltekit
-  - components
+    - levelup
+    - sveltekit
+    - components
 ---
+
 ## [Advanced Custom Stores With a Toast Message](https://levelup.video/tutorials/building-svelte-components/advanced-custom-stores-with-a-toast-message)
 
 [Toast messages](https://www.magicbell.com/blog/what-is-a-toast-message-and-how-do-you-use-it) help to deliver simple feedback to the user. They are informative, have a lifespan of just a few seconds and take up a very small portion of the screen.
 
 --> create a toast message
 
-1. Create a new folder! ```src/lib/toast```, Containing ```toast.js``` and ```Toast.svelte```.
-2. Create a basic store in ```toast.js```:
+1. Create a new folder! `src/lib/toast`, Containing `toast.js` and `Toast.svelte`.
+2. Create a basic store in `toast.js`:
 
 ```javascript
 import { writable } from 'svelte/store';
 
 // function to create store
 const newToast = () => {
-    const { subscribe, update } = writable([]);
+	const { subscribe, update } = writable([]);
 
-    return {
-        subscribe,
-
-    }
-}
+	return {
+		subscribe
+	};
+};
 
 export const toast = newToast();
 ```
@@ -36,21 +36,21 @@ export const toast = newToast();
 
 ```javascript
 const newToast = () => {
-    const { subscribe, update } = writable([]);
+	const { subscribe, update } = writable([]);
 
-    function send(message) {
-        // create a new array containing all daa in state and add new message
-        update((state) => [...state, message]);
-    }
+	function send(message) {
+		// create a new array containing all daa in state and add new message
+		update((state) => [...state, message]);
+	}
 
-    return {
-        subscribe,
-        send,
-    }
-}
+	return {
+		subscribe,
+		send
+	};
+};
 ```
 
-4. In ```Toast.svelte```:
+4. In `Toast.svelte`:
 
 ```
 <!-- script -->
@@ -98,10 +98,10 @@ const newToast = () => {
 ```
 
 Note:
-- ```{#each $toast as message}``` only works as a reactive statement because the ```subscribe``` function is returned from ```newToast```
 
+-   `{#each $toast as message}` only works as a reactive statement because the `subscribe` function is returned from `newToast`
 
-5. Finally, in ```+page.svelte```:
+5. Finally, in `+page.svelte`:
 
 ```
 <script>
@@ -121,4 +121,4 @@ Note:
 
 It works! Messages don't dissappear but it does work.
 
-Essentially, we have a button that runs a *send* function accepting a string. The *send* function adds the new string to an array, and its parent function *newToast* returns the *subscribe* method. That means in ```Toast.svelte``` we can subscribe to the store (```{#each $toast as message}```) and the *each* loop is rerun when *toast* updates.
+Essentially, we have a button that runs a _send_ function accepting a string. The _send_ function adds the new string to an array, and its parent function _newToast_ returns the _subscribe_ method. That means in `Toast.svelte` we can subscribe to the store (`{#each $toast as message}`) and the _each_ loop is rerun when _toast_ updates.

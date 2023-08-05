@@ -3,15 +3,16 @@ title: Basic toggle
 date: '2023-08-03'
 description: DIY toggle
 tags:
-  - levelup
-  - sveltekit
-  - components
+    - levelup
+    - sveltekit
+    - components
 ---
+
 #[Basic toggle](https://levelup.video/tutorials/building-svelte-components/creating-a-toggle)
 
 ##A barebones toggle
 
-1. Create ```src/lib/Toggle.svelte```
+1. Create `src/lib/Toggle.svelte`
 2. Code:
 
 ```
@@ -19,6 +20,7 @@ tags:
     <input type="checkbox" />
 </label>
 ```
+
 Wrpapping the toggle in a label becomes significant later, as means you can click the toggle itself.
 
 3. In homepage, render checkbox:
@@ -32,9 +34,10 @@ Wrpapping the toggle in a label becomes significant later, as means you can clic
 
 <Toggle />
 ```
+
 ...and now we have an unstyled checkbox
 
-4. In ```Toggle.svelte```, add an empty div with class toggle, and style checkbox:
+4. In `Toggle.svelte`, add an empty div with class toggle, and style checkbox:
 
 ```
 <label>
@@ -87,12 +90,10 @@ Wrpapping the toggle in a label becomes significant later, as means you can clic
 </style>
 ```
 
-```label``` section creates scoped CSS variables:
-	- width is defined.
-	- height is width /2.
-	- radius is height /2.
-```.toggle``` styles the empty div into a pillbox shape.
-[```.toggle::after```](https://developer.mozilla.org/en-US/docs/Web/CSS/::after) creates a pseudoelement that represents a styleable child pseudo-element immediately after the originating element's actual content. This creates the dot that toggles back and forth.
-```.input:checked + .toggle::after```: this checks whether the input is checked, and if so animates the toggle::after selector. The commented out code was copilot's suggestion, that seems to work the same.
-- ```.input:checked + .toggle```: colours the pillbox background when toggle toggled.
-- ```input { display: none;}``` hides the original checkbox
+`label` section creates scoped CSS variables: - width is defined. - height is width /2. - radius is height /2.
+`.toggle` styles the empty div into a pillbox shape.
+[`.toggle::after`](https://developer.mozilla.org/en-US/docs/Web/CSS/::after) creates a pseudoelement that represents a styleable child pseudo-element immediately after the originating element's actual content. This creates the dot that toggles back and forth.
+`.input:checked + .toggle::after`: this checks whether the input is checked, and if so animates the toggle::after selector. The commented out code was copilot's suggestion, that seems to work the same.
+
+-   `.input:checked + .toggle`: colours the pillbox background when toggle toggled.
+-   `input { display: none;}` hides the original checkbox

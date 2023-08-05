@@ -3,13 +3,10 @@ title: 'Github Action'
 date: '2023-07-31'
 description: Github Action for project management
 tags:
-  - sveltekit
-  - learning_blog
-  - github
+    - sveltekit
+    - learning_blog
+    - github
 ---
-
-
-
 
 [GitHub Acrtions for project management](https://docs.github.com/en/actions/managing-issues-and-pull-requests/using-github-actions-for-project-management)
 
@@ -17,49 +14,49 @@ tags:
 [add assignee to an issue](https://octokit.github.io/rest.js/v19#issues-add-assignees)
 [create a project card](https://octokit.github.io/rest.js/v19#projects-create-card)
 
-
-
-
 ## Action components
 
 ### [Workflow](https://docs.github.com/en/actions/using-workflows/)
+
 ...a configurable automated process that will run one or more jobs
 
-
 ### [Event](https://docs.github.com/en/actions/learn-github-actions/understanding-github-actions#events)
+
 ...a specific activity in a repository that triggers a workflow run.
 
-
 ### [Job](https://docs.github.com/en/actions/using-jobs)
+
 ...a set of steps in a workflow that is executed on the same runner. Can have _dependencies_, and then will wait on job 1 before starting job 2.
 
 [Available permissions](https://docs.github.com/en/actions/using-jobs/assigning-permissions-to-jobs):
 
 ```yaml
 permissions:
-  actions: read|write|none
-  checks: read|write|none
-  contents: read|write|none
-  deployments: read|write|none
-  id-token: read|write|none
-  issues: read|write|none
-  discussions: read|write|none
-  packages: read|write|none
-  pages: read|write|none
-  pull-requests: read|write|none
-  repository-projects: read|write|none
-  security-events: read|write|none
-  statuses: read|write|none
+    actions: read|write|none
+    checks: read|write|none
+    contents: read|write|none
+    deployments: read|write|none
+    id-token: read|write|none
+    issues: read|write|none
+    discussions: read|write|none
+    packages: read|write|none
+    pages: read|write|none
+    pull-requests: read|write|none
+    repository-projects: read|write|none
+    security-events: read|write|none
+    statuses: read|write|none
 ```
 
-
 ### [Action](https://docs.github.com/en/actions/learn-github-actions/understanding-github-actions#actions)
+
 ...a custom application for the GitHub Actions platform that performs a complex but frequently repeated task.
 
 ### [Runner](https://docs.github.com/en/actions/learn-github-actions/understanding-github-actions#runners)
+
 ...a server that runs your workflows when they're triggered. Each runner runs a single job at a time.
 
 ## The workflow file
+
 example:
 
 ```yaml
@@ -67,30 +64,28 @@ name: learn-github-actions
 run-name: ${{ github.actor }} is learning GitHub Actions
 on: [push]
 jobs:
-  check-bats-version:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '14'
-      - run: npm install -g bats
-      - run: bats -v
+    check-bats-version:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: '14'
+            - run: npm install -g bats
+            - run: bats -v
 ```
 
-| Code | Required | Explanation |
-|------|----------|-------------|
-|`name:`|[ ]|workflow name in the "Actions" tab of the repo|
-|`run-name:`|[ ]|name shown while running|
-|`on: [push]`|[x]|trigger for workflow (here, push|
-|`jobs:`|[x]|groups the jobs to run|
-|`check-bats-version:`|[x]|defines job called 'check-bats-version'|
-|`runs-on: ubuntu-latest`|[x]|configures runner as ubuntu server|
-|`steps:`|[x]|groups steps in the job|
-|`- uses: actions/checkout@v3`<br /> &ensp; `with:` <br> &ensp; &ensp; &ensp;`node-version: 14`|[x]|action to use (here, checkoutv3, with node v14)|
-|`  - run: npm install -g bats`<br /> `  - run: bats -v`|[x]|run keyword exectues job on runner|
-
-
+| Code                                                                                           | Required | Explanation                                     |
+| ---------------------------------------------------------------------------------------------- | -------- | ----------------------------------------------- |
+| `name:`                                                                                        | [ ]      | workflow name in the "Actions" tab of the repo  |
+| `run-name:`                                                                                    | [ ]      | name shown while running                        |
+| `on: [push]`                                                                                   | [x]      | trigger for workflow (here, push                |
+| `jobs:`                                                                                        | [x]      | groups the jobs to run                          |
+| `check-bats-version:`                                                                          | [x]      | defines job called 'check-bats-version'         |
+| `runs-on: ubuntu-latest`                                                                       | [x]      | configures runner as ubuntu server              |
+| `steps:`                                                                                       | [x]      | groups steps in the job                         |
+| `- uses: actions/checkout@v3`<br /> &ensp; `with:` <br> &ensp; &ensp; &ensp;`node-version: 14` | [x]      | action to use (here, checkoutv3, with node v14) |
+| `  - run: npm install -g bats`<br /> `  - run: bats -v`                                        | [x]      | run keyword exectues job on runner              |
 
 [Events that trigger workflows](https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows)
 
@@ -98,7 +93,6 @@ jobs:
 
 [Github scripts docs](https://github.com/marketplace/actions/github-script)
 [Github rest API docs](https://octokit.github.io/rest.js/v19)
-
 
 ### Context object
 

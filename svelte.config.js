@@ -3,20 +3,11 @@ import { vitePreprocess } from '@sveltejs/kit/vite';
 import { mdsvex } from 'mdsvex';
 import codeTitle from 'remark-code-titles';
 
-
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	// Consult https://kit.svelte.dev/docs/integrations#preprocessors
 	// for more information about preprocessors
-	preprocess:
-	[
-		mdsvex(
-		{ extensions: ['.md'],
-		remarkPlugins: [codeTitle],
-
-	}),
-	vitePreprocess()
-],
+	preprocess: [mdsvex({ extensions: ['.md'], remarkPlugins: [codeTitle] }), vitePreprocess()],
 	extensions: ['.svelte', '.md'],
 	kit: {
 		// adapter-auto only supports some environments, see https://kit.svelte.dev/docs/adapter-auto for a list.

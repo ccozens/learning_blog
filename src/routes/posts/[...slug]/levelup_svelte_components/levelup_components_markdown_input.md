@@ -3,14 +3,15 @@ title: Markdown input
 date: '2023-08-03'
 description: Making a markdown input component, and rendering with marked
 tags:
-  - levelup
-  - sveltekit
-  - components
-  - markdown
+    - levelup
+    - sveltekit
+    - components
+    - markdown
 ---
+
 #[Markdown input](https://levelup.video/tutorials/building-svelte-components/markdown-input)
 
-1. Create ```src/lib/Markdown.svelte```
+1. Create `src/lib/Markdown.svelte`
 2. Set up basic text area:
 
 ```
@@ -31,11 +32,11 @@ tags:
 </div>
 ```
 
-- ```cols``` and ```rows``` set the [textarea](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/textarea) size
-- ```bind:value={text}``` binds the variable _text_ to the value of text input
+-   `cols` and `rows` set the [textarea](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/textarea) size
+-   `bind:value={text}` binds the variable _text_ to the value of text input
 
-3. Add [marked to allow markdown parsing](https://marked.js.org/): ```pnpm add marked```
-4. import and use in ```Markdown.svelte```!
+3. Add [marked to allow markdown parsing](https://marked.js.org/): `pnpm add marked`
+4. import and use in `Markdown.svelte`!
 
 ```
 <!-- script -->
@@ -65,7 +66,7 @@ This outputs the raw html.
 
 5. [Svelte has a special tag @html](https://svelte.dev/docs/special-tags#html) to render html:
 
-```{@html markdownText}```
+`{@html markdownText}`
 
 Output is now rendered!
 
@@ -90,9 +91,10 @@ Output is now rendered!
 
 Now renders with box centred and all children 50% width.
 
-7. To make the data availabe in ```+page.svelte```
-- first in ```Markdown.svelte``` make the variable a prop: ```export let text = '';```
-- second in ```+page.svelte```:
+7. To make the data availabe in `+page.svelte`
+
+-   first in `Markdown.svelte` make the variable a prop: `export let text = '';`
+-   second in `+page.svelte`:
 
 ```
 <script>

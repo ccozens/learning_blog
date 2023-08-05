@@ -3,13 +3,14 @@ title: Complex State Updates With Toast Messages
 date: '2023-08-03'
 description: Intro to complex state updates with toast messages
 tags:
-  - levelup
-  - sveltekit
-  - components
+    - levelup
+    - sveltekit
+    - components
 ---
+
 #[Complex State Updates With Toast Messages](https://levelup.video/tutorials/building-svelte-components/using-tweened-as-a-timeout)
 
-1. Create ```src/lib/toast/ToastMessage.svelte``` and scaffold:
+1. Create `src/lib/toast/ToastMessage.svelte` and scaffold:
 
 ```
 <!-- script -->
@@ -24,7 +25,7 @@ tags:
 </p>
 ```
 
-2. Update ```Toast.svelte```:
+2. Update `Toast.svelte`:
 
 ```
 <script>
@@ -53,9 +54,9 @@ tags:
 
 This now works the same and is more composable.
 
-3. We can use [onMount](https://svelte.dev/docs/svelte#onmount) to run a tweening function whenever a toast message loads. In ```ToastMessage.svelte```:
+3. We can use [onMount](https://svelte.dev/docs/svelte#onmount) to run a tweening function whenever a toast message loads. In `ToastMessage.svelte`:
 
-```
+````
 <!-- script -->
 <script>
 	import { tweened } from 'svelte/motion';
@@ -89,16 +90,16 @@ This now works the same and is more composable.
 		margin: 0;
 	}
 </style>
-```
+````
 
 Now, when a message loads it has a progress bar that tracks from full to nothing and the message is removed at zero. Copilot suggests a JS variant that didn't use the toast method:
 
 ```javascript
 progress.subscribe((value) => {
-        if (value === 0) {
-            toast.remove();
-        }
-    });
+	if (value === 0) {
+		toast.remove();
+	}
+});
 ```
 
-4. However, multiple toasts all run on the same timer, so pass a duration prop into Toast on ```+page.svelte```: ```<Toast duration={3000}/>```, then ```Toast.svelte``` gets ```export let duration = 1000;``` and ```<ToastMessage {message} {duration} />```. Finally, ```ToastMessage.svelte``` also gets ```export let duration = 1000;``` and amend *progress* to ```let progress = tweened(100, { duration });``` to use passed on value. Aaaaand now they all run on their own timer.
+4. However, multiple toasts all run on the same timer, so pass a duration prop into Toast on `+page.svelte`: `<Toast duration={3000}/>`, then `Toast.svelte` gets `export let duration = 1000;` and `<ToastMessage {message} {duration} />`. Finally, `ToastMessage.svelte` also gets `export let duration = 1000;` and amend _progress_ to `let progress = tweened(100, { duration });` to use passed on value. Aaaaand now they all run on their own timer.

@@ -3,8 +3,8 @@ title: Astro components
 date: '2023-07-31'
 description: Intro to Astro components, including JS in frontmatter, styling and CSS variables
 tags:
-  - astro
-  - components
+    - astro
+    - components
 ---
 
 JavaScript
@@ -38,19 +38,22 @@ Then inject as for JSX:
 ```html
 <h1>{pageTitle}</h1>
 <ul>
-      <li>My name is {identity.firstName}.</li>
-      <li>
-        I live in {identity.country} and I am a {
-          identity.occupation[0]
-        } and {identity.occupation[1]}.
-      </li>
-    </ul>
-    <p>My skills are:</p>
-    <ul>
-      {skills.map((skill) => <li>{skill}</li>)}
-    </ul>
+	<li>My name is {identity.firstName}.</li>
+	<li>
+		I live in {identity.country} and I am a { identity.occupation[0] } and
+		{identity.occupation[1]}.
+	</li>
+</ul>
+<p>My skills are:</p>
+<ul>
+	{skills.map((skill) =>
+	<li>{skill}</li>
+	)}
+</ul>
 
-    {happy && <p>I am happy to be learning Astro!</p>}
+{happy &&
+<p>I am happy to be learning Astro!</p>
+}
 ```
 
 ## [Styling](https://docs.astro.build/en/guides/styling/#styling-in-astro)
@@ -59,10 +62,10 @@ The Astro `<style>` tag is scoped by default, meaning that it only affects the e
 
 ```html
 <style>
-  h1 {
-    color: purple;
-    font-size: 4rem;
-  }
+	h1 {
+		color: purple;
+		font-size: 4rem;
+	}
 </style>
 ```
 
@@ -71,17 +74,16 @@ The Astro `<style>` tag is scoped by default, meaning that it only affects the e
 First the style:
 
 ```html
- .skill {
-    color: green;
-    font-weight: bold;
-    }
+.skill { color: green; font-weight: bold; }
 ```
 
 Then in the HTML:
 
 ```html
 <ul>
-  {skills.map((skill) => <li class="skill">{skill}</li>)}
+	{skills.map((skill) =>
+	<li class="skill">{skill}</li>
+	)}
 </ul>
 ```
 
@@ -90,18 +92,17 @@ Then in the HTML:
 Define colour in JS:
 
 ```javascript
-const skillColour = "navy";
+const skillColour = 'navy';
 ```
 
 Then inject `define:vars={{skillColour}}` into style declaration the style, and update color to use the colour `color: var(--skillColor)`:
 
 ```html
-<style define:vars={{skillColour}}>
-
- .skill {
-    color: var(--skillColor);
-    font-weight: bold;
-    }
+<style define:vars="{{skillColour}}">
+	.skill {
+		color: var(--skillColor);
+		font-weight: bold;
+	}
 </style>
 ```
 
@@ -109,7 +110,9 @@ And leave the JSX:
 
 ```html
 <ul>
-  {skills.map((skill) => <li class="skill">{skill}</li>)}
+	{skills.map((skill) =>
+	<li class="skill">{skill}</li>
+	)}
 </ul>
 ```
 
@@ -124,25 +127,25 @@ This can be done various ways - tutorial uses `global.css` that is then imported
 
 ```css
 html {
-  background-color: #f1f5f9;
-  font-family: sans-serif;
+	background-color: #f1f5f9;
+	font-family: sans-serif;
 }
 
 body {
-  margin: 0 auto;
-  width: 100%;
-  max-width: 80ch;
-  padding: 1rem;
-  line-height: 1.5;
+	margin: 0 auto;
+	width: 100%;
+	max-width: 80ch;
+	padding: 1rem;
+	line-height: 1.5;
 }
 
 * {
-  box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 h1 {
-  margin: 1rem 0;
-  font-size: 2.5rem;
+	margin: 1rem 0;
+	font-size: 2.5rem;
 }
 ```
 
@@ -152,4 +155,5 @@ h1 {
 ---
 import '../styles/global.css';
 ```
-*
+
+-

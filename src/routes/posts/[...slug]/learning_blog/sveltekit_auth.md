@@ -3,10 +3,11 @@ title: 'SvelteKit auth using Auth.js'
 date: '2023-07-31'
 description: Enable auth in SvelteKit using Auth.js, with GitHub OAuth.
 tags:
-  - sveltekit
-  - learning_blog
-  - auth
+    - sveltekit
+    - learning_blog
+    - auth
 ---
+
 #Auth using [Auth.js](https://authjs.dev/).
 
 I wanted to enable auth in this project so I can have all data visible to anyone and only allow editing by me when I am logged in. I wanted a simple route so went for [Auth.js](https://authjs.dev/). Auth.js is an expanded version of [NextAuth](https://next-auth.js.org/), which I've used in the past, and there is a [sveltekit adaptor](https://authjs.dev/reference/sveltekit/). Currently (21 Jul 23) the docs have a huge flag on saying:
@@ -18,34 +19,32 @@ and feel incomplete, so I based my auth on the [vercel example hosted on GitHub]
 
 ## The process.
 
-1. First up, install: ```pnpm add @auth/core @auth/sveltekit```
+1. First up, install: `pnpm add @auth/core @auth/sveltekit`
 2. Create **two** [Github OAuth apps](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app). This allows using different auth for dev and prod, and gets round GitHub only allowing one callback URL. The callback URL defaults to:
 
-	```[origin]/auth/callback/[provider]```
+    `[origin]/auth/callback/[provider]`
 
-	so I created:
+    so I created:
 
-   - _dev_: ```https://localhost:5173/auth/callback/github```
-   - _prod_: ```https://learning-blog.teal.vercel.app/auth/callback/github```. Here, _https://learning-blog-teal.vercel.app/_ is the URL my project was deployed to before I moved to a named domain.
+    - _dev_: `https://localhost:5173/auth/callback/github`
+    - _prod_: `https://learning-blog.teal.vercel.app/auth/callback/github`. Here, _https://learning-blog-teal.vercel.app/_ is the URL my project was deployed to before I moved to a named domain.
 
-
-3. Record client id and client secret in ```.env```:
+3. Record client id and client secret in `.env`:
 
 ```javascript:.env
 GITHUB_ID = '####'
 GITHUB_SECRET = '####'
 ```
 
-4. Create a random string 32 character for AUTH_SECRET ([online generator](https://generate-secret.vercel.app/32)) and add to ```.env```"
+4. Create a random string 32 character for AUTH_SECRET ([online generator](https://generate-secret.vercel.app/32)) and add to `.env`"
 
 ```javascript .env
-GITHUB_ID = '####'
-GITHUB_SECRET = '####'
-AUTH_SECRET = '####'
+GITHUB_ID = '####';
+GITHUB_SECRET = '####';
+AUTH_SECRET = '####';
 ```
 
-
-5. Create and populate ```hooks.server.ts``` in the root dir:
+5. Create and populate `hooks.server.ts` in the root dir:
 
 ```typescript:hooks.server.ts
 import { SvelteKitAuth } from '@auth/sveltekit';
@@ -69,12 +68,13 @@ export const handle: Handle = SvelteKitAuth(async () => {
 ```
 
 ### What's going on here?
-- imports are fairly standard, apart from `````` which is importing from ```.env' using [sveltekit's $env/static/private module](https://kit.svelte.dev/docs/modules#$env-static-private), which imports static variables and only runs server-side.
-- [handle is a sveltekit hook](https://kit.svelte.dev/docs/hooks#server-hooks-handle) that runs wvery time the SvelteKit server receives a request. It is allows modification of response headers or bodies.
-- when handle runs, it runs SvelteKitAuth, which specifies the auth providers (here, GitHub) and sets the ```clientId``` and ```clientSecret``` for authorisation by GitHub.
-- ```secret```: is a optional parameter that is used to sign and verify authentication tokens. When a user logs in using GitHub, a token containing information about the user's auth status and permission scopes is generated. This is signed using the ```secret``` key and allows the SvelteKit app to validate the GitHub token.
-- ```trustHost``` permits trusting hosts other than vercel. While this is a security risk, it allows logging in from localhost.
-- ```return authOptions``` returns all the above data:
+
+-   imports are fairly standard, apart from ````which is importing from`.env' using [sveltekit's $env/static/private module](https://kit.svelte.dev/docs/modules#$env-static-private), which imports static variables and only runs server-side.
+-   [handle is a sveltekit hook](https://kit.svelte.dev/docs/hooks#server-hooks-handle) that runs wvery time the SvelteKit server receives a request. It is allows modification of response headers or bodies.
+-   when handle runs, it runs SvelteKitAuth, which specifies the auth providers (here, GitHub) and sets the `clientId` and `clientSecret` for authorisation by GitHub.
+-   `secret`: is a optional parameter that is used to sign and verify authentication tokens. When a user logs in using GitHub, a token containing information about the user's auth status and permission scopes is generated. This is signed using the `secret` key and allows the SvelteKit app to validate the GitHub token.
+-   `trustHost` permits trusting hosts other than vercel. While this is a security risk, it allows logging in from localhost.
+-   `return authOptions` returns all the above data:
 
 ```json
 authOptions {
@@ -111,25 +111,25 @@ authOptions {
 }
 ```
 
-4. Create and populate ```src/routes/+layout.server.ts```
+4. Create and populate `src/routes/+layout.server.ts`
 
-Elements in a [SvelteKit layout file](https://kit.svelte.dev/docs/routing#layout) will display on every sibling and child page. As a ```+layout.server.ts``` file, [the load function will run on the server](https://kit.svelte.dev/docs/routing#layout-layout-server-js).
+Elements in a [SvelteKit layout file](https://kit.svelte.dev/docs/routing#layout) will display on every sibling and child page. As a `+layout.server.ts` file, [the load function will run on the server](https://kit.svelte.dev/docs/routing#layout-layout-server-js).
 
 ```typescript +layout.server.ts
-import type { LayoutServerLoad } from "./$types"
+import type { LayoutServerLoad } from './$types';
 
 export const load: LayoutServerLoad = async (event) => {
-  return {
-    session: await event.locals.getSession(),
-  }
-}
+	return {
+		session: await event.locals.getSession()
+	};
+};
 ```
 
-This load function is run automatically when the layout is loaded, and takes a server load event object as argument. This returns a session using ```getSession```, which is a SvelteKit function that returns a Promise - if authenticated, it returns user session data, or null if the user is not authenticated.
+This load function is run automatically when the layout is loaded, and takes a server load event object as argument. This returns a session using `getSession`, which is a SvelteKit function that returns a Promise - if authenticated, it returns user session data, or null if the user is not authenticated.
 
-As this is a load funcion, the session data is now available globally via the [page.data object](https://kit.svelte.dev/docs/types#app-pagedata) of the [page store](https://kit.svelte.dev/docs/types#public-types-page), as ```page.data``` contains the merged data of all load functions in the app.
+As this is a load funcion, the session data is now available globally via the [page.data object](https://kit.svelte.dev/docs/types#app-pagedata) of the [page store](https://kit.svelte.dev/docs/types#public-types-page), as `page.data` contains the merged data of all load functions in the app.
 
-5. Create ```+layout.svelte```
+5. Create `+layout.svelte`
 
 This [sveltekit layout](https://kit.svelte.dev/docs/routing#layout-layout-svelte) provides client side layouts for every sibling and child page.
 
@@ -288,14 +288,16 @@ Importantly, this imports the [SvelteKit page store](https://kit.svelte.dev/docs
 ```
 
 This code generates a header showing a either:
-- if not signed in: a message saying 'You are not signed in' and a _Sign in_ button
-- if signed in: your GitHub avatar and a message saying 'Signed in as <your GitHub name>', and a _Sign out_ button.
+
+-   if not signed in: a message saying 'You are not signed in' and a _Sign in_ button
+-   if signed in: your GitHub avatar and a message saying 'Signed in as <your GitHub name>', and a _Sign out_ button.
 
 It also so:
-- generates a small nav with _Home_ and _Protected_ links, where _Protected_ can only be visited on login.
-- adds CSS
 
-6. Create ```+page.svelte```:
+-   generates a small nav with _Home_ and _Protected_ links, where _Protected_ can only be visited on login.
+-   adds CSS
+
+6. Create `+page.svelte`:
 
 Content here not important - the [Auth.js demo](https://github.com/nextauthjs/sveltekit-auth-example/) contains:
 
@@ -309,7 +311,7 @@ Content here not important - the [Auth.js demo](https://github.com/nextauthjs/sv
 </p>
 ```
 
-7. Create ```src/routes/protected/+page.svelte``` and populate:
+7. Create `src/routes/protected/+page.svelte` and populate:
 
 ```typescript
 <script lang="ts">
@@ -333,4 +335,4 @@ Content here not important - the [Auth.js demo](https://github.com/nextauthjs/sv
 {/if}
 ```
 
-This page uses an [Svelte if...else... expression](https://svelte.dev/docs/logic-blocks#if) to check for ```page.data.session```. If present it allows access, and if not shows a message saying _You must be signed in to view this page_. This is as simple as it is because _getSession()_ returns _null_ if authorization is incorrect.
+This page uses an [Svelte if...else... expression](https://svelte.dev/docs/logic-blocks#if) to check for `page.data.session`. If present it allows access, and if not shows a message saying _You must be signed in to view this page_. This is as simple as it is because _getSession()_ returns _null_ if authorization is incorrect.

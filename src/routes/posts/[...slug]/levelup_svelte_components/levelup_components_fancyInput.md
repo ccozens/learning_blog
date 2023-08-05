@@ -3,15 +3,16 @@ title: Fancy Input
 date: '2023-08-03'
 description: Using an input component to create a fancy input
 tags:
-  - levelup
-  - sveltekit
-  - components
+    - levelup
+    - sveltekit
+    - components
 ---
+
 #[Fancy Input](https://levelup.video/tutorials/building-svelte-components/fancy-input)
 
-Fancy inputs can be used for form fields in svelte: ```src/lib/Field.svelte```. The goal here is to create a component that does things you don't want to have to do each time.
+Fancy inputs can be used for form fields in svelte: `src/lib/Field.svelte`. The goal here is to create a component that does things you don't want to have to do each time.
 
-1. Set up ```Field.svelte``` to have element properties as component props:
+1. Set up `Field.svelte` to have element properties as component props:
 
 ```
 <!-- script -->
@@ -40,13 +41,13 @@ Fancy inputs can be used for form fields in svelte: ```src/lib/Field.svelte```. 
 ```
 
 Here,
-- wrapper div receives style
-- the label is wrapped in an if clause, meaning there is no label shown as by default it is an empty string (which equates to _false_), and will render if a label is entered.
-- ditto instructions, which also has its own style
-- input type is set to the default value where _type="text"_, and can be amended if desired.
 
+-   wrapper div receives style
+-   the label is wrapped in an if clause, meaning there is no label shown as by default it is an empty string (which equates to _false_), and will render if a label is entered.
+-   ditto instructions, which also has its own style
+-   input type is set to the default value where _type="text"_, and can be amended if desired.
 
-2. Use it! ```+page.svelte```:
+2. Use it! `+page.svelte`:
 
 ```
 <script>
@@ -60,9 +61,9 @@ Here,
 Note value set equal to search as already exists on page and saves setting up a new var.
 You can type but nothing changes.
 
-3. If choose to bind value in ```Field.svelte```: ```<input {type} bind:value {placeholder} />``` you get an error: _'type' attribute cannot be dynamic if input uses two-way binding_, which means if the _type_ attribute is coming in as a prop then svelte cannot properly bind the value.
+3. If choose to bind value in `Field.svelte`: `<input {type} bind:value {placeholder} />` you get an error: _'type' attribute cannot be dynamic if input uses two-way binding_, which means if the _type_ attribute is coming in as a prop then svelte cannot properly bind the value.
 
-Workaround: go back to ```<input {type} {value} {placeholder} />``` and write a handleInput fn:
+Workaround: go back to `<input {type} {value} {placeholder} />` and write a handleInput fn:
 
 ```
 	function handleInput(e) {
@@ -73,15 +74,17 @@ Workaround: go back to ```<input {type} {value} {placeholder} />``` and write a 
 	}
 ```
 
-and update input: ```<input on:input={handleInput} {type} {value} {placeholder} />```
+and update input: `<input on:input={handleInput} {type} {value} {placeholder} />`
 
 aaand now input is binding and displays on screen as type
 
 4. Use the props!
-```	<Field
+
+````<Field
 		bind:value={search}
 		label="Search"
 		instructions="Type in the box"
 		placeholder="I'm a box"
        style="background-color: lightgoldenrodyellow;"
 	/>```
+````

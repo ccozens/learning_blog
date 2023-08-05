@@ -3,17 +3,18 @@ title: Search List Input
 date: '2023-08-03'
 description: Making a search filter
 tags:
-  - levelup
-  - sveltekit
-  - components
+    - levelup
+    - sveltekit
+    - components
 ---
+
 #[Search List Input](https://levelup.video/tutorials/building-svelte-components/search-list-input)
 
-Start from search filter, and rename ```SearchList.svelte```.
->The output here is not keyboard scrollable of focussable
+Start from search filter, and rename `SearchList.svelte`.
 
+> The output here is not keyboard scrollable of focussable
 
-1. Modify the ```<ul>``` to make the components clickable:
+1. Modify the `<ul>` to make the components clickable:
 
 ```
 <ul>
@@ -58,7 +59,8 @@ Now clicking on any element will make it the search term.
 
 3. There is no autocomplete on typing. One way round this is to make the user click on something:
 
-Update the ```<ul>``` element so that clicking an item is what sets isFocused to false and hides the list:
+Update the `<ul>` element so that clicking an item is what sets isFocused to false and hides the list:
+
 ```
 {#if isFocused}
 	<ul>
@@ -76,9 +78,9 @@ Update the ```<ul>``` element so that clicking an item is what sets isFocused to
 {/if}
 ```
 
-and remove ```on:blur={() => (isFocused = false)}``` from the ```<input>``` as now redundant.
+and remove `on:blur={() => (isFocused = false)}` from the `<input>` as now redundant.
 
-Here, ```onFocus``` is set true when we click on the input (which displays the list of names), and clicking sets ```onFocus``` to false and so hides the rest of the list.
+Here, `onFocus` is set true when we click on the input (which displays the list of names), and clicking sets `onFocus` to false and so hides the rest of the list.
 
 4. Animations!
 
@@ -111,7 +113,7 @@ Added 200 ms fade to the ul and individual li transitions.
 
 5. Styles!
 
-Wrap the whole markup in ```<div class="wrapper">``` and:
+Wrap the whole markup in `<div class="wrapper">` and:
 
 ```
 <style>
@@ -143,8 +145,8 @@ ul {
 
 6. To output _search_ **anywhere** in the page (ie, pass the prop from child to parent):
 
-Update script element of ```SearchList.svelte```: ```export let search = '';```
-Update ```+page.svelte```:
+Update script element of `SearchList.svelte`: `export let search = '';`
+Update `+page.svelte`:
 
 ```
 <script>

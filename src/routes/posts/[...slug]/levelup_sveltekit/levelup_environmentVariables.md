@@ -3,22 +3,22 @@ title: Environment Variables
 date: '2023-07-07'
 description: Intro to environment variables in SvelteKit
 tags:
-  - levelup
-  - sveltekit
-  - envvars
+    - levelup
+    - sveltekit
+    - envvars
 ---
+
 ## [video](https://levelup.video/tutorials/sveltekit/env-vars)
 
-In dev and preview, SvelteKit will read environment variables from your .env file (or .env.local, or .env.[mode], as determined by Vite.) In production, .env files are not automatically loaded. To do so, install ```dotenv``` in your project.
+In dev and preview, SvelteKit will read environment variables from your .env file (or .env.local, or .env.[mode], as determined by Vite.) In production, .env files are not automatically loaded. To do so, install `dotenv` in your project.
 
 [SvelteKit allows public and private environment variables](https://kit.svelte.dev/docs/adapter-node#environment-variables). 99% of the time, static variables are probably the ones to go for.
 
-
-
-
 ##Private environmental variables
+
 ### Create
-1. Create env vars: touch ```.env```
+
+1. Create env vars: touch `.env`
 2. Create mock API keys:
 3. Restart server
 
@@ -28,11 +28,13 @@ PUBLIC_LUT_PUB_KEY='iampublic'
 ```
 
 ### Can't use client side
-1. in ```src/routes/+layout.svelte```: ```import { env } from '$env/dynamic/private';```
-2. It tells you off! ```Cannot import $env/dynamic/private into client-side code```
+
+1. in `src/routes/+layout.svelte`: `import { env } from '$env/dynamic/private';`
+2. It tells you off! `Cannot import $env/dynamic/private into client-side code`
 
 ### Can use server side
-1. in ```src/routes/show/[num]/+page.server.js```:
+
+1. in `src/routes/show/[num]/+page.server.js`:
 
 ```javascript
 import { env } from '$env/dynamic/private';
@@ -126,27 +128,33 @@ env {
 }
 ```
 
-### Easier import as ```static/private```
+### Easier import as `static/private`
+
 This means it is resolved statically from vite. It won't log when you visit every page as it doesn't change.
 
-1. in ```src/routes/show/[num]/+page.server.js```:
+1. in `src/routes/show/[num]/+page.server.js`:
 
 ```javascript
 import { LUT_API } from '$env/static/private';
 console.log('LUT_API', LUT_API);
 ```
-2. server console logs: ```LUT_API``` 'asdfasdfasdf'
 
+2. server console logs: `LUT_API` 'asdfasdfasdf'
 
 ##Public environmental variables
+
 ### Why?
+
 Might be needed for eg for a feature flag, or the URL of currently hosted page for cookies.
+
 ### How?
-Demaracate by prefixing with ```PUBLIC_``` in ```.env```.
+
+Demaracate by prefixing with `PUBLIC_` in `.env`.
 
 ###Examples
 ####Dynamic import
-1. in ```src/routes/+layout.svelte``` (key is that its a svelte component):
+
+1. in `src/routes/+layout.svelte` (key is that its a svelte component):
 
 ```javscript
 import { env } from '$env/dynamic/public';
@@ -155,8 +163,11 @@ console.log('env', env);
 
 2. ```PUBLIC_LUT_PUB_KEY': 'iampublic' logged to *browser* console.
 
+   ```
+
 ####Static import
-1. in ```src/routes/+layout.svelte``` (key is that its a svelte component):
+
+1. in `src/routes/+layout.svelte` (key is that its a svelte component):
 
 ```javscript
 import { PUBLIC_LUT_PUB_KEY } from '$env/static/public';
@@ -164,3 +175,5 @@ console.log('PUBLIC_LUT_PUB_KEY', PUBLIC_LUT_PUB_KEY);
 ```
 
 2. ```PUBLIC_LUT_PUB_KEY': 'iampublic' logged to *browser* console.
+
+   ```

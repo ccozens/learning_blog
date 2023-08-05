@@ -3,10 +3,11 @@ title: Accordion with Mounting and Unmounting
 date: '2023-08-03'
 description: Mounting and unmounting components
 tags:
-  - levelup
-  - sveltekit
-  - components
+    - levelup
+    - sveltekit
+    - components
 ---
+
 #[Accordion with Mounting and Unmounting](https://levelup.video/tutorials/building-svelte-components/accordion-with-mounting-and-unmounting)
 
 2 different, completely viable approaches: using [Svelte's transitions](https://svelte.dev/docs/svelte-transition) and CSS.
@@ -14,7 +15,7 @@ tags:
 ##Svelte's transitions
 This method is easy but it mounts and unmounts from the DOM - ie, when you close the accordion the HTML for the inner text is _removed from the DOM_. As the accordion is closed by default, the children are not mounted in the SSR side, so Google won't be able to index it, as the HTML won't be rendered until there is a user interaction.
 
-1. Create ```src/lib/Accordion.svelte```
+1. Create `src/lib/Accordion.svelte`
 2. Setup props and layout:
 
 ```
@@ -31,10 +32,10 @@ This method is easy but it mounts and unmounts from the DOM - ie, when you close
 </div>
 ```
 
-- buttonText is for the header text
-- isOpen marks whether the accordion is open or not
-- slot is for the accordion content
-- divs are wrappers
+-   buttonText is for the header text
+-   isOpen marks whether the accordion is open or not
+-   slot is for the accordion content
+-   divs are wrappers
 
 2. [slide transition using svelte](https://svelte.dev/docs/svelte-transition#slide):
 
@@ -74,7 +75,7 @@ This method is easy but it mounts and unmounts from the DOM - ie, when you close
 </button>
 ```
 
-5. Take a look! In ```+page.svelte```:
+5. Take a look! In `+page.svelte`:
 
 ```
 <script>
@@ -89,7 +90,5 @@ This method is easy but it mounts and unmounts from the DOM - ie, when you close
     </div>
 </Accordion>
 ```
-
-
 
 ##Accordion using CSS and Svelte actions

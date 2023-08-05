@@ -3,35 +3,36 @@ title: Dismiss-able Toasts and Error Toasts
 date: '2023-08-03'
 description: Dissmiss-able Toasts messages - click to dismiss
 tags:
-  - levelup
-  - sveltekit
-  - components
+    - levelup
+    - sveltekit
+    - components
 ---
+
 #[Dismiss-able Toasts and Error Toasts](https://levelup.video/tutorials/building-svelte-components/dismiss-able-toasts-and-error-toasts)
 
 --> making toast messages more configurable
 
 ##Toast messages
 
-1. In ```toast.js```, update _send_ function to take in an objectL
+1. In `toast.js`, update _send_ function to take in an objectL
 
 ```javascript
-function send(message, { duration = 2000, type = "INFO"}) {
-    // create a new message object
-    const id = new Date().getTime(); // unique id
+function send(message, { duration = 2000, type = 'INFO' }) {
+	// create a new message object
+	const id = new Date().getTime(); // unique id
 
-    const newMessage = {
-        id,
-        duration,
-        type,
-        message
-    }
-    // create a new array containing all daa in state and add new message
-    update((state) => [...state, newMessage]);
+	const newMessage = {
+		id,
+		duration,
+		type,
+		message
+	};
+	// create a new array containing all daa in state and add new message
+	update((state) => [...state, newMessage]);
 }
 ```
 
-2. As a result of adding duration here, need a few updates to ```ToastMessage.svelte```:
+2. As a result of adding duration here, need a few updates to `ToastMessage.svelte`:
 
 ```
 <script>
@@ -44,12 +45,12 @@ function send(message, { duration = 2000, type = "INFO"}) {
 	{message.message} // was previously: {message}
 </p>
 ```
-and remove ```export let duration```
 
+and remove `export let duration`
 
-3. and ```Toast.svelte```:
+3. and `Toast.svelte`:
 
-- remove ```export let duration ;``` as don't need prop any more, and also remove from ```<ToastMessage {message} />``` instantiation.
+-   remove `export let duration ;` as don't need prop any more, and also remove from `<ToastMessage {message} />` instantiation.
 
 4. Error!
 
@@ -59,11 +60,11 @@ toast.js?t=1689759612185:7 Uncaught TypeError: Cannot read properties of undefin
     at HTMLButtonElement.click_handler (+page.svelte:41:32)
 ```
 
-Which means when click ```<button on:click={() => toast.send('add PB')}>Make Toast</button>``` in ```+page.svelte```, there is no data for _duration_ passed to _send_, causing the object destructuring to fail. So, can add a default of empty object ```= {}``` to _send_, like so: ```function send(message, { duration = 2000, type = "INFO" } = {} )```, so that JS knows what to expect.
+Which means when click `<button on:click={() => toast.send('add PB')}>Make Toast</button>` in `+page.svelte`, there is no data for _duration_ passed to _send_, causing the object destructuring to fail. So, can add a default of empty object `= {}` to _send_, like so: `function send(message, { duration = 2000, type = "INFO" } = {} )`, so that JS knows what to expect.
 
 Now all works!
 
-5. Make multiple toasts in ```Toast.svelte``` so can experiment with properties:
+5. Make multiple toasts in `Toast.svelte` so can experiment with properties:
 
 ```
 <button on:click={() => toast.send('add PB')}>Make Toast</button>
@@ -72,7 +73,7 @@ Now all works!
 <Toast />
 ```
 
-6. Jazz up a little in ```Toast.svelte```:
+6. Jazz up a little in `Toast.svelte`:
 
 ```
 <style>
@@ -94,7 +95,7 @@ Now all works!
 </style>
 ```
 
-Note if SCSS/PostCSS was set up, could have use ```&```:
+Note if SCSS/PostCSS was set up, could have use `&`:
 
 ```
 <style>
@@ -109,14 +110,14 @@ Note if SCSS/PostCSS was set up, could have use ```&```:
 </style>
 ```
 
-Then to apply, update class on ```class="toast"``` to ``````class={```toast ${message.type.toLowerCase()}```}``````.
-
+Then to apply, update class on `class="toast"` to ` class={```toast ${message.type.toLowerCase()}```} `.
 
 ##Progress bar styling
-1. Currently its green ``````<div class="progress" style={```width: ${$progress}%; height: 10px; background:green;```} />``````
+
+1. Currently its green ` <div class="progress" style={```width: ${$progress}%; height: 10px; background:green;```} /> `
 2. Keep the width and otherwise break out into style tag and style properly:
 
-```
+````
 <div class="progress" style={```width: ${$progress}%;```} />
 
 <style>
@@ -130,20 +131,20 @@ Then to apply, update class on ```class="toast"``` to ``````class={```toast ${me
 	right: 0;
 }
 </style>
-```
+````
 
-Need to update ```.toast``` style in ```Toast.svelte``` to include ```position: relative;``` as ```position:absolute``` [sets position relative to its nearest positioned ancestir (ie, the nearest parent that is not static)](https://developer.mozilla.org/en-US/docs/Web/CSS/position).
+Need to update `.toast` style in `Toast.svelte` to include `position: relative;` as `position:absolute` [sets position relative to its nearest positioned ancestir (ie, the nearest parent that is not static)](https://developer.mozilla.org/en-US/docs/Web/CSS/position).
 
 ##Dismissing on click
 
-Currently ```toast.js``` removes the first item in the array when called:
+Currently `toast.js` removes the first item in the array when called:
 
 ```javascript
 function remove() {
-    update((state) => {
-        let [first, ...rest] = state;
-        return [...rest];
-    })
+	update((state) => {
+		let [first, ...rest] = state;
+		return [...rest];
+	});
 }
 ```
 
@@ -158,9 +159,9 @@ function remove(id) {
 }
 ```
 
-Then, update the toast in ```Toast.svelte``` to pass the message ID when called:
+Then, update the toast in `Toast.svelte` to pass the message ID when called:
 
-```
+````
 <div
 	class={```toast ${message.type.toLowerCase()}```}
 	on:click={toast.remove(message.id)}
@@ -168,9 +169,9 @@ Then, update the toast in ```Toast.svelte``` to pass the message ID when called:
 	out:fade
 	animate:flip
 >
-```
+````
 
-Also amend ```ToastMessage.svelte``` to pass message id into the _toast.remove_ call:
+Also amend `ToastMessage.svelte` to pass message id into the _toast.remove_ call:
 
 ```javascript
 onMount(async () => {

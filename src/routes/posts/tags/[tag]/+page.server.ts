@@ -4,7 +4,7 @@ export const load: PageServerLoad = async ({ params, parent }) => {
 	// extract tag string from params
 	const tag: string = params.tag;
 	// access sortedPosts from parent layout
-	const {sortedPosts} = await parent();
+	const { sortedPosts } = await parent();
 
 	// filter posts by tag
 	const postsByTag = sortedPosts.filter((post) => {

@@ -16,9 +16,9 @@ I have kept this section on unified as I learnt a lot doing it and enjoyed the e
 
 The [unified package itself](https://unifiedjs.com/explore/package/unified/) provides an interface for processing context with syntax trees, that are modified by the plugins. Typically, a syntax tree requires:
 
-- a parser, to get the syntax tree from text
-- a transformer, to modify the syntax tree
-- a compiler, to return to text in the format of choice
+-   a parser, to get the syntax tree from text
+-   a transformer, to modify the syntax tree
+-   a compiler, to return to text in the format of choice
 
 From [the unified docs](https://unifiedjs.com/learn/guide/introduction-to-unified/#how-it-comes-together):
 
@@ -32,17 +32,17 @@ From [the unified docs](https://unifiedjs.com/learn/guide/introduction-to-unifie
 
 I loosely followed the [unifiedjs guide](https://unifiedjs.com/learn/guide/using-unified/), with a few additions. I used:
 
-- [unified](https://github.com/unifiedjs): the core package from [unifiedjs](https://unifiedjs.com/), which is a collection of packages to process text with plugins.
-- [remark parse](https://github.com/remarkjs/remark-parse): parses Markdown into an abstract syntax tree (AST), a structured representation of the content. The [Markdown Abstract Syntax Tree (mdast) spec is here](https://github.com/syntax-tree/mdast).
-- [remark frontmatter](https://github.com/remarkjs/remark-frontmatter): separates frontmatter from the main markdown.
-- [remark parse frontmatter](https://github.com/remarkjs/remark-frontmatter): parses frontmatter into an easily-accessabe object.
-- [remark GFM](https://github.com/remarkjs/remark-gfm): enables use of GitHub Flavoured Markdown (GFM), such as task liss, tables, strikethroughs.
-- [remark rehype](https://github.com/remarkjs/remark-rehype): transforms the MDAST created by remark parse into a HAST that can be serialized as HTML. The [Hypertext Abstract Syntax Tree format spec is here](https://github.com/syntax-tree/hast).
-- [rehype stringify](https://github.com/remarkjs/remark-rehype-stringify): parses the new AST into HTML
-- [rehype prism plus](https://www.timlrx.com/blog/creating-a-rehype-syntax-highlighting-plugin): modified version of the [rehype prism plugin](https://github.com/mapbox/rehype-prism), which highlights code blocks using the [Prism syntax highlighter](https://prismjs.com/). I used this version as it has added functionaliy such as line numbering.
+-   [unified](https://github.com/unifiedjs): the core package from [unifiedjs](https://unifiedjs.com/), which is a collection of packages to process text with plugins.
+-   [remark parse](https://github.com/remarkjs/remark-parse): parses Markdown into an abstract syntax tree (AST), a structured representation of the content. The [Markdown Abstract Syntax Tree (mdast) spec is here](https://github.com/syntax-tree/mdast).
+-   [remark frontmatter](https://github.com/remarkjs/remark-frontmatter): separates frontmatter from the main markdown.
+-   [remark parse frontmatter](https://github.com/remarkjs/remark-frontmatter): parses frontmatter into an easily-accessabe object.
+-   [remark GFM](https://github.com/remarkjs/remark-gfm): enables use of GitHub Flavoured Markdown (GFM), such as task liss, tables, strikethroughs.
+-   [remark rehype](https://github.com/remarkjs/remark-rehype): transforms the MDAST created by remark parse into a HAST that can be serialized as HTML. The [Hypertext Abstract Syntax Tree format spec is here](https://github.com/syntax-tree/hast).
+-   [rehype stringify](https://github.com/remarkjs/remark-rehype-stringify): parses the new AST into HTML
+-   [rehype prism plus](https://www.timlrx.com/blog/creating-a-rehype-syntax-highlighting-plugin): modified version of the [rehype prism plugin](https://github.com/mapbox/rehype-prism), which highlights code blocks using the [Prism syntax highlighter](https://prismjs.com/). I used this version as it has added functionaliy such as line numbering.
 
 1. Add packages: ``pnpm add unified unified-stream remark-parse remark-rehype rehype-stringify remark-gfm remark-frontmatter```
-2. Create ```src/lib/functions/RenderMarkdown.ts```
+2. Create `src/lib/functions/RenderMarkdown.ts`
 3. Imports:
 
 ```typescript
@@ -60,46 +60,46 @@ import rehypePrism from 'rehype-prism-plus';
 
 ```typescript
 const processor = unified()
-    .use(remarkParse)
-    .use(remarkFrontmatter, ['yaml'])
-    .use(remarkParseFrontmatter, { type: 'yaml', marker: '-' })
-    .use(remarkGfm)
-    .use(remarkRehype)
-    .use(rehypeStringify)
-    .use(rehypePrism, { showLineNumbers: true });
+	.use(remarkParse)
+	.use(remarkFrontmatter, ['yaml'])
+	.use(remarkParseFrontmatter, { type: 'yaml', marker: '-' })
+	.use(remarkGfm)
+	.use(remarkRehype)
+	.use(rehypeStringify)
+	.use(rehypePrism, { showLineNumbers: true });
 ```
 
-This defines the ```processor``` function using the unified() lilbrary and comprises several plugins to parse, transform and seralize Markdown content.
+This defines the `processor` function using the unified() lilbrary and comprises several plugins to parse, transform and seralize Markdown content.
 
 5. define actual renderMarkdown function:
 
 ```typescript
 export const renderMarkdown = async (
-    markdown: string
+	markdown: string
 ): Promise<{ frontmatter: any; html: string }> => {
-    return new Promise<{ frontmatter: any; html: string }>((resolve, reject) => {
-        processor.process(markdown, (err, file) => {
-            if (file) {
-                if (err) {
-                    reject(err);
-                    return;
-                } else {
-                    resolve({
-                        frontmatter: file.data.frontmatter,
-                        html: file.toString()
-                    });
-                }
-            }
-        });
-    });
+	return new Promise<{ frontmatter: any; html: string }>((resolve, reject) => {
+		processor.process(markdown, (err, file) => {
+			if (file) {
+				if (err) {
+					reject(err);
+					return;
+				} else {
+					resolve({
+						frontmatter: file.data.frontmatter,
+						html: file.toString()
+					});
+				}
+			}
+		});
+	});
 };
 ```
 
-`renderMarkdown` takes a markdown string and returns a promise, which in turn will resolve to an object containing a *frontmatter* object (containing the yaml frontmatter) an and *html* string (consisting the parsed, formatted, and stringified markdown content).
+`renderMarkdown` takes a markdown string and returns a promise, which in turn will resolve to an object containing a _frontmatter_ object (containing the yaml frontmatter) an and _html_ string (consisting the parsed, formatted, and stringified markdown content).
 
 6. I created `test.md` to test a few markdown features:
 
-````markdown
+`````markdown
     ---
     "title": "Test"
     "description": "This is a test"
@@ -132,21 +132,20 @@ export const renderMarkdown = async (
     ```python
     test = 'test'
     ```
-
-````
+`````
 
 7. Finally `+page.svelte` to render the markdown:
 
 ```svelte
 <script lang="ts">
-    import './codeThemeNightOwl.css'
+	import './codeThemeNightOwl.css';
 
-    import type { PageData } from './$types';
+	import type { PageData } from './$types';
 
-    export let data: PageData;
+	export let data: PageData;
 
-    const { title, description, tags } = data.frontmatter;
-    const html = data.html;
+	const { title, description, tags } = data.frontmatter;
+	const html = data.html;
 </script>
 
 <h1>You're here!</h1>
@@ -157,21 +156,21 @@ export const renderMarkdown = async (
 
 <p>Here's the content:</p>
 {#if html}
-    {@html html}
+	{@html html}
 {:else}
-    <p>loading...</p>
+	<p>loading...</p>
 {/if}
-````
+```
 
 8. Actually, finally is adding the CSS! It turns out rehype prism plus as I had implemented it didn't include CSS to format the code blocks, so first I imported the [Prismjs Night Owl theme](https://github.com/PrismJS/prism-themes/blob/master/themes/prism-night-owl.css) into its own file, and then added some css to show the line numbers, as they were not present in the imported them:
 
 ```css
 .line-number::before {
-    content: attr(line);
-    padding-right: 1em;
-    font-size: 0.6em;
-    opacity: 0.4;
-  }
+	content: attr(line);
+	padding-right: 1em;
+	font-size: 0.6em;
+	opacity: 0.4;
+}
 ```
 
 <detail>
@@ -190,124 +189,124 @@ export const renderMarkdown = async (
 
 code[class*='language-'],
 pre[class*='language-'] {
-    color: #d6deeb;
-    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
-    text-align: left;
-    white-space: pre;
-    word-spacing: normal;
-    word-break: normal;
-    word-wrap: normal;
-    line-height: 1.5;
-    font-size: 1em;
+	color: #d6deeb;
+	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	word-wrap: normal;
+	line-height: 1.5;
+	font-size: 1em;
 
-    -moz-tab-size: 4;
-    -o-tab-size: 4;
-    tab-size: 4;
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
 
-    -webkit-hyphens: none;
-    -moz-hyphens: none;
-    -ms-hyphens: none;
-    hyphens: none;
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
 }
 
 pre[class*='language-']::-moz-selection,
 pre[class*='language-'] ::-moz-selection,
 code[class*='language-']::-moz-selection,
 code[class*='language-'] ::-moz-selection {
-    text-shadow: none;
-    background: rgba(29, 59, 83, 0.99);
+	text-shadow: none;
+	background: rgba(29, 59, 83, 0.99);
 }
 
 pre[class*='language-']::selection,
 pre[class*='language-'] ::selection,
 code[class*='language-']::selection,
 code[class*='language-'] ::selection {
-    text-shadow: none;
-    background: rgba(29, 59, 83, 0.99);
+	text-shadow: none;
+	background: rgba(29, 59, 83, 0.99);
 }
 
 @media print {
-    code[class*='language-'],
-    pre[class*='language-'] {
-        text-shadow: none;
-    }
+	code[class*='language-'],
+	pre[class*='language-'] {
+		text-shadow: none;
+	}
 }
 
 /* Code blocks */
 pre[class*='language-'] {
-    padding: 1em;
-    margin: 0.5em 0;
-    overflow: auto;
+	padding: 1em;
+	margin: 0.5em 0;
+	overflow: auto;
 }
 
 :not(pre) > code[class*='language-'],
 pre[class*='language-'] {
-    color: white;
-    background: #011627;
+	color: white;
+	background: #011627;
 }
 
 :not(pre) > code[class*='language-'] {
-    padding: 0.1em;
-    border-radius: 0.3em;
-    white-space: normal;
+	padding: 0.1em;
+	border-radius: 0.3em;
+	white-space: normal;
 }
 
 .token.comment,
 .token.prolog,
 .token.cdata {
-    color: rgb(99, 119, 119);
-    font-style: italic;
+	color: rgb(99, 119, 119);
+	font-style: italic;
 }
 
 .token.punctuation {
-    color: rgb(199, 146, 234);
+	color: rgb(199, 146, 234);
 }
 
 .namespace {
-    color: rgb(178, 204, 214);
+	color: rgb(178, 204, 214);
 }
 
 .token.deleted {
-    color: rgba(239, 83, 80, 0.56);
-    font-style: italic;
+	color: rgba(239, 83, 80, 0.56);
+	font-style: italic;
 }
 
 .token.symbol,
 .token.property {
-    color: rgb(128, 203, 196);
+	color: rgb(128, 203, 196);
 }
 
 .token.tag,
 .token.operator,
 .token.keyword {
-    color: rgb(127, 219, 202);
+	color: rgb(127, 219, 202);
 }
 
 .token.boolean {
-    color: rgb(255, 88, 116);
+	color: rgb(255, 88, 116);
 }
 
 .token.number {
-    color: rgb(247, 140, 108);
+	color: rgb(247, 140, 108);
 }
 
 .token.constant,
 .token.function,
 .token.builtin,
 .token.char {
-    color: rgb(130, 170, 255);
+	color: rgb(130, 170, 255);
 }
 
 .token.selector,
 .token.doctype {
-    color: rgb(199, 146, 234);
-    font-style: italic;
+	color: rgb(199, 146, 234);
+	font-style: italic;
 }
 
 .token.attr-name,
 .token.inserted {
-    color: rgb(173, 219, 103);
-    font-style: italic;
+	color: rgb(173, 219, 103);
+	font-style: italic;
 }
 
 .token.string,
@@ -315,36 +314,36 @@ pre[class*='language-'] {
 .token.entity,
 .language-css .token.string,
 .style .token.string {
-    color: rgb(173, 219, 103);
+	color: rgb(173, 219, 103);
 }
 
 .token.class-name,
 .token.atrule,
 .token.attr-value {
-    color: rgb(255, 203, 139);
+	color: rgb(255, 203, 139);
 }
 
 .token.regex,
 .token.important,
 .token.variable {
-    color: rgb(214, 222, 235);
+	color: rgb(214, 222, 235);
 }
 
 .token.important,
 .token.bold {
-    font-weight: bold;
+	font-weight: bold;
 }
 
 .token.italic {
-    font-style: italic;
+	font-style: italic;
 }
 
 .line-number::before {
-    content: attr(line);
-    padding-right: 1em;
-    font-size: 0.6em;
-    opacity: 0.4;
-  }
+	content: attr(line);
+	padding-right: 1em;
+	font-size: 0.6em;
+	opacity: 0.4;
+}
 ```
 
 </detail>
@@ -355,9 +354,9 @@ This function is not typesafe as it stands, as it defines frontmatter as `any`. 
 
 ```typescript
 interface Frontmatter {
-    title: string;
-    description: string;
-    tags: string[];
+	title: string;
+	description: string;
+	tags: string[];
 }
 ```
 
@@ -365,13 +364,13 @@ A function to test for Frontmatter:
 
 ```typescript
 function isFrontmatter(obj: unknown): obj is Frontmatter {
-    const fm = obj as Frontmatter;
-    return (
-        typeof fm.title === 'string' &&
-        typeof fm.description === 'string' &&
-        Array.isArray(fm.tags) &&
-        fm.tags.every((tag) => typeof tag === 'string')
-    );
+	const fm = obj as Frontmatter;
+	return (
+		typeof fm.title === 'string' &&
+		typeof fm.description === 'string' &&
+		Array.isArray(fm.tags) &&
+		fm.tags.every((tag) => typeof tag === 'string')
+	);
 }
 ```
 
@@ -379,26 +378,26 @@ And then called the function within `renderMarkdown` to ensure frontmatter is Fr
 
 ```typescript
 export const renderMarkdown = async (
-    markdown: string
+	markdown: string
 ): Promise<{ frontmatter: Frontmatter; html: string }> => {
-    return new Promise<{ frontmatter: Frontmatter; html: string }>((resolve, reject) => {
-        processor.process(markdown, (err, file) => {
-            if (file) {
-                if (err) {
-                    reject(err);
-                    return;
-                } else {
-                    if (!isFrontmatter(file.data.frontmatter)) {
-                        reject(new Error('Frontmatter is invalid'));
-                        return;
-                    }
-                    resolve({
-                        frontmatter: file.data.frontmatter,
-                        html: file.toString()
-                    });
-                }
-            }
-        });
-    });
+	return new Promise<{ frontmatter: Frontmatter; html: string }>((resolve, reject) => {
+		processor.process(markdown, (err, file) => {
+			if (file) {
+				if (err) {
+					reject(err);
+					return;
+				} else {
+					if (!isFrontmatter(file.data.frontmatter)) {
+						reject(new Error('Frontmatter is invalid'));
+						return;
+					}
+					resolve({
+						frontmatter: file.data.frontmatter,
+						html: file.toString()
+					});
+				}
+			}
+		});
+	});
 };
 ```

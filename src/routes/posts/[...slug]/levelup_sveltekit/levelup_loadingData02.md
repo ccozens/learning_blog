@@ -3,26 +3,25 @@ title: 'Sveltekit data: Destructuring data in a reactive statement'
 date: '2023-07-03'
 description: Intro to destructuring data in sveltekit
 tags:
-  - levelup
-  - sveltekit
-  - data
+    - levelup
+    - sveltekit
+    - data
 ---
+
 [Practical loading](https://levelup.video/tutorials/sveltekit/practical-loading)
 
 ## Destructuring data in a reactive statement
 
-By default, JS in a svelte component script tag is not reactive - that is, it does not run on each re-render like a react component. ```$``` notation denotes reactive variable that does re-run.
+By default, JS in a svelte component script tag is not reactive - that is, it does not run on each re-render like a react component. `$` notation denotes reactive variable that does re-run.
 
 Here:
 
 ```javascript
-<script>
-	$: ({ latest_episode } = data)
-</script>
+<script>$: ({latest_episode} = data)</script>
 ```
 
-```data.latest_episode``` can now be accessed in markup:
-```<h1>{latest_episode}</h1>```
+`data.latest_episode` can now be accessed in markup:
+`<h1>{latest_episode}</h1>`
 
 ## Render all_episodes as an array:
 
@@ -31,17 +30,16 @@ Here:
 ```javascript
 /** @type {import('./$types').PageLoad} */
 export async function load({ fetch }) {
-    const res = await fetch('https://syntax.fm/api/shows/latest');
-    const all_ep_res = await fetch('https://syntax.fm/api/shows');
+	const res = await fetch('https://syntax.fm/api/shows/latest');
+	const all_ep_res = await fetch('https://syntax.fm/api/shows');
 
-    const data = await res.json();
-    const all_ep_data = await all_ep_res.json();
+	const data = await res.json();
+	const all_ep_data = await all_ep_res.json();
 
-    return {
-        latest_episode: data,
-        all_episodes: all_ep_data
-        ,
-    }
+	return {
+		latest_episode: data,
+		all_episodes: all_ep_data
+	};
 }
 ```
 

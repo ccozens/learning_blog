@@ -3,9 +3,10 @@ title: Using props to style components
 date: '2023-07-31'
 description: Intro to styling components with props
 tags:
-  - sveltekit
-  - notes
+    - sveltekit
+    - notes
 ---
+
 #Using props to style components
 In `+page.svelte`
 
@@ -64,12 +65,12 @@ Then in `+page.svelte`, simply declare a _Component_ with styles passed in:
 
 ```javascript
 export function colourPicker() {
-    /// random colour generator
-    let colour = '#';
-    for (let i = 0; i < 6; i++) {
-        colour += Math.floor(Math.random() * 16).toString(16);
-    }
-    return colour;
+	/// random colour generator
+	let colour = '#';
+	for (let i = 0; i < 6; i++) {
+		colour += Math.floor(Math.random() * 16).toString(16);
+	}
+	return colour;
 }
 ```
 
@@ -104,10 +105,11 @@ export function colourPicker() {
 ```
 
 Specifically:
-- changed `<div>` to `<button>` for accessability when adding click event
-- added on:click to run updateStyle function
-- added function _updateStyle_ which, when run:
-	(1) Extracts current value of _--squareSize_ by matching anything after _--squareSize:_ and before _;_ and setting as _currentSize_.
-	(2) If no size was passed in and the square is the default size (50px, as set by fallback in CSS variable), _currentSize_ is null. If a size was passed in, _currentSize_ has a value. So, if _currentSize_ has a value then _newSize_ is set to _currentSize_, otherwise _newSize_ is set to 50px (the fallback size).
-	(3)   _style_ is set to define _--squareSize_ as _newSize_, and _--backgroundColour_ as the output of _colourPicker()_.
+
+-   changed `<div>` to `<button>` for accessability when adding click event
+-   added on:click to run updateStyle function
+-   added function _updateStyle_ which, when run:
+    (1) Extracts current value of _--squareSize_ by matching anything after _--squareSize:_ and before _;_ and setting as _currentSize_.
+    (2) If no size was passed in and the square is the default size (50px, as set by fallback in CSS variable), _currentSize_ is null. If a size was passed in, _currentSize_ has a value. So, if _currentSize_ has a value then _newSize_ is set to _currentSize_, otherwise _newSize_ is set to 50px (the fallback size).
+    (3) _style_ is set to define _--squareSize_ as _newSize_, and _--backgroundColour_ as the output of _colourPicker()_.
 -

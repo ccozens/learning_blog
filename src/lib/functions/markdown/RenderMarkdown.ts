@@ -1,4 +1,3 @@
-
 import { unified } from 'unified'; // core interface
 import remarkParse from 'remark-parse'; // parse markdown to mdast
 import remarkFrontmatter from 'remark-frontmatter'; // separate frontmatter
@@ -18,7 +17,6 @@ const processor = unified()
 	.use(remarkRehype)
 	.use(rehypeStringify)
 	.use(rehypePrism, { showLineNumbers: true });
-
 
 function isFrontmatter(obj: unknown): obj is Frontmatter {
 	const fm = obj as Frontmatter;

@@ -3,15 +3,16 @@ title: Making a portal
 date: '2023-08-03'
 description: Making a portal
 tags:
-  - levelup
-  - sveltekit
-  - components
+    - levelup
+    - sveltekit
+    - components
 ---
+
 #[Making a portal](https://levelup.video/tutorials/building-svelte-components/making-a-portal)
 
 A [portal is an HTML element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/portal) that enables the embedding of another HTML page into the current one for the purposes of allowing smoother navigation into new pages.
 
-1. Create ```src/lib/Portal.svelte```
+1. Create `src/lib/Portal.svelte`
 2. Set up [svelte action](https://svelte.dev/docs/svelte-action) scaffold:
 
 ```
@@ -42,7 +43,7 @@ A [portal is an HTML element](https://developer.mozilla.org/en-US/docs/Web/HTML/
 <div use:portal />
 ```
 
-Functions ```update``` and ```destroy``` are svelte action lifecycle methods usually defined in the return statement. Here, they are called in the return but defined in the body so that we can call them in the body as well without duplication.
+Functions `update` and `destroy` are svelte action lifecycle methods usually defined in the return statement. Here, they are called in the return but defined in the body so that we can call them in the body as well without duplication.
 
 2. Use [document.querySelector](https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector) to select the [body](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/body), and append [node](https://developer.mozilla.org/en-US/docs/Web/API/Node) to that target.
 
@@ -73,7 +74,7 @@ function destroy() {
 
 ```
 
-5. Use it in ```+page.svelte```:
+5. Use it in `+page.svelte`:
 
 ```
 <script>
@@ -86,7 +87,7 @@ function destroy() {
 </Portal>
 ```
 
-This appears at the bottom of the page in a distinct DOM tree, as it has been appended directly as a child of ```body```:
+This appears at the bottom of the page in a distinct DOM tree, as it has been appended directly as a child of `body`:
 
 ```html
 <body data-sveltekit-preload-data="hover" cz-shortcut-listen="true">
@@ -141,7 +142,7 @@ This appears at the bottom of the page in a distinct DOM tree, as it has been ap
 
 7. Can be made configurable, for example by allowing target to be passed in via prop:
 
-```<Portal target='body'>```
+`<Portal target='body'>`
 
 ```
 function portal(node, element) {

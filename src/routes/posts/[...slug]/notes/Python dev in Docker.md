@@ -3,11 +3,11 @@ title: Python dev in Docker
 date: '2023-07-31'
 description: Tutorial on how to set up a python dev environment in Docker
 tags:
-  - python
-  - docker
+    - python
+    - docker
 ---
-# Python dev in Docker
 
+# Python dev in Docker
 
 1. Create venv
 2. `python3 -m pip install bla bla`
@@ -51,6 +51,7 @@ Hello, Docker!
 ```
 
 ## Create persistent volumes and network
+
 1. for data: `docker volume create mysql`
 2. for config: `docker volume create mysql_config`
 3. Create network for db and app to talk to each other (user-defined bridge network): `docker network create mysqlnet`
@@ -67,9 +68,10 @@ docker run --rm -d -v mysql:/var/lib/mysql \
 ```
 
 ### Test connection
+
 -> open command line within container.
 `docker exec` runs a command in container
-`-ti`  = `-t` technically attaches psuedo-TTY; more simply opens a terminal. `-i` is short for `-- interactive`, and keeps the terminal open when commands finished running (ie allows typing commands in).
+`-ti` = `-t` technically attaches psuedo-TTY; more simply opens a terminal. `-i` is short for `-- interactive`, and keeps the terminal open when commands finished running (ie allows typing commands in).
 `mysqldb mysql` passes `mysql` command to `mysqldb` container
 `-u root`: username `root`
 `-p`: password prompt
@@ -91,9 +93,11 @@ Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 
 mysql>
 ```
+
 Ctrl+D to exit
 
 ## Connect the application to the database
+
 Update `app.py` to read:
 
 ```python
@@ -163,6 +167,7 @@ if __name__ == "__main__":
 ```
 
 ### Rebuild image using updated code
+
 1. add missing module: ` pip3 install mysql-connector-python`
 2. add to requirements.txt: `pip3 freeze | grep mysql-connector-python >> requirements.txt`
 3. build: `docker build --tag python-docker-dev .`
@@ -178,7 +183,7 @@ $ docker run \
   python-docker-dev
 ```
 
- 6. Test connection by running some of the routes:
- 	`curl http://localhost:8000`
- 	`curl http://localhost:8000/initdb`
- 	`curl http://localhost:8000/widgets`
+6.  Test connection by running some of the routes:
+    `curl http://localhost:8000`
+    `curl http://localhost:8000/initdb`
+    `curl http://localhost:8000/widgets`

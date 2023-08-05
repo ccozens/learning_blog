@@ -3,71 +3,74 @@ title: Throwing errors in Sveltekit
 date: '2023-07-04'
 description: Intro to throwing errors in Sveltekit
 tags:
-  - levelup
-  - sveltekit
-  - errors
+    - levelup
+    - sveltekit
+    - errors
 ---
+
 ## [video](https://levelup.video/tutorials/sveltekit/throwing-errors)
 
 Errors are about augmenting a user's journey through your site. For example:
-- has a resource not loaded, or does it not exist?
-- does a page exist, or do you need to be logged in to access it?
 
+-   has a resource not loaded, or does it not exist?
+-   does a page exist, or do you need to be logged in to access it?
 
 Expected errors: we checked this data, it doesn't exist, and so we're returning a 'data not found error'.
 
-At its most simple, that's adding a console.log to ```src/routes/show/[num]/page.server.js```:
+At its most simple, that's adding a console.log to `src/routes/show/[num]/page.server.js`:
 
-```javascript
+````javascript
 export async function load({ fetch, params, setHeaders, locals }) {
-    const res = await fetch(```https://syntax.fm/api/shows/${params.num}```);
-    const data = await res.json();
-    console.log('data', data );
-    setHeaders({
-        // 'Cache-Control': 'max-age=3600, s-maxage=86400'
-        'Cache-Control': 'max-age=60'
-    });
+	const res = await fetch(```https://syntax.fm/api/shows/${params.num}```);
+	const data = await res.json();
+	console.log('data', data);
+	setHeaders({
+		// 'Cache-Control': 'max-age=3600, s-maxage=86400'
+		'Cache-Control': 'max-age=60'
+	});
 
-    console.log('locals', locals);
+	console.log('locals', locals);
 
-    return {
-        episode: data,
-        user: locals.user,
-    };
+	return {
+		episode: data,
+		user: locals.user
+	};
 }
-```
+````
 
-If no page found, this logs: ```data { message: 'Sorry, we could not find show #900' }```.
+If no page found, this logs: `data { message: 'Sorry, we could not find show #900' }`.
 
 A more sophisticated version is to:
+
 1. check whether data.message exists
 2. throw an error, using [sveltekit's error helper](https://kit.svelte.dev/docs/errors#expected-errors)
 
-```javascript
+````javascript
 import { error } from '@sveltejs/kit';
 
 export async function load({ fetch, params, setHeaders, locals }) {
-    const res = await fetch(```https://syntax.fm/api/shows/${params.num}```);
-    const data = await res.json();
+	const res = await fetch(```https://syntax.fm/api/shows/${params.num}```);
+	const data = await res.json();
 
-    if (data.message) {
-        throw error(404, {
-            message: data.message
-        })
-    }
+	if (data.message) {
+		throw error(404, {
+			message: data.message
+		});
+	}
 
-    setHeaders({
-        'Cache-Control': 'max-age=60'
-    });
+	setHeaders({
+		'Cache-Control': 'max-age=60'
+	});
 
-    console.log('locals', locals);
+	console.log('locals', locals);
 
-    return {
-        episode: data,
-        user: locals.user,
-    };
+	return {
+		episode: data,
+		user: locals.user
+	};
 }
-```
+````
+
 This renders:
 404
 Sorry, we could not find show #900
@@ -78,9 +81,9 @@ This can be used to redirect users to a custom error page:
 
 #[Error pages](https://levelup.video/tutorials/sveltekit/error-pages)
 
-Error pages allow customisation of the error page content, when and where they show up. Guess what: ```+error``` files!
+Error pages allow customisation of the error page content, when and where they show up. Guess what: `+error` files!
 
-1. ```code src/routes/+error.svelte```
+1. `code src/routes/+error.svelte`
 2. Error code:
 
 ```javascript
@@ -95,18 +98,21 @@ Error pages allow customisation of the error page content, when and where they s
 ```
 
 This shows:
+
 <h1>Oops</h1>
 <h2>400</h2>
 Sorry, we could not find show #900
 
-\#900 because I went to ```http://127.0.0.1:5173/show/900``` to force an error (there aren't 900 shows yet).
+\#900 because I went to `http://127.0.0.1:5173/show/900` to force an error (there aren't 900 shows yet).
 
 ## console logging from svelte stores:
-``` $: console.log('page', $page);```
+
+` $: console.log('page', $page);`
 In svelte script tags, this needs to be a reactive statement, and need to ensure the page is marked as reactive as well, so that the function runs and the page data updates each time the page re-renders.
 
 ## Pages at different levels
-Creating nested error pages is the same as nested layouts/etc, as any error thrown will look up the route tree for the closest error page. ie: ```code src/routes/show/[num]/+error.svelte``` will create a custom error page only shown in the individual show pages.
+
+Creating nested error pages is the same as nested layouts/etc, as any error thrown will look up the route tree for the closest error page. ie: `code src/routes/show/[num]/+error.svelte` will create a custom error page only shown in the individual show pages.
 
 #[Redirects](https://levelup.video/tutorials/sveltekit/redirects)
 
@@ -118,37 +124,37 @@ Taking auth as an example, you could say: if user exists, let them access page o
 
 In sveltekit, you throw redirect:
 
-```javascript
+````javascript
 import { error, redirect } from '@sveltejs/kit';
 
 export async function load({ fetch, params, setHeaders, locals }) {
-    const res = await fetch(```https://syntax.fm/api/shows/${params.num}```);
-    const data = await res.json();
+	const res = await fetch(```https://syntax.fm/api/shows/${params.num}```);
+	const data = await res.json();
 
-if (!locals?.user?.id) {
-        throw redirect(307, '/')
+	if (!locals?.user?.id) {
+		throw redirect(307, '/');
+	}
+
+	if (data.message) {
+		throw error(404, {
+			message: data.message
+		});
+	}
+
+	setHeaders({
+		'Cache-Control': 'max-age=60'
+	});
+
+	console.log('locals', locals);
+
+	return {
+		episode: data,
+		user: locals.user
+	};
 }
+````
 
-    if (data.message) {
-        throw error(404, {
-            message: data.message
-        })
-    }
-
-    setHeaders({
-        'Cache-Control': 'max-age=60'
-    });
-
-    console.log('locals', locals);
-
-    return {
-        episode: data,
-        user: locals.user,
-    };
-}
-```
-
-```if (!locals?.user?.id) {
+````if (!locals?.user?.id) {
         throw redirect(307, '/')
 }```
 means: return null if user or user.id are falsy, and if that happens then redirect, with [code 307](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/307), to homepage.
@@ -162,4 +168,4 @@ function authorize({ event, resolve }) {
     // event.locals.user = user;
     return resolve(event);
 }
-```
+````
