@@ -1,7 +1,7 @@
 ---
 title: 'SvelteKit auth using Auth.js'
 date: '2023-07-31'
-description: Enable auth in SvelteKit using Auth.js, with GitHub OAuth. 
+description: Enable auth in SvelteKit using Auth.js, with GitHub OAuth.
 tags:
   - sveltekit
   - learning_blog
@@ -102,8 +102,8 @@ authOptions {
     textDark: '#fff'
   },
   options: {
-    clientId: '173f2adee208acbcd757',
-    clientSecret: '327fad6a791b7c1db61f9bc9525b8036d1646713'
+    clientId: 'actual client id',
+    clientSecret: 'actual client secret'
   }
 }],
   secret: <AUTH_SECRET>,

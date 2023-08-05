@@ -449,17 +449,6 @@ export * from './posts';
 #### posts.ts
 
 ```typescript
-export interface RawPost {
-    metadata: {
-        title: string;
-        date: string;
-        tags: string[];
-    };
-    default: {
-        render: () => Content;
-    };
-}
-
 export interface PostData {
     escapedContent: content;
     title: string;
@@ -502,50 +491,59 @@ SvelteKit allows creation of API routes by [adding HTTP verbs (eg GET) to a `+se
 
 #### +server.ts
 
-This file is based on [Josh Collinsworth's post on mdsvex and SvelteKit blogs](https://joshcollinsworth.com/blog/build-static-sveltekit-markdown-blog). I've extended it to add
+This file is based on [Josh Collinsworth's post on mdsvex and SvelteKit blogs](https://joshcollinsworth.com/blog/build-static-sveltekit-markdown-blog). I've altered it to reflect the batch processing of mdsvex files, and to escape svelte syntax in the mdsvex content.
 
 ```typescript
 import { json } from '@sveltejs/kit';
 import { formatDate } from '$lib/functions/FormatDate';
-import type { Post, Metadata } from '$lib/types';
+import type { Post, Metadata, Content } from '$lib/types';
 import { error } from '@sveltejs/kit';
-
+import { escapeSvelte } from 'mdsvex';
 
 async function getPost() {
-    const allFiles = import.meta.glob('/src/routes/posts/**/*.md');
-    const iterableFiles = Object.entries(allFiles);
+	const allFiles = import.meta.glob('/src/routes/posts/**/*.md');
+	const iterableFiles = Object.entries(allFiles);
 
-    const Post = await Promise.all(
-        iterableFiles.map(async ([path, resolver]) => {
-            const { metadata } = (await resolver()) as Metadata;
-            if (!metadata) throw error(404, { message: `No metadata found in ${path}` });
-            const slug: string = path.split('/')?.pop()?.split('.').shift() ?? '';
-            if (!slug) throw error(404, { message: `No slug found in ${path}` });
-            const date = metadata.date;
-            if (!date) throw error(404, { message: `No date found in ${path}` });
-            const dateFormatted: string = await formatDate(date);
+	const Post = await Promise.all(
+		iterableFiles.map(async ([path, resolver]) => {
+			const { metadata } = (await resolver()) as Metadata;
+			if (!metadata) throw error(404, { message: `No metadata found in ${path}` });
+			// extract and format body text (content) by calling render()
+			const content: Content = (await resolver())?.default.render();
+			// escape svelte syntax
+			const escapedContent = escapeSvelte(content?.html);
+			if (!content) throw error(404, { message: `No content found in ${path}` });
 
-            return {
-                slug,
-                metadata,
-                path,
-                date,
-                dateFormatted
-            };
-        })
-    );
+			const slug: string = path.split(']/')?.pop()?.split('.').shift() ?? '';
+			if (!slug) throw error(404, { message: `No slug found in ${path}` });
 
-    return Post;
+			const date = metadata.date;
+			if (!date) throw error(404, { message: `No date found in ${path}` });
+
+			const dateFormatted: string = await formatDate(date);
+			return {
+				slug,
+				metadata,
+				path,
+				date,
+				dateFormatted,
+				escapedContent
+			};
+		})
+	);
+
+	return Post;
 }
 
 export const GET = async () => {
-    const Post: Post[] = await getPost();
+	const Post: Post[] = await getPost();
 
-    const sortedPosts = Post.sort((a, b) => {
-        return +new Date(b.date) - +new Date(a.date); // the + operator converts the date to a number by calling getTime(), which returns a unix timestamp
-    });
-    return json(sortedPosts);
+	const sortedPosts = Post.sort((a, b) => {
+		return +new Date(b.date) - +new Date(a.date); // the + operator converts the date to a number by calling getTime(), which returns a unix timestamp
+	});
+	return json(sortedPosts);
 };
+
 ```
 
 ##### walkthrough
@@ -673,12 +671,32 @@ Where a dynamic route allows route createion from dynamic data, meaning the rout
 .
 blog
     └── [slug]
+        ├── one.md
+        ├── two.md
+        ├── three.md
         └── +page.svelte
+
 ```
 
 Here we have a rest parameter.
 
 # TODO
+```bash
+.
+blog
+    └── [...slug]
+        ├── one.md
+        ├── subfolder
+        │   ├── one.md
+        │   └── two.md
+        ├── anotherSubfolder
+        │   ├── one.md
+        │   └── two.md
+        └── +page.svelte
+```
+
+Here, the rest parameter is used to match any number of child routes, and the ```slug``` array will contain the path segments. So for example, ```blog/one``` will match the first route, and ```blog/subfolder/one``` will match the second route.
+
 
 So, we know the [slug] is a dynamic route. It has 2 files: one that generates the data serverside, and one that renders clientside:
 
@@ -691,34 +709,33 @@ also have another go at proper import syntax
 ```typescript
 // import type { LayoutServerLoad } from './$types';
 import type { PageServerLoad } from './$types';
-import type { RawPost, Content, PostData } from '$lib/types';
-import { formatDate } from '$lib/functions/FormatDate';
-import { escapeSvelte } from 'mdsvex';
+import type { PostData } from '$lib/types';
 
-export const load: PageServerLoad = async ({ params }) => {
-// export const load: LayoutServerLoad = async ({ params }) => {
-	// import post file
-	const post: RawPost = await import(`./${params.slug}.md`);
+export const load: PageServerLoad = async ({ parent, params }) => {
+	// access sortedPosts from parent layout
+	const { sortedPosts } = await parent();
+	// find post by slug
+	const post = sortedPosts.find((post) => post.slug === params.slug);
+	if (!post) {
+		return {
+			status: 404
+		};
+	}
 	// extract metadata
-	const { title, date, tags } = post.metadata;
-	// extract and format body text (content)
-	const content: Content = post.default.render();
-	// escape svelte syntax
-	const escapedContent = escapeSvelte(content.html);
-	// format date
-	const dateFormatted = await formatDate(date);
-
+	const { title, tags } = post.metadata;
+	// extract dateFormatted and escapedContent
+	const { dateFormatted, escapedContent } = post;
 
 	// create post object from content, title, date
 	const postData: PostData = {
 		escapedContent,
 		title,
 		tags,
-		dateFormatted,
+		dateFormatted
 	};
 
 	return {
-		postData,
+		postData
 	};
 };
 
@@ -758,16 +775,18 @@ export const load: PageServerLoad = async ({ params }) => {
 	import TagCloud from '$lib/components/TagCloud.svelte';
 	export let data;
 	// destructure props and create postContent object
-	const { escapedContent, title, dateFormatted, tags } = data.postData;
+	const { escapedContent, title, dateFormatted, tags } = data.postData || {};
 	const postContent = { title, dateFormatted, escapedContent };
+
 </script>
 
 <SinglePost {postContent} />
 
-{#if tags.length}
+{#if tags?.length}
 	<h2>Posted in:</h2>
 	<TagCloud {tags} />
 {/if}
+
 
 ```
 

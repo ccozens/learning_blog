@@ -1,6 +1,6 @@
 import { json } from '@sveltejs/kit';
 import { formatDate } from '$lib/functions/FormatDate';
-import type { Post, Metadata, Content } from '$lib/types';
+import type { RawPost, Post, Metadata, Content } from '$lib/types';
 import { error } from '@sveltejs/kit';
 import { escapeSvelte } from 'mdsvex';
 
@@ -8,15 +8,21 @@ async function getPost() {
 	const allFiles = import.meta.glob('/src/routes/posts/**/*.md');
 	const iterableFiles = Object.entries(allFiles);
 
-	const Post = await Promise.all(
+	const Post: Post[] = await Promise.all(
 		iterableFiles.map(async ([path, resolver]) => {
-			const { metadata } = (await resolver()) as Metadata;
+
+			const rawPost = await resolver() as RawPost;
+			if (!rawPost) throw error(404, { message: `No post found in ${path}` });
+			
+			const metadata: Metadata = rawPost.metadata;
 			if (!metadata) throw error(404, { message: `No metadata found in ${path}` });
+
 			// extract and format body text (content) by calling render()
-			const content: Content = (await resolver())?.default.render();
+			const content: Content = rawPost.default.render();
+			if (!content) throw error(404, { message: `No content found in ${path}` });
+
 			// escape svelte syntax
 			const escapedContent = escapeSvelte(content?.html);
-			if (!content) throw error(404, { message: `No content found in ${path}` });
 
 			const slug: string = path.split(']/')?.pop()?.split('.').shift() ?? '';
 			if (!slug) throw error(404, { message: `No slug found in ${path}` });

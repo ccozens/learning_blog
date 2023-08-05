@@ -1,8 +1,15 @@
+export interface RawPost {
+	metadata: Metadata;
+	default: {
+		render: () => Content;
+	};
+}
+
 export interface PostData {
-	escapedContent: string;
 	title: string;
 	dateFormatted: string;
 	tags: string[];
+	escapedContent: string;
 }
 
 export interface Content {
@@ -11,22 +18,15 @@ export interface Content {
 	head: string;
 }
 export interface Metadata {
-	metadata: {
-		title: string;
-		description: string;
-		date: string;
-		tags: string[];
-	};
+	title: string;
+	description: string;
+	date: string;
+	tags: string[];
 }
 
 export interface Post {
 	slug: string;
-	metadata: {
-		title: string;
-		description: string;
-		date: string;
-		tags: string[];
-	};
+	metadata: Metadata;
 	path: string;
 	date: string;
 	dateFormatted: string;
