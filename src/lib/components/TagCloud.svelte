@@ -5,6 +5,10 @@
 
 <!-- html -->
 
+{#if tags.length === 0}
+	<p>No tags yet.</p>
+{/if}
+
 <ul>
 	{#each tags as tag}
 		<li>

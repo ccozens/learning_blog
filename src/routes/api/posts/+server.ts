@@ -10,10 +10,9 @@ async function getPost() {
 
 	const Post: Post[] = await Promise.all(
 		iterableFiles.map(async ([path, resolver]) => {
-
-			const rawPost = await resolver() as RawPost;
+			const rawPost = (await resolver()) as RawPost;
 			if (!rawPost) throw error(404, { message: `No post found in ${path}` });
-			
+
 			const metadata: Metadata = rawPost.metadata;
 			if (!metadata) throw error(404, { message: `No metadata found in ${path}` });
 

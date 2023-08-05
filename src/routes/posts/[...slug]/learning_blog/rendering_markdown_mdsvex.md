@@ -204,7 +204,7 @@ Displays a single post (an indiidual transformed and rendered markdown file):
 
 #### TagCloud.svelte
 
-Displays a list of all tags present in all markdown files
+Displays a list of all tags present in all markdown files, if any:
 
 ```svelte
 <!-- script -->
@@ -213,6 +213,10 @@ Displays a list of all tags present in all markdown files
 </script>
 
 <!-- html -->
+
+{#if tags.length === 0}
+	<p>No tags yet.</p>
+{/if}
 
 <ul>
     {#each tags as tag}
@@ -449,39 +453,39 @@ export * from './posts';
 #### posts.ts
 
 ```typescript
-export interface PostData {
-    escapedContent: content;
-    title: string;
-    dateFormatted: string;
-    tags: string[];
-}
-
-export interface content {
-    html: string;
-    css: { code: string; map: null };
-    head: string;
+export interface Content {
+	html: string;
+	css: { code: string; map: null };
+	head: string;
 }
 
 export interface Metadata {
-    metadata: {
-        title: string;
-        description: string;
-        date: string;
-        tags: string[];
-    };
+	title: string;
+	description: string;
+	date: string;
+	tags: string[];
+}
+export interface RawPost {
+	metadata: Metadata;
+	default: {
+		render: () => Content;
+	};
+}
+
+export interface PostData {
+	title: string;
+	dateFormatted: string;
+	tags: string[];
+	escapedContent: string;
 }
 
 export interface Post {
-    slug: string;
-    metadata: {
-        title: string;
-        description: string;
-        date: string;
-        tags: string[];
-    };
-    path: string;
-    date: string;
-    dateFormatted: string;
+	slug: string;
+	metadata: Metadata;
+	path: string;
+	date: string;
+	dateFormatted: string;
+	escapedContent: string;
 }
 ```
 
@@ -496,7 +500,7 @@ This file is based on [Josh Collinsworth's post on mdsvex and SvelteKit blogs](h
 ```typescript
 import { json } from '@sveltejs/kit';
 import { formatDate } from '$lib/functions/FormatDate';
-import type { Post, Metadata, Content } from '$lib/types';
+import type { RawPost, Post, Metadata, Content } from '$lib/types';
 import { error } from '@sveltejs/kit';
 import { escapeSvelte } from 'mdsvex';
 
@@ -504,15 +508,21 @@ async function getPost() {
 	const allFiles = import.meta.glob('/src/routes/posts/**/*.md');
 	const iterableFiles = Object.entries(allFiles);
 
-	const Post = await Promise.all(
+	const Post: Post[] = await Promise.all(
 		iterableFiles.map(async ([path, resolver]) => {
-			const { metadata } = (await resolver()) as Metadata;
+
+			const rawPost = await resolver() as RawPost;
+			if (!rawPost) throw error(404, { message: `No post found in ${path}` });
+
+			const metadata: Metadata = rawPost.metadata;
 			if (!metadata) throw error(404, { message: `No metadata found in ${path}` });
+
 			// extract and format body text (content) by calling render()
-			const content: Content = (await resolver())?.default.render();
+			const content: Content = rawPost.default.render();
+			if (!content) throw error(404, { message: `No content found in ${path}` });
+
 			// escape svelte syntax
 			const escapedContent = escapeSvelte(content?.html);
-			if (!content) throw error(404, { message: `No content found in ${path}` });
 
 			const slug: string = path.split(']/')?.pop()?.split('.').shift() ?? '';
 			if (!slug) throw error(404, { message: `No slug found in ${path}` });
@@ -544,6 +554,7 @@ export const GET = async () => {
 	return json(sortedPosts);
 };
 
+
 ```
 
 ##### walkthrough
@@ -558,7 +569,7 @@ export const GET = async () => {
 
     - This is the formatDate function above
 
-  - ```import type { Post, Metadata } from 'lib/types';```
+  - ```import type { RawPost, Post, Metadata, Content } from 'lib/types';```
 
     - type imports, detailed above
 
@@ -611,14 +622,44 @@ export const GET = async () => {
 - the body of the map function calls resolver to access data and shapes the output data, with error messages if items not found
 
 ```javascript
-            const { metadata } = (await resolver()) as Metadata;
-                if (!metadata) throw error(404, { message: `No metadata found in ${path}` });
-            const slug: string = path.split('/')?.pop()?.split('.').shift() ?? '';
-                if (!slug) throw error(404, { message: `No slug found in ${path}` });
-            const date = metadata.date;
-                if (!date) throw error(404, { message: `No date found in ${path}` });
-            const dateFormatted: string = await formatDate(date);
+            const rawPost = await resolver() as RawPost;
+			if (!rawPost) throw error(404, { message: `No post found in ${path}` });
+
+			const metadata: Metadata = rawPost.metadata;
+			if (!metadata) throw error(404, { message: `No metadata found in ${path}` });
+
+			// extract and format body text (content) by calling render()
+			const content: Content = rawPost.default.render();
+			if (!content) throw error(404, { message: `No content found in ${path}` });
+
+			// escape svelte syntax
+			const escapedContent = escapeSvelte(content?.html);
+
+			const slug: string = path.split(']/')?.pop()?.split('.').shift() ?? '';
+			if (!slug) throw error(404, { message: `No slug found in ${path}` });
+
+			const date = metadata.date;
+			if (!date) throw error(404, { message: `No date found in ${path}` });
 ```
+
+- key to note here is escapeSvelte, which isn't mentioned in the mdsvex docs but is essential. Delving into the [mdsvex code on GitHub](https://github.com/pngwn/MDsveX/blob/26591be63e088f57c78108553813ef18cc8ca5b1/packages/mdsvex/src/transformers/index.ts#L572), we find that it's a function that escapes svelte syntax in the html output:
+
+```typescript
+// escape curlies, backtick, \t, \r, \n to avoid breaking output of {@html `here`} in .svelte
+export const escape_svelty = (str: string): string =>
+	str
+		.replace(
+			/[{}`]/g,
+			//@ts-ignore
+			(c) => ({
+				'{': '&#123;',
+				'}': '&#125;',
+				'`': '&#96;'
+			}[c])
+		)
+		.replace(/\\([trn])/g, '&#92;$1');
+```
+    This replaces the characters {, }, and ` with their html entity equivalents, and replaces \t, \r, and \n with their html entity equivalents.
 
 - then there is a return statement from ```Post```, and finally Post itself is returned from ```getPost```:
 
@@ -639,7 +680,7 @@ export const GET = async () => {
 
 The second function declares this to be an API [GET endpoint](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/GET), calls getPost, sorts them by date and returns a a json of the pots sorted by date:
 
-```javascript
+```typescript
 export const GET = async () => {
     const Post: Post[] = await getPost();
 
@@ -652,7 +693,10 @@ export const GET = async () => {
 
 ### /[...slug]
 
-The square bracket notation here denotes a dynamic route. Given 3 pages, the static routing method to access ```blog/one```, ```blog/two``` and ```blog/three``` would be:
+The square bracket notation here denotes a dynamic route, and the ... denotes a [rest parameter](https://kit.svelte.dev/docs/advanced-routing#rest-parameters).
+
+#### Static routes
+Given 3 pages, the static routing method to access ```blog/one```, ```blog/two``` and ```blog/three``` would be:
 
 ```bash
 .
@@ -665,6 +709,7 @@ blog
         └── +page.svelte
 ```
 
+#### Dynamic routes
 Where a dynamic route allows route createion from dynamic data, meaning the routes do not need to be defined ahead of time:
 
 ```bash
@@ -678,9 +723,30 @@ blog
 
 ```
 
-Here we have a rest parameter.
+#### Rest parameters
 
-# TODO
+
+The [rest parameter is a special kind of parameter that allows us to represent an indefinite number of arguments as an array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/rest_parameters). The syntax for a rest parameter is three dots followed by the name of the array that will contain the rest of the arguments. In this case, the array is called ```slug```.
+
+<detail><summary>JS example of rest parameters from MDN</summary>
+A function definition's last parameter can be prefixed with ... (three U+002E FULL STOP characters), which will cause all remaining (user supplied) parameters to be placed within an Array object.
+
+```javascript
+function myFun(a, b, ...manyMoreArgs) {
+  console.log("a", a);
+  console.log("b", b);
+  console.log("manyMoreArgs", manyMoreArgs);
+}
+
+myFun("one", "two", "three", "four", "five", "six");
+
+// Console Output:
+// a, one
+// b, two
+// manyMoreArgs, ["three", "four", "five", "six"]
+```
+</detail>
+
 ```bash
 .
 blog
@@ -698,16 +764,15 @@ blog
 Here, the rest parameter is used to match any number of child routes, and the ```slug``` array will contain the path segments. So for example, ```blog/one``` will match the first route, and ```blog/subfolder/one``` will match the second route.
 
 
-So, we know the [slug] is a dynamic route. It has 2 files: one that generates the data serverside, and one that renders clientside:
+So, we know the [...slug] is a dynamic route with rest parameter. It has 2 files: one that generates the data serverside, and one that renders clientside:
 
 #### +page.server.ts
 
-# TODO
+
 
 also have another go at proper import syntax
 
 ```typescript
-// import type { LayoutServerLoad } from './$types';
 import type { PageServerLoad } from './$types';
 import type { PostData } from '$lib/types';
 
@@ -739,6 +804,7 @@ export const load: PageServerLoad = async ({ parent, params }) => {
 	};
 };
 
+
 ```
 
 ##### walkthrough
@@ -747,23 +813,20 @@ export const load: PageServerLoad = async ({ parent, params }) => {
 
    Type ```PageServerLoad``` is imported from [sveltekit's generated types](https://kit.svelte.dev/docs/types#public-types-serverload).
 
-   Types ```RawPost, Content, PostData``` are defined types imported locally.
-
-   ```formatDate``` is a function (described above) to format the date.
-
-   Of note is ```RawPost```, which specifies that the render function will return data of structure ```Content```.
 
 2. ```load``` function
 
-   - ```export const load: PageServerLoad = async ({ params }) => {```: the function is defined as type ```PageServerLoad```, is async, and takes in [params](https://kit.svelte.dev/docs/load#using-url-data-params). Params is defined form the url visited and so tells the load function which markdown file to load
+   - ```export const load: PageServerLoad = async ({ parent, params }) => {```: the function is defined as type ```PageServerLoad```, is async, and takes in:
+     - [params](https://kit.svelte.dev/docs/load#using-url-data-params). Params is defined form the url visited and so tells the load function which markdown file to load
+     - [parent](https://kit.svelte.dev/docs/load#using-parent-data), an async sveltekit function that returns the data from the parent layout. In this case, the parent layout is ```src/routes/blog/index.svelte```, which is where the ```sortedPosts``` data is defined.
 
-   - ```const post: RawPost = await import(`../${params.slug}.md`);```: the file is imported based on params
+   - ```const { sortedPosts } = await parent();``` extracts ```sortedPosts``` from the parent layout
 
-   - ```const { title, date, tags } = post.metadata;``` : title, data and tags are assigned from imported metadata
+    - ```const post = sortedPosts.find((post) => post.slug === params.slug);``` finds the post with the matching slug
 
-   - ```const content: Content = post.default.render();``` : Sveltekit's render funciton is called to parse the markdown into HTML and CSS.
+    - ```if (!post) { return { status: 404 }; }``` returns a 404 error if no post is found
 
-   - ```const dateFormatted = await formatDate(date);``` : the date is formatted
+    - ```const { dateFormatted, escapedContent } = post;``` extracts ```dateFormatted``` and ```escapedContent``` from post
 
    - finally, a ```postData``` object is assembled and returned
 
@@ -796,7 +859,7 @@ export const load: PageServerLoad = async ({ parent, params }) => {
 
 2. ```export let data``` creates data prop
 
-3. ```const { content, title, dateFormatted, tags } = data.postData;``` destructures ```postData``` from the server file
+3. ```const { content, title, dateFormatted, tags } = data.postData || {};``` destructures ```postData``` from the server file, with a fallback of an empty object
 
 4. ```const body = content.html;``` extracts html from ```content```
 
@@ -806,7 +869,7 @@ export const load: PageServerLoad = async ({ parent, params }) => {
 
 7. And finally if there are tags then tags are passed to ```TagCloud``` to render tags.
 
-### /[tags]
+### tags/[tag]
 
 As with ```[slug]```, the square brackets here denote a dynamic route.
 
@@ -892,8 +955,7 @@ export const load: LayoutServerLoad = async ({ fetch }) => {
     };
 };
 ```
-
-This defines a ```load``` function that makes a [fetch request using sveltekit's modified fetch method](https://kit.svelte.dev/docs/load#making-fetch-requests) request to the internal ```/api/posts``` defined in ```/api/posts/+server.ts```, which returns a list of all posts with slug, metadata, path, date as input into frontmatter and formatted, sorted into date order: ```const response = await fetch('/api/posts');```and calls [Response: json()](https://developer.mozilla.org/en-US/docs/Web/API/Response/json)```const sortedPosts: Post[] = await response.json();```to read the Response stream to completion and resolve to json.
+This layout file is the parent file that both ```[slug]``` and ```[tag]``` pages inherit from.  It defines a ```load``` function that makes a [fetch request using sveltekit's modified fetch method](https://kit.svelte.dev/docs/load#making-fetch-requests) request to the internal ```/api/posts``` defined in ```/api/posts/+server.ts```, which returns a list of all posts with slug, metadata, path, date as input into frontmatter and formatted, sorted into date order: ```const response = await fetch('/api/posts');```and calls [Response: json()](https://developer.mozilla.org/en-US/docs/Web/API/Response/json)```const sortedPosts: Post[] = await response.json();```to read the Response stream to completion and resolve to json.
 
 ```const allTags = await getAllTags(sortedPosts);``` then calls ```getAllTags``` to make a list of unique tags and ```allTags``` and ```sortedPosts``` are returned.
 

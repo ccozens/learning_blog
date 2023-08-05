@@ -1,4 +1,3 @@
-// import type { LayoutServerLoad } from './$types';
 import type { PageServerLoad } from './$types';
 import type { PostData } from '$lib/types';
 

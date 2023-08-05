@@ -1,3 +1,15 @@
+export interface Content {
+	html: string;
+	css: { code: string; map: null };
+	head: string;
+}
+
+export interface Metadata {
+	title: string;
+	description: string;
+	date: string;
+	tags: string[];
+}
 export interface RawPost {
 	metadata: Metadata;
 	default: {
@@ -10,18 +22,6 @@ export interface PostData {
 	dateFormatted: string;
 	tags: string[];
 	escapedContent: string;
-}
-
-export interface Content {
-	html: string;
-	css: { code: string; map: null };
-	head: string;
-}
-export interface Metadata {
-	title: string;
-	description: string;
-	date: string;
-	tags: string[];
 }
 
 export interface Post {
