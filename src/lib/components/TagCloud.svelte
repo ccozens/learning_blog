@@ -1,6 +1,7 @@
 <!-- script -->
 <script lang="ts">
-	export let tags: string[] = [];
+	import type { Tag } from '$lib/types';
+	export let tags: Tag[] = [];
 </script>
 
 <!-- html -->
@@ -13,7 +14,7 @@
 	{#each tags as tag}
 		<li>
 			<a href="tags/{tag}">
-				{tag}
+				{tag.name} ({tag.count})
 			</a>
 		</li>
 	{/each}

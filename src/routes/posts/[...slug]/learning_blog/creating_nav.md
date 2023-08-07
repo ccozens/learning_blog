@@ -1,15 +1,13 @@
 ---
-title: Creaing a nav component
-description: Setting up a nav component for the blog that auto-generates links to routes.
-date: 2021-08-07
+title: Creating a nav component
+description: Setting up a nav component for the blog that auto-generates route array and highlights active route.
+date: 2023-08-07
 tags:
     - learning_blog
     - sveltekit
     - nav
     - components
 ---
-
-## Creating a nav component
 
 This nav component generates links to routes from the folder structure, meaning there is no need to manually update the nav when a new route is added.
 

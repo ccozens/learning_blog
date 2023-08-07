@@ -15,3 +15,6 @@ export * from './posts';
 
 // navItem
 export * from './navItem';
+
+// tag
+export * from './tags';
