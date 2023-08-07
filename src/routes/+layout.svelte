@@ -2,14 +2,9 @@
 	import Nav from '$lib/components/Nav.svelte';
 	import { page } from '$app/stores';
 
-	$: currentPath = $page.route.id;
 	$: session = $page.data.session;
 	$: image = $page.data.session?.user?.image;
 	$: name = $page.data.session?.user?.name;
-
-	// Initialize a writable store to handle errors
-	import { writable } from 'svelte/store';
-	export const error = writable(null);
 
 	// load path data for nav
 	export let data;
@@ -37,14 +32,10 @@
 			{/if}
 		</p>
 	</div>
-	<Nav {navItems} {currentPath} />
+	<Nav {navItems} />
 </header>
-<slot />
 
-{#if $error}
-	<p>Error</p>
-	<pre>{$error.message}</pre>
-{/if}
+<slot />
 
 <style>
 	:global(body) {
