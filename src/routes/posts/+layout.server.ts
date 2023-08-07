@@ -1,5 +1,5 @@
 import type { LayoutServerLoad } from './$types';
-import type { Post } from '$lib/types';
+import type { Post, Tag } from '$lib/types';
 import { getAllTags } from '$lib/functions/GetAllTags';
 
 export const load: LayoutServerLoad = async ({ fetch }) => {
@@ -8,8 +8,7 @@ export const load: LayoutServerLoad = async ({ fetch }) => {
 	const sortedPosts: Post[] = await response.json();
 
 	// extract tags
-	const allTags = await getAllTags(sortedPosts);
-
+	const allTags: Tag[] = await getAllTags(sortedPosts);
 	return {
 		allTags,
 		sortedPosts

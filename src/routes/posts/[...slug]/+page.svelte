@@ -5,12 +5,11 @@
 	// destructure props and create postContent object
 	const { escapedContent, title, dateFormatted, tags } = data.postData || {};
 	const postContent = { title, dateFormatted, escapedContent };
-
 </script>
 
 <SinglePost {postContent} />
 
 {#if tags?.length}
 	<h2>Posted in:</h2>
-	<TagCloud {tags} />
+	<TagCloud tagString={tags} />
 {/if}

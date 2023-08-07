@@ -10,11 +10,11 @@
 
 {#each posts as post}
 	<article>
-		<!-- note the /posts in the <a> element - makes it absolute link (/posts/slug) rather than relative (/posts/tags/posts/slug) -->
+		<!-- note the /posts in the <a> element - makes it absolute link (/posts/slug) rather than relative (posts/slug) -->
 		<h1><a href="/posts/{post.slug}">{post.metadata.title}</a></h1>
 		<p class="preview">{post.metadata.description}</p>
 		<p>Posted on {post.dateFormatted}</p>
-		<TagCloud tags={post.metadata.tags} />
+		<TagCloud tagString={post.metadata.tags} />
 	</article>
 {/each}
 
