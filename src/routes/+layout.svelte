@@ -1,6 +1,8 @@
 <script lang="ts">
+	import Nav from '$lib/components/Nav.svelte';
 	import { page } from '$app/stores';
 
+	$: currentPath = $page.route.id;
 	$: session = $page.data.session;
 	$: image = $page.data.session?.user?.image;
 	$: name = $page.data.session?.user?.name;
@@ -8,6 +10,10 @@
 	// Initialize a writable store to handle errors
 	import { writable } from 'svelte/store';
 	export const error = writable(null);
+
+	// load path data for nav
+	export let data;
+	const navItems = data.navItems;
 </script>
 
 <header>
@@ -21,19 +27,17 @@
 					<small>Signed in as</small>
 					<strong>{name}</strong>
 				</span>
-				<a href="/auth/signout" class="button" data-sveltekit-preload-data="off">Sign out</a>
+				<a href="/auth/signout" class="button" data-sveltekit-preload-data="off">Sign out</a
+				>
 			{:else}
 				<span class="notSignedInText">You are not signed in</span>
-				<a href="/auth/signin" class="buttonPrimary" data-sveltekit-preload-data="off">Sign in</a>
+				<a href="/auth/signin" class="buttonPrimary" data-sveltekit-preload-data="off"
+					>Sign in</a
+				>
 			{/if}
 		</p>
 	</div>
-	<nav>
-		<ul class="navItems">
-			<li class="navItem"><a href="/">Home</a></li>
-			<li class="navItem"><a href="/protected">Protected</a></li>
-		</ul>
-	</nav>
+	<Nav {navItems} {currentPath} />
 </header>
 <slot />
 
@@ -142,15 +146,6 @@
 	}
 	.buttonPrimary:hover {
 		box-shadow: inset 0 0 5rem rgba(0, 0, 0, 0.2);
-	}
-	.navItems {
-		margin-bottom: 2rem;
-		padding: 0;
-		list-style: none;
-	}
-	.navItem {
-		display: inline-block;
-		margin-right: 1rem;
 	}
 
 	:global(a) {

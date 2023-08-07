@@ -12,3 +12,6 @@ export * from './frontmatter';
 
 // postData
 export * from './posts';
+
+// navItem
+export * from './navItem';

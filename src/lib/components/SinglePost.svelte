@@ -1,7 +1,7 @@
 <script lang="ts">
 	import '$lib/styles/code-prism-night-owl.css'; // theme for code blocks
 	export let postContent;
-	
+
 	const { title, dateFormatted, escapedContent } = postContent;
 </script>
 
@@ -10,8 +10,7 @@
 	<p>Posted on {dateFormatted}</p>
 	{#if escapedContent}
 		{@html escapedContent}
-			{:else}
+	{:else}
 		<p>loading...</p>
 	{/if}
-
 </article>
