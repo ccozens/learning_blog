@@ -1,4 +1,4 @@
-import { unified } from 'unified'; // core interface
+/* import { unified } from 'unified'; // core interface
 import remarkParse from 'remark-parse'; // parse markdown to mdast
 import remarkFrontmatter from 'remark-frontmatter'; // separate frontmatter
 import remarkParseFrontmatter from 'remark-parse-frontmatter'; // parse frontmatter
@@ -51,3 +51,4 @@ export const renderMarkdown = async (
 		});
 	});
 };
+ */

@@ -1,24 +1,19 @@
 <script lang="ts">
+	// types
 	import type { Tag } from '$lib/types';
+	// functions
+	import { tagSearch, normalizeSearch } from '$lib/functions/';
 
 	export let items: Tag[] = [];
 	export let placeholder: string = 'search';
+	let filteredSearch: Tag[] = [];
+
 	const extendedPlaceholder = `🔍 ${placeholder}`;
 	let search = '';
 	let isFocused = false;
 
-	$: filteredSearch = items.filter((item) => {
-		if (search === '' && isFocused) {
-			return [];
-		}
-		// return true if no search
-		return (
-			search === '' ||
-			// or
-			// return true if index is not -1
-			item.name.indexOf(search) !== -1
-		);
-	});
+	$: normalizedsearch = normalizeSearch(search);
+	$: searchResults = tagSearch(items, normalizedsearch);
 
 	function clearSearch() {
 		search = '';
@@ -48,17 +43,17 @@
 		<p>No results found</p>
 	{/if}
 
-	{#if filteredSearch.length > 0}
-		<div class="search-results">
+	<div class="search-results">
+		{#if searchResults instanceof Array}
 			<ul>
-				{#each filteredSearch as item}
+				{#each searchResults as item}
 					<li>
 						<a href={`/posts/tags/${item.name}`}>{item.name}</a>
 					</li>
 				{/each}
 			</ul>
-		</div>
-	{/if}
+		{/if}
+	</div>
 {/if}
 
 <style>

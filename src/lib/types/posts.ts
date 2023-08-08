@@ -32,3 +32,10 @@ export interface Post {
 	dateFormatted: string;
 	escapedContent: string;
 }
+
+export interface SearchedPost {
+	titleMatches: Post[];
+	descriptionMatches: Post[];
+	tagMatches: Post[];
+	contentMatches: Post[];
+}
