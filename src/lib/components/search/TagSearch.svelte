@@ -3,15 +3,16 @@
 	import type { Tag } from '$lib/types';
 	// functions
 	import { tagSearch, normalizeSearch } from '$lib/functions/';
+	// components
+	import SearchBox from './SearchBox.svelte';
 
 	export let items: Tag[] = [];
 	export let placeholder: string = 'search';
 	let filteredSearch: Tag[] = [];
 
 	const extendedPlaceholder = `🔍 ${placeholder}`;
-	let search = '';
+	let search: string = '';
 	let isFocused = false;
-
 	$: normalizedsearch = normalizeSearch(search);
 	$: searchResults = tagSearch(items, normalizedsearch);
 
@@ -22,12 +23,8 @@
 </script>
 
 <form>
-	<input
-		on:focus={() => (isFocused = true)}
-		type="text"
-		placeholder={extendedPlaceholder}
-		bind:value={search}
-	/>
+	<SearchBox placeholder={extendedPlaceholder} bind:search bind:isFocused {clearSearch} />
+
 	<div class="shortcut">
 		<kbd>⌘</kbd>
 		<kbd>K</kbd>
@@ -59,11 +56,6 @@
 <style>
 	li {
 		text-transform: capitalize;
-	}
-
-	input::placeholder::before {
-		content: '🔍';
-		padding-right: 0.5rem;
 	}
 
 	.search-results {

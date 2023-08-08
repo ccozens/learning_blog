@@ -10,7 +10,7 @@
 	<ul>
 		{#each matches as match}
 			<li>
-				<a href={match.slug}>
+				<a href="posts/{match.slug}">
 					<h3>{match.metadata.description}</h3>
 				</a>
 			</li>

@@ -5,6 +5,7 @@
 	import { postSearch, formatSearchResult, normalizeSearch } from '$lib/functions/';
 	// components
 	import Matches from './Matches.svelte';
+	import SearchBox from './SearchBox.svelte';
 
 	export let items: Post[] = [];
 	export let placeholder: string = 'search';
@@ -18,7 +19,6 @@
 	$: searchResults = postSearch(items, normalizedsearch);
 	$: formattedSearch = formatSearchResult(searchResults, normalizedsearch);
 
-	// {titleMatches, descriptionMatches, tagMatches, contentMatches} = formattedSearch;
 	$: titleMatches = formattedSearch.titleMatches;
 	$: descriptionMatches = formattedSearch.descriptionMatches;
 	$: tagMatches = formattedSearch.tagMatches;
@@ -31,12 +31,7 @@
 </script>
 
 <form>
-	<input
-		on:focus={() => (isFocused = true)}
-		type="text"
-		placeholder={extendedPlaceholder}
-		bind:value={search}
-	/>
+	<SearchBox placeholder={extendedPlaceholder} bind:search bind:isFocused {clearSearch} />
 	<div class="shortcut">
 		<kbd>⌘</kbd>
 		<kbd>K</kbd>
