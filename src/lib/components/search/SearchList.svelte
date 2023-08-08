@@ -2,7 +2,8 @@
 	import type { Tag } from '$lib/types';
 
 	export let items: Tag[] = [];
-
+	export let placeholder: string = 'search';
+	const extendedPlaceholder = `🔍 ${placeholder}`;
 	let search = '';
 	let isFocused = false;
 
@@ -25,15 +26,22 @@
 	}
 </script>
 
-<label>
-	Search: <br />
+<form>
 	<input
 		on:focus={() => (isFocused = true)}
 		type="text"
-		placeholder="search"
+		placeholder={extendedPlaceholder}
 		bind:value={search}
 	/>
-</label>
+	<div class="shortcut">
+		<kbd>⌘</kbd>
+		<kbd>K</kbd>
+	</div>
+</form>
+
+{#if isFocused}
+	<button on:click={clearSearch}> clear </button>
+{/if}
 
 {#if isFocused && search !== ''}
 	{#if filteredSearch.length === 0}
@@ -41,8 +49,6 @@
 	{/if}
 
 	{#if filteredSearch.length > 0}
-		<button on:click={clearSearch}> clear </button>
-
 		<div class="search-results">
 			<ul>
 				{#each filteredSearch as item}
@@ -58,6 +64,11 @@
 <style>
 	li {
 		text-transform: capitalize;
+	}
+
+	input::placeholder::before {
+		content: '🔍';
+		padding-right: 0.5rem;
 	}
 
 	.search-results {

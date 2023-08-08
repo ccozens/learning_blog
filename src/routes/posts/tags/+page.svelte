@@ -7,7 +7,7 @@
 	const allTags = data.allTags;
 </script>
 
-<SearchList items={allTags} />
+<SearchList items={allTags} placeholder="Search tags" />
 
 <h1>all tags</h1>
 
