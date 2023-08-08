@@ -8,6 +8,6 @@
 	const { sortedPosts } = data;
 </script>
 
-<PostSearch items={sortedPosts} placeholder="Search posts" />
+<PostSearch items={sortedPosts} placeholder="Search posts" keybind="k" />
 
 <slot />

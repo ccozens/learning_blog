@@ -9,7 +9,7 @@
 	const allTags = data.allTags;
 </script>
 
-<TagSearch items={allTags} placeholder="Search tags" />
+<TagSearch items={allTags} placeholder="Search tags" keybind="m" />
 
 <h1>all tags</h1>
 

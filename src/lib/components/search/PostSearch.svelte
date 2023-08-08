@@ -9,6 +9,7 @@
 
 	export let items: Post[] = [];
 	export let placeholder: string = 'search';
+	export let keybind: string = 'k';
 	let filteredSearch: Post[] = [];
 
 	const extendedPlaceholder = `🔍 ${placeholder}`;
@@ -31,10 +32,16 @@
 </script>
 
 <form>
-	<SearchBox placeholder={extendedPlaceholder} bind:search bind:isFocused {clearSearch} />
+	<SearchBox
+		placeholder={extendedPlaceholder}
+		bind:search
+		bind:isFocused
+		{clearSearch}
+		{keybind}
+	/>
 	<div class="shortcut">
 		<kbd>⌘</kbd>
-		<kbd>K</kbd>
+		<kbd>{keybind.toUpperCase()}</kbd>
 	</div>
 </form>
 

@@ -3,10 +3,11 @@
 	export let search: string = '';
 	export let isFocused: Boolean = false;
 	export let clearSearch = () => {};
+	export let keybind: string = '';
 
 	// create key binding to focus input
 	const focusOnSearch = (event: KeyboardEvent) => {
-		if (!isFocused && event.key === 'k' && event.metaKey) {
+		if (!isFocused && event.key === keybind && event.metaKey) {
 			event.preventDefault();
 			isFocused = true;
 		}
