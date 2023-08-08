@@ -6,24 +6,8 @@
 	let search = '';
 	let isFocused = false;
 
-	let isPopoverOpen = false;
-
-	/* 	$: filteredSearch = items.filter((item) => {
-		let foundItems: Tag[] = [];
-		// foundItems are items that match the search
-		foundItems = items.filter((item) => {
-			return item.name.toLowerCase().includes(search.toLowerCase());
-		});
-
-
-
-	}); */
-
 	$: filteredSearch = items.filter((item) => {
-		if (search !== '' && isFocused) {
-			isPopoverOpen = true;
-		} else {
-			isPopoverOpen = false;
+		if (search === '' && isFocused) {
 			return [];
 		}
 		// return true if no search
@@ -56,19 +40,17 @@
 		<p>No results found</p>
 	{/if}
 
-	{#if isPopoverOpen}
-		<div id="popover-targert">
-			<button on:click={clearSearch}> clear </button>
+	{#if filteredSearch.length > 0}
+		<button on:click={clearSearch}> clear </button>
 
-			<div class="search-results">
-				<ul>
-					{#each filteredSearch as item}
-						<li>
-							<a href={`/posts/tags/${item.name}`}>{item.name}</a>
-						</li>
-					{/each}
-				</ul>
-			</div>
+		<div class="search-results">
+			<ul>
+				{#each filteredSearch as item}
+					<li>
+						<a href={`/posts/tags/${item.name}`}>{item.name}</a>
+					</li>
+				{/each}
+			</ul>
 		</div>
 	{/if}
 {/if}
