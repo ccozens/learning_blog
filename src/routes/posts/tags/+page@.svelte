@@ -4,7 +4,6 @@
 	// components
 	import TagCloud from '$lib/components/TagCloud.svelte';
 	import TagSearch from '$lib/components/search/TagSearch.svelte';
-	import Example from '$lib/components/search/Example.svelte';
 
 	export let data: PageData;
 	const allTags = data.allTags;
