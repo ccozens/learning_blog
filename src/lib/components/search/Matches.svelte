@@ -9,7 +9,7 @@
 	<h2>{heading}</h2>
 	<ul>
 		{#each matches as match}
-			<li>
+			<li tabindex="0">
 				<a data-sveltekit-reload href="/posts/{match.slug}">
 					<h2>{match.metadata.title}</h2>
 				</a>

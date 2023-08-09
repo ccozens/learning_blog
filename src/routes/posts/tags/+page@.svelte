@@ -10,8 +10,6 @@
 	const allTags = data.allTags;
 </script>
 
-<Example />
-
 <TagSearch items={allTags} placeholder="Search tags" keybind="k" />
 
 <h1>All tags</h1>
