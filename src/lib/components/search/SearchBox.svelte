@@ -12,33 +12,26 @@
 		}
 	};
 
+	// create key binding to clear search
 	export const cancelSearch = (event: KeyboardEvent) => {
 		if (isFocused && event.key === 'Escape') {
 			clearSearch();
 		}
 	};
+
+	// clear search and blur input
 	export function clearSearch() {
 		search = '';
 		isFocused = false;
-		blurSearch(node);
-	}
-	// select SearchBox node
-	let node: HTMLInputElement | null = null;
-	$: if (isFocused) {
-		node = document.querySelector('input');
-	}
-
-	// svelte action to clear searcg, set isFocused to false, and blur input
-	function blurSearch(node: HTMLInputElement | null) {
-		if (!isFocused) {
-			node?.blur();
-		}
 	}
 
 	// give focus to input when isFocused=true
 	$: if (isFocused) {
 		const input = document.querySelector('input');
 		input?.focus();
+	} else {
+		const input = document.querySelector('input');
+		input?.blur();
 	}
 </script>
 
