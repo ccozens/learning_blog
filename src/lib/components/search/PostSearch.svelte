@@ -13,16 +13,18 @@
 	let filteredSearch: Post[] = [];
 
 	const extendedPlaceholder = `🔍 ${placeholder}`;
-	let search = '';
-	let isFocused = false;
+	let search: string = '';
+	let isFocused: Boolean = false;
 
 	// child function
 	let clearSearch = () => {};
 
+	// reactive variables
 	$: normalizedsearch = normalizeSearch(search);
 	$: searchResults = postSearch(items, normalizedsearch);
 	$: formattedSearch = formatSearchResult(searchResults, normalizedsearch);
 
+	// destructure formattedSearch
 	$: titleMatches = formattedSearch.titleMatches;
 	$: descriptionMatches = formattedSearch.descriptionMatches;
 	$: tagMatches = formattedSearch.tagMatches;
@@ -30,13 +32,7 @@
 </script>
 
 <form>
-	<SearchBox
-		placeholder={extendedPlaceholder}
-		bind:search
-		bind:isFocused
-		{clearSearch}
-		{keybind}
-	/>
+	<SearchBox placeholder={extendedPlaceholder} bind:search bind:isFocused {keybind} />
 	<div class="shortcut">
 		<kbd>⌘</kbd>
 		<kbd>{keybind.toUpperCase()}</kbd>

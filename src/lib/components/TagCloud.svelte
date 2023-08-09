@@ -2,22 +2,31 @@
 <script lang="ts">
 	import type { Tag } from '$lib/types';
 	export let tags: Tag[] = [];
+	export let tagString: string[] = [];
 </script>
 
 <!-- html -->
 
-{#if tags.length === 0}
+{#if tags.length === 0 && tagString.length === 0}
 	<p>No tags yet.</p>
 {/if}
 
-{#if tags}
-	<ul>
-		{#each tags as tag}
+<ul>
+	{#if tagString}
+		{#each tagString as tag}
 			<li>
-				<a href="tags/{tag.name}">
-					{tag.name} ({tag.count})
+				<a href="tags/{tag}">
+					{tag}
 				</a>
 			</li>
 		{/each}
-	</ul>
-{/if}
+	{/if}
+
+	{#each tags as tag}
+		<li>
+			<a href="tags/{tag.name}">
+				{tag.name} ({tag.count})
+			</a>
+		</li>
+	{/each}
+</ul>

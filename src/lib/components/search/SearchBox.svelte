@@ -20,10 +20,10 @@
 	};
 
 	// clear search and blur input
-	export function clearSearch() {
+	export const clearSearch = () => {
 		search = '';
 		isFocused = false;
-	}
+	};
 
 	// give focus to input when isFocused=true
 	$: if (isFocused) {

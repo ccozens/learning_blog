@@ -5,6 +5,7 @@
 	import PostSearch from '$lib/components/search/PostSearch.svelte';
 	import PostListWithPreview from '$lib/components/PostListWithPreview.svelte';
 	import TagCloud from '$lib/components/TagCloud.svelte';
+
 	//  data
 	export let data: PageData;
 

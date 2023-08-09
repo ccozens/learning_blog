@@ -13,7 +13,8 @@
 
 	const extendedPlaceholder = `🔍 ${placeholder}`;
 	let search: string = '';
-	let isFocused = false;
+	let isFocused: Boolean = false;
+
 	// child function
 	let clearSearch = () => {};
 
@@ -22,13 +23,7 @@
 </script>
 
 <form>
-	<SearchBox
-		placeholder={extendedPlaceholder}
-		bind:search
-		bind:isFocused
-		{clearSearch}
-		{keybind}
-	/>
+	<SearchBox placeholder={extendedPlaceholder} bind:search bind:isFocused {keybind} />
 
 	<div class="shortcut">
 		<kbd>⌘</kbd>
