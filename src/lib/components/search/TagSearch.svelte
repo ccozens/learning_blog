@@ -45,7 +45,7 @@
 			<ul>
 				{#each searchResults as item}
 					<li>
-						<a href={`/posts/tags/${item.name}`}>{item.name}</a>
+						<a href="/posts/tags/{item.name}">{item.name}</a>
 					</li>
 				{/each}
 			</ul>

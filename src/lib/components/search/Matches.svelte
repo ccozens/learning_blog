@@ -10,9 +10,10 @@
 	<ul>
 		{#each matches as match}
 			<li>
-				<a href="posts/{match.slug}">
-					<h3>{match.metadata.description}</h3>
+				<a href="/posts/{match.slug}">
+					<h2>{match.metadata.title}</h2>
 				</a>
+				<p>{match.metadata.description}</p>
 			</li>
 		{/each}
 	</ul>

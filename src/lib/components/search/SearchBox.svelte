@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { tick } from 'svelte';
 	export let placeholder: string = 'search';
 	export let search: string = '';
 	export let isFocused: Boolean = false;
@@ -6,7 +7,7 @@
 
 	// create key binding to focus input
 	export const focusOnSearch = (event: KeyboardEvent) => {
-		if (!isFocused && event.key === keybind && event.metaKey) {
+		if (typeof window !== 'undefined' && !isFocused && event.key === keybind && event.metaKey) {
 			event.preventDefault();
 			isFocused = true;
 		}
@@ -14,24 +15,28 @@
 
 	// create key binding to clear search
 	export const cancelSearch = (event: KeyboardEvent) => {
-		if (isFocused && event.key === 'Escape') {
+		if (typeof window !== 'undefined' && isFocused && event.key === 'Escape') {
 			clearSearch();
 		}
 	};
 
 	// clear search and blur input
 	export const clearSearch = () => {
-		search = '';
-		isFocused = false;
+		// add a 500 ms delay to prevent input from being blurred immediately
+		setTimeout(() => {
+			search = '';
+			isFocused = false;
+		}, 500);
 	};
 
 	// give focus to input when isFocused=true
-	$: if (isFocused) {
+	$: if (isFocused && typeof window !== 'undefined') {
 		const input = document.querySelector('input');
 		input?.focus();
-	} else {
+	} else if (typeof window !== 'undefined') {
 		const input = document.querySelector('input');
-		input?.blur();
+		// add a tick to prevent input from being blurred immediately
+		tick().then(() => input?.blur());
 	}
 </script>
 
