@@ -14,12 +14,12 @@
 	};
 
 	const cancelSearch = (event: KeyboardEvent) => {
-		if (event.key === 'Escape') {
+		if (isFocused && event.key === 'Escape') {
 			clearSearch();
 		}
 	};
 
-	// give focus to input when isFoxused=true
+	// give focus to input when isFocused=true
 	$: if (isFocused) {
 		const input = document.querySelector('input');
 		input?.focus();

@@ -66,5 +66,3 @@ export const load: PageServerLoad = async ({ fetch }) => {
 		issues
 	};
 };
-
-// gitHubData { data: { repository: { issues: [Object] } } }

@@ -8,7 +8,7 @@
 
 	export let items: Tag[] = [];
 	export let placeholder: string = 'search';
-	export let keybind: string = 'm';
+	export let keybind: string = 'k';
 	let filteredSearch: Tag[] = [];
 
 	const extendedPlaceholder = `🔍 ${placeholder}`;
@@ -17,9 +17,22 @@
 	$: normalizedsearch = normalizeSearch(search);
 	$: searchResults = tagSearch(items, normalizedsearch);
 
+	// select SearchBox node
+	let node: HTMLInputElement | null = null;
+	$: if (isFocused) {
+		node = document.querySelector('input');
+	}
+
+	// svelte action to clear searcg, set isFocused to false, and blur input
+	function blurSearch(node: HTMLInputElement | null) {
+		if (!isFocused) {
+			node?.blur();
+		}
+	}
 	function clearSearch() {
 		search = '';
 		isFocused = false;
+		blurSearch(node);
 	}
 </script>
 
