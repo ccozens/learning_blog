@@ -3,6 +3,10 @@
 	import type { Tag } from '$lib/types';
 	export let tags: Tag[] = [];
 	export let tagString: string[] = [];
+
+	if (tagString.length > 0) {
+		tagString.forEach((tag) => tags.push({ name: tag, count: 0 }));
+	}
 </script>
 
 <!-- html -->
@@ -12,20 +16,13 @@
 {/if}
 
 <ul>
-	{#if tagString}
-		{#each tagString as tag}
-			<li>
-				<a href="tags/{tag}">
-					{tag}
-				</a>
-			</li>
-		{/each}
-	{/if}
-
 	{#each tags as tag}
 		<li>
-			<a href="tags/{tag.name}">
-				{tag.name} ({tag.count})
+			<a href="/posts/tags/{tag.name}">
+				{tag.name}
+				{#if tag.count > 0}
+					({tag.count})
+				{/if}
 			</a>
 		</li>
 	{/each}
