@@ -16,6 +16,9 @@
 	let search = '';
 	let isFocused = false;
 
+	// child function
+	let clearSearch = () => {};
+
 	$: normalizedsearch = normalizeSearch(search);
 	$: searchResults = postSearch(items, normalizedsearch);
 	$: formattedSearch = formatSearchResult(searchResults, normalizedsearch);
@@ -24,11 +27,6 @@
 	$: descriptionMatches = formattedSearch.descriptionMatches;
 	$: tagMatches = formattedSearch.tagMatches;
 	$: contentMatches = formattedSearch.contentMatches;
-
-	function clearSearch() {
-		search = '';
-		isFocused = false;
-	}
 </script>
 
 <form>

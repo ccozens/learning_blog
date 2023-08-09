@@ -14,26 +14,11 @@
 	const extendedPlaceholder = `🔍 ${placeholder}`;
 	let search: string = '';
 	let isFocused = false;
+	// child function
+	let clearSearch = () => {};
+
 	$: normalizedsearch = normalizeSearch(search);
 	$: searchResults = tagSearch(items, normalizedsearch);
-
-	// select SearchBox node
-	let node: HTMLInputElement | null = null;
-	$: if (isFocused) {
-		node = document.querySelector('input');
-	}
-
-	// svelte action to clear searcg, set isFocused to false, and blur input
-	function blurSearch(node: HTMLInputElement | null) {
-		if (!isFocused) {
-			node?.blur();
-		}
-	}
-	function clearSearch() {
-		search = '';
-		isFocused = false;
-		blurSearch(node);
-	}
 </script>
 
 <form>
