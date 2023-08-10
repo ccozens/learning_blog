@@ -173,7 +173,7 @@ export const renderMarkdown = async (
 }
 ```
 
-<detail>
+<details>
 <summary>Full theme here</summary>
 
 ```css
@@ -346,7 +346,7 @@ pre[class*='language-'] {
 }
 ```
 
-</detail>
+</details>
 
 ## A note on typescript.
 

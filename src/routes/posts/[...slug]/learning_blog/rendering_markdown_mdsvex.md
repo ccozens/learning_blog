@@ -267,7 +267,7 @@ export async function getAllTags(Post: Post[]) {
 
 CSS for the code block theme. Its long so its compacted here:
 
-<detail>
+<details>
 
 <summary>code-prism-night-owl.css</summary>
 
@@ -437,7 +437,7 @@ pre[class*='language-'] {
 }
 ```
 
-</detail>
+</details>
 
 ### types
 
@@ -728,7 +728,7 @@ blog
 
 The [rest parameter is a special kind of parameter that allows us to represent an indefinite number of arguments as an array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/rest_parameters). The syntax for a rest parameter is three dots followed by the name of the array that will contain the rest of the arguments. In this case, the array is called `slug`.
 
-<detail><summary>JS example of rest parameters from MDN</summary>
+<details><summary>JS example of rest parameters from MDN</summary>
 A function definition's last parameter can be prefixed with ... (three U+002E FULL STOP characters), which will cause all remaining (user supplied) parameters to be placed within an Array object.
 
 ```javascript
@@ -746,7 +746,7 @@ myFun('one', 'two', 'three', 'four', 'five', 'six');
 // manyMoreArgs, ["three", "four", "five", "six"]
 ```
 
-</detail>
+</details>
 
 ```bash
 .
