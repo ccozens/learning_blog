@@ -104,7 +104,7 @@ overlay_open.subscribe((value) => {
 });
 ```
 
-This file contains four stores, all of which are simple [writable stores](https://svelte.dev/docs/svelte-store#writable) with default value `false`.
+This file contains four stores, all of whh are simple [writable stores](https://svelte.dev/docs/svelte-store#writable) with default value `false`.
 It also contains logic that disables scrolling on the root element when the `overlay_open` store is set to `true`. `overlay_open.subscribe((value) => {` listens to changes in _overlay_open_'s value and, if set to _true_, disables scrolling on the root element by setting overflow to _hidden_. If _overlay_open_ emits a falsy value, the if statement will not execute and the overflow property of the _document.documentElement_ element will be set to an empty string, which enables scrolling on the root element of the document.
 
 #### 3.1.2. <a name='search.js'></a>search.js
@@ -246,7 +246,7 @@ The next thing the function does is get the index of the current focusable eleme
 const index = nodes.indexOf(document.activeElement);
 ```
 
-[indexOf](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/indexOf) is a JS array method that rturns the first index at which a given element can be found in the array, or -1 if it is not present.
+[indexOf](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/indexOf) is a JS array method that returns the first index at which a given element can be found in the array, or -1 if it is not present.
 
 ##### update function
 
@@ -336,7 +336,7 @@ const handle_keydown = (e) => {
 ```
 
 -   `node.addEventListener('keydown', handle_keydown);` adds the event listener to the node.
--   The destoy function is triggered when the component is destroyed, and removes the event listener.
+-   The destroy function is triggered when the component is destroyed, and removes the event listener.
     -   `node.removeEventListener('keydown', handle_keydown` removes the event listener.
     -   `if (reset_focus) {previous?.focus({ preventScroll: true });};` returns focus to the previous element if _reset_focus_ is true, and prevents scrolling using _preventScroll: true_.
 
@@ -482,7 +482,7 @@ _Index_ has the following basic methods:
 -   [index.append(id, string)](https://github.com/nextapps-de/flexsearch#append-contents) -> appends a new entry to the index, with unique ID. This differs from add in that it won't overwrite existing entries, and
 -   [index.update(id, string)](https://github.com/nextapps-de/flexsearch#update-item-from-an-index) -> overwrites extant content with new content.
 -   [index.remove(id)](https://github.com/nextapps-de/flexsearch#remove-item-from-an-index) -> removes an entry from the index.
--   [index.search(string, <limit>, <options>)](https://github.com/nextapps-de/flexsearch#search-items) -> used for seaching!.
+-   [index.search(string, <limit>, <options>)](https://github.com/nextapps-de/flexsearch#search-items) -> used for searching!.
     -   basic search: `index.search("John");`
     -   search limiting to 10 results: `index.search("John", 10);`
 -   [index.search(options)](https://github.com/nextapps-de/flexsearch#search-options) -> define how search is carried out, e.g. `index.search({ query: "John", limit: 10, suggest: true });` enables suggestions in results
@@ -490,7 +490,7 @@ _Index_ has the following basic methods:
 -   [index.import(key, data)](https://github.com/nextapps-de/flexsearch#import) -> import data. Note you ned to create an index before can import data into it.
     Each method can also been called as an [async method](https://github.com/nextapps-de/flexsearch#async), e.g. `index.addAsync(id, content, function(){}` by passing a callback, returning a Promise or using async/await.
 
-There are futher options, for example using a [built-in tokenizer](https://github.com/nextapps-de/flexsearch#tokenizer-prefix-search) or [defining a custom tokenizer](https://github.com/nextapps-de/flexsearch#add-custom-tokenizer): `var index = new FlexSearch({ tokenize: function(str) { return str.split(/\s-\//g); } });` , which takes a string and returns an array of strings, and [encoders](https://github.com/nextapps-de/flexsearch#encoders), which affect memory requirement, query time and phonetic matches.
+There are further options, for example using a [built-in tokenizer](https://github.com/nextapps-de/flexsearch#tokenizer-prefix-search) or [defining a custom tokenizer](https://github.com/nextapps-de/flexsearch#add-custom-tokenizer): `var index = new FlexSearch({ tokenize: function(str) { return str.split(/\s-\//g); } });` , which takes a string and returns an array of strings, and [encoders](https://github.com/nextapps-de/flexsearch#encoders), which affect memory requirement, query time and phonetic matches.
 
 #### 3.3.3. <a name='Searchfunction'></a>Search function
 
@@ -507,7 +507,7 @@ There are futher options, for example using a [built-in tokenizer](https://githu
 -   then a for look loops over the _blocks_ array, and for each block:
     -   _title_ is set to the final entry of _blocks.breadcrumbs_ array, using [array method .at](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/at) `const title = block.breadcrumbs.at(-1);`
     -   adds a new entry to _map_ consisting block.href as key and block as value: `map.set(block.href, block);`
-    -   adds data to the appripriate FlexSearch index based on the rank of a block: `` indexes[block.rank ?? 0].add(block.href, `${title} ${block.content}`); ``. Specifically:
+    -   adds data to the appropriate FlexSearch index based on the rank of a block: `` indexes[block.rank ?? 0].add(block.href, `${title} ${block.content}`); ``. Specifically:
         -   `indexes[block.rank ?? 0]` looks up the index based on the rank of the block. If no rank is present, it defaults to 0 using the [nullish coalescing operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing) `??`.
         -   that done, `` .add(block.href, `${title} ${block.content}`); `` adds a new entry to the index using flexsearch's [index.add method](https://github.com/nextapps-de/flexsearch#add-text-item-to-an-index), with unique ID _block.href_ and content `${title} ${block.content}`. As noted in the comment in the code, svelte are using the URL as an ID, where a [number type is recommended by flexsearch](https://github.com/nextapps-de/flexsearch#use-numeric-ids) due to memory usage.
         -   `hrefs.set(block.breadcrumbs.join('::'), block.href);` adds a new entry to _hrefs_ consisting of the block's breadcrumbs joined by '::' as key and block.href as value. _hrefs_ is a [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) object, and [Map.set](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/set) adds a new key:value pair to the map.
@@ -1336,7 +1336,7 @@ As before, the styles are here and I won't discuss the CSS
 -   [tick is a svelte lifecycle function](https://svelte.dev/docs/svelte#tick) that schedules a callback to run after the next time the component is updated.
 -   [focusable_children()](#focusable_children) and [trap()](#trap) are actions, discussed above.
 -   Icon is the [svelte icon](https://commons.wikimedia.org/wiki/File:Svelte_Logo.svg)
--   `SearchResults` is a component that formats the search results, discussed below // TODO link
+-   `SearchResults` is a component that formats the search results, discussed in the [SearchResults section](#SearchResults).
 -   `SearchWorker` is `search-worker.js,` discussed in the [search-worker.js section](<(#search-worker.js)>).
 
 Variables
@@ -1552,7 +1552,7 @@ The next is an [if expression](https://svelte.dev/docs/logic-blocks#if) which re
 
     -   `svelte-ignore a11y-autofocus` silences the [a11y-autofocus](https://svelte.dev/docs/accessibility-warnings#a11y-autofocus) warning, which specifies that autofocus should not be used.
     -   `<input autofocus` creates an [input element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input) and autofocuses it when the modal is opened.
-    -   `on:keydown={(e) => { if (e.key === 'Enter' && !e.isComposing)` listens for keydown events and if the key is enter and the event is not composing (i.e. it is not part of a composition session) it clicks the first link with a data-has-node attribute. - [isComposing is an HTML input event](https://developer.mozilla.org/en-US/docs/Web/API/InputEvent/isComposing) that specifies whether the event is part of a composition session. - within the keydown event listener, `modal.querySelector('a[data-has-node]')`uses the [query selector API](https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector) to select the first link with a data-has-node attribute. - `data-has-node` is set by Search Result List TODO link component to indicate that the link has a node associated with it. - `)?.click();` if the query selector returns a link, it clicks it using the HTML element's [click() method](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/click).
+    -   `on:keydown={(e) => { if (e.key === 'Enter' && !e.isComposing)` listens for keydown events and if the key is enter and the event is not composing (i.e. it is not part of a composition session) it clicks the first link with a data-has-node attribute. - [isComposing is an HTML input event](https://developer.mozilla.org/en-US/docs/Web/API/InputEvent/isComposing) that specifies whether the event is part of a composition session. - within the keydown event listener, ` modal.querySelector('a[data-has-node]')```uses the [query selector API](https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector) to select the first link with a data-has-node attribute. -  `data-has-node`is set by [Search Result List](#searchresultlistsvelte)  component to indicate that the link has a node associated with it. -`)?.click();` if the query selector returns a link, it clicks it using the HTML element's [click() method](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/click).
         -   `on:input={(e) => { $search_query = e.currentTarget.value; }}` listens for input events and sets the search query to the current target's value.
         -   `value={$search_query}` sets the input's value to the search query store.
         -   `placeholder="Search"` sets the input's placeholder to "Search".
@@ -1748,10 +1748,41 @@ This component is used to display the search results. It is imported into [Searc
 </ul>
 ```
 
+##### Custom event
+
+This file imports [svelte's createEventDispatcher lifecycle function](https://svelte.dev/docs/svelte#createeventdispatcher), which can be used to dispatch [component events](https://svelte.dev/docs/component-directives#on-eventname). A new event is created `const dispatch = createEventDispatcher();` and later a custom event is dispatched with `dispatch('select', { href: result.href })`. This event is handled in [SearchBox.svelte](#343-searchboxsvelte) with `on:select={(e) => {navigate(e.detail.href); }}`.
+
+##### Props
+
+The component takes two props, `results` and `query`. `results` is an array of [Tree](#typesjs) objects, and `query` is a string. The `results` prop is used in a [each block](https://svelte.dev/docs#each) to iterate over the array and display the results. The `query` prop is used in the [excerpt function](#excerpt-function) to highlight the query in the results.
+
+##### escape function
+
+The `escape` function takes a string as a parameter and returns the string with `<` and `>` replaced with `&lt;` and `&gt;` respectively.
+
+##### excerpt function
+
+The excerpt function is take content and query as params (`function excerpt(content, query) {`) and first creates `index` with both set to lower case: `const index = content.toLowerCase().indexOf(query.toLowerCase());`. It then checks if the query is in the content, and if not returns the first 100 characters of the content: `if (index === -1) { return escape(content.slice(0, 100)); }`. If the query is in the content, it returns a 3 part element:
+
+1. `` const prefix = index > 20 ? `…${content.slice(index - 15, index)}` : content.slice(0, index); `` checks whether there are 20 characters before the query. If there are less than 20 characters from content start to query, it returns them all; if there are more than 20 characters before the query, it returns the first 15 characters before the query.
+2. `const suffix = content.slice( index + query.length, index + query.length + (80 - (prefix.length + query.length)) );` returns the first 80 characters after the query.
+3. `` return ( escape(prefix) + `<mark>${escape(content.slice(index, index + query.length))}</mark>` + escape(suffix) ); `` returns the prefix, the query wrapped in a [mark](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/mark) tag, and the suffix.
+
+##### HTML
+
+Here, an [unordered list](https://svelte.dev/docs/logic-blocks#each) containing a [svelte each expression](https://svelte.dev/docs/logic-blocks#each) loops through the results array. Each result is displayed in a list item, with a link to the result's href. The link has:
+
+-   a [data-sveltekit-preload-data](https://kit.svelte.dev/docs/link-options#data-sveltekit-preload-data) attribute, which is used to preload data for the destination page data on hover or click, ensuring faster navigation through the site. The link also has an [on:click](https://svelte.dev/docs/element-directives#on-eventname) event handler, which dispatches the custom event with the result's href.
+-   [an HTML data- element](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/data-*), `data-has-node={result.node ? true : undefined}`, which is true if the result has a node, and undefined if it doesn't - this is used by [SearchBox's input element](#343-searchboxsvelte) to navigate to the top result when enter is pressed.
+-   [a strong element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/strong), which displays the result title (which is the last element in the result's breadcrumbs array).
+-   If the result has a node, it also displays a span element with the result's node content.
+
+Outside the link but with in the item, there is also an [if expression](https://svelte.dev/docs/logic-blocks#if) that displays if the result has children. If so, it displays a [svelte self component](https://svelte.dev/docs/special-elements#svelte-self) with the result's children as the results prop and the query as the query prop. Svelte self components are able to render themselves recursively, so this allows the component to display the children of the result's children, and so on. Finally, there is an event listener `on:select`, which triggers the rendering when a 'select' event is dispatched (which occurs when a result link is clicked).
+
 <details>
 <summary>
-</summary>
 Styles here
+</summary>
 ```css
 <style>
 	ul {
@@ -1854,6 +1885,47 @@ Styles here
 </style>
 ```
 </details>
+
+#### SearchResults.svelte
+
+This file renders a list of search results. It is used by [SearchBox.svelte](#343-searchboxsvelte) to display the results of a search query:
+
+```javascript
+<!--@component
+Renders a list of search results
+-->
+<script>
+	import SearchResultList from './SearchResultList.svelte';
+
+	/** @type {import('./types').Tree[]} */
+	export let results;
+
+	/** @type {string} */
+	export let query;
+</script>
+
+{#if results.length > 0}
+	<SearchResultList {results} {query} on:select />
+{:else if query}
+	<p class="info"><slot name="no-results">No results</slot></p>
+{/if}
+
+<style>
+	.info {
+		padding: 1rem;
+		font-size: 1.2rem;
+		font-weight: normal;
+		text-transform: uppercase;
+		background-color: var(--sk-back-2);
+		border-radius: 0 0 var(--sk-border-radius) var(--sk-border-radius);
+		pointer-events: all;
+		margin: 0;
+	}
+</style>
+```
+
+It accepts results and query as props, and renders a [SearchResultList](#searchresultlistsvelte) component if there are results, or a paragraph element with the text 'No results' if there is a query but there are are no results.
+
 h4 for file
 h5 for functions
 
