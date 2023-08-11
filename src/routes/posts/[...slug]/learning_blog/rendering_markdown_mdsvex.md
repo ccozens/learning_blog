@@ -196,11 +196,14 @@ Displays a single post (an indiidual transformed and rendered markdown file):
 </script>
 
 <article>
+	<!-- svelte-ignore a11y-missing-content-->
 	<h1>{title}</h1>
 	<p>Posted on {dateFormatted}</p>
 	{@html escapedContent}
 </article>
 ```
+
+Note the comment in the markup that silences the [svelte Accessibility warning](https://svelte.dev/docs/accessibility-warnings) the a11y warning about missing content: `<!-- svelte-ignore a11y-missing-content-->`. This is generated because the anchor tags used for markdown table of content are formatted `<a name='Overview'></a>Overview` - ie, with no content between the opening and closing tags.
 
 #### TagCloud.svelte
 

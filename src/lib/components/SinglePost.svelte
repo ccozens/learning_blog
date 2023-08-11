@@ -6,6 +6,8 @@
 </script>
 
 <article>
+	<!-- this silences errors from markdown a elements used for ToC -->
+	<!-- svelte-ignore a11y-missing-content-->
 	<h1>{title}</h1>
 	<p>Posted on {dateFormatted}</p>
 	{#if escapedContent}
