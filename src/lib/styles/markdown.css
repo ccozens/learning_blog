@@ -1,0 +1,11 @@
+ul {
+	list-style: none;
+}
+
+li a {
+	text-decoration: none;
+}
+
+li a:hover {
+	text-decoration: underline;
+}

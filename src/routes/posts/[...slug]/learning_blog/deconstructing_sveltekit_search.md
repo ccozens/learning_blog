@@ -10,35 +10,57 @@ tags:
     - stores
 ---
 
-<!-- vscode-markdown-toc -->
-
--   1. [Overview](#Overview)
--   2. [What is it?](#Whatisit)
--   3. [The files](#Thefiles)
-    -   3.1. [The stores](#Thestores)
-        -   3.1.1. [nav.js](#nav.js)
-        -   3.1.2. [search.js](#search.js)
-    -   3.2. [The actions](#Theactions)
-        -   3.2.1. [focusable_children()](#focusable_children)
-        -   3.2.2. [next() and prev() methods](#nextandprevmethods)
-        -   3.2.3. [trap()](#trap)
-    -   3.3. [Javascript files](#Javascriptfiles)
-        -   3.3.1. [search.js](#search.js-1)
-        -   3.3.2. [Flexsearch](#Flexsearch)
-        -   3.3.3. [Search function](#Searchfunction)
-        -   3.3.4. [search-worker.js](#search-worker.js)
-        -   3.3.5. [Web workers](#Webworkers)
-        -   3.3.6. [Breakdown](#Breakdown)
-    -   3.4. [The search components](#Thesearchcomponents)
-        -   3.4.1. [index](#index)
-        -   3.4.2. [Search.svelte](#Search.svelte)
-        -   3.4.3. [SearchBox.svelte](#SearchBox.svelte)
-
-<!-- vscode-markdown-toc-config
-	numbering=true
-	autoSave=true
-	/vscode-markdown-toc-config -->
-<!-- /vscode-markdown-toc -->
+-   [1. Overview](#1-overview)
+-   [2. What is it?](#2-what-is-it)
+-   [3. The files](#3-the-files)
+    -   [3.1. The stores](#31-the-stores)
+        -   [3.1.1. nav.js](#311-navjs)
+        -   [3.1.2. search.js](#312-searchjs)
+    -   [3.2. The actions](#32-the-actions)
+        -   [3.2.1. focusable_children()](#321-focusable_children)
+            -   [Generating an array of nodes](#generating-an-array-of-nodes)
+            -   [Getting the index of the current focusable element](#getting-the-index-of-the-current-focusable-element)
+            -   [update function](#update-function)
+        -   [3.2.2. next() and prev() methods](#322-next-and-prev-methods)
+        -   [3.2.3. trap()](#323-trap)
+    -   [3.3. Javascript files](#33-javascript-files)
+        -   [3.3.1. search.js](#331-searchjs)
+        -   [3.3.2. Flexsearch](#332-flexsearch)
+            -   [Indexes](#indexes)
+        -   [3.3.3. Search function](#333-search-function)
+            -   [init function](#init-function)
+            -   [search function](#search-function)
+            -   [tree function](#tree-function)
+        -   [3.3.4. search-worker.js](#334-search-workerjs)
+        -   [3.3.5. Web workers](#335-web-workers)
+        -   [3.3.6. Breakdown](#336-breakdown)
+    -   [3.4. The search components](#34-the-search-components)
+        -   [3.4.1. index](#341-index)
+        -   [3.4.2. Search.svelte](#342-searchsvelte)
+            -   [Browser](#browser)
+            -   [3.4.3. Imports and props](#343-imports-and-props)
+            -   [3.4.4. Search form](#344-search-form)
+            -   [Input](#input)
+            -   [Shortcut](#shortcut)
+        -   [3.4.3. SearchBox.svelte](#343-searchboxsvelte)
+            -   [Imports](#imports)
+            -   [onMount](#onmount)
+            -   [afterNavigate](#afternavigate)
+            -   [navigate function](#navigate-function)
+            -   [Sending messages to SearchWorker](#sending-messages-to-searchworker)
+            -   [Managing the overlay](#managing-the-overlay)
+            -   [Managing the modal](#managing-the-modal)
+            -   [Resetting the search query](#resetting-the-search-query)
+            -   [Rendering](#rendering)
+                -   [Adding an event listener to window](#adding-an-event-listener-to-window)
+                -   [Showing the modal](#showing-the-modal)
+        -   [3.4.4. SearchResultList.svelte](#344-searchresultlistsvelte)
+            -   [Custom event](#custom-event)
+            -   [Props](#props)
+            -   [escape function](#escape-function)
+            -   [excerpt function](#excerpt-function)
+            -   [HTML](#html)
+        -   [3.4.5. SearchResults.svelte](#345-searchresultssvelte)
 
 ## 1. <a name='Overview'></a>Overview
 
@@ -1585,7 +1607,7 @@ The next is an [if expression](https://svelte.dev/docs/logic-blocks#if) which re
     				</div>
     ```
 
-    If there is a search query, it creates a div with class "results-container", which displays the search results TODO link. Clicks on the container set searching to false (`on:click={() => ($searching = false)}`), and selecting a search result navigates to the search result's href (`on:select={(e) => {navigate(e.detail.href);}}`).
+    If there is a search query, it creates a div with class "results-container", which displays the [search results](#345-searchresultssvelte) link. Clicks on the container set searching to false (`on:click={() => ($searching = false)}`), and selecting a search result navigates to the search result's href (`on:select={(e) => {navigate(e.detail.href);}}`).
 
     ```javascript
     {:else}
@@ -1679,7 +1701,7 @@ This exists for assisitve technology users, and is a [visually hidden](https://w
 
 The `aria-live="assertive"` attribute creates a [live region](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Live_Regions), which is a dynamic region which updates without page reload. An assertive live region will interrupt and announcement a screen reader is currently making.
 
-#### SearchResultList.svelte
+#### 3.4.4. <a name='SearchResultList.svelte'></a>SearchResultList.svelte
 
 This component is used to display the search results. It is imported into [SearchBox.svelte](#343-searchboxsvelte) and displayed with `searching=true`, `ready=true` and `search.query` is [truthy](https://developer.mozilla.org/en-US/docs/Glossary/Truthy). It formats returned search results to display the title an excerpt of the content by category. The excerpt function takes the content and query as parameters, and returns the content with the query highlighted by wrapping it in [mark](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/mark) tag.
 
@@ -1886,7 +1908,7 @@ Styles here
 ```
 </details>
 
-#### SearchResults.svelte
+#### 3.4.5. <a name='SearchResults.svelte'></a>SearchResults.svelte
 
 This file renders a list of search results. It is used by [SearchBox.svelte](#343-searchboxsvelte) to display the results of a search query:
 

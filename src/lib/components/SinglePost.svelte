@@ -1,5 +1,6 @@
 <script lang="ts">
 	import '$lib/styles/code-prism-night-owl.css'; // theme for code blocks
+	import '$lib/styles/markdown.css';
 	export let postContent;
 
 	const { title, dateFormatted, escapedContent } = postContent;
