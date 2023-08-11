@@ -10,6 +10,8 @@ tags:
     - stores
 ---
 
+<!-- vscode-markdown-toc -->
+
 -   1. [Overview](#Overview)
 -   2. [What is it?](#Whatisit)
 -   3. [The files](#Thefiles)
@@ -22,12 +24,21 @@ tags:
         -   3.2.3. [trap()](#trap)
     -   3.3. [Javascript files](#Javascriptfiles)
         -   3.3.1. [search.js](#search.js-1)
+        -   3.3.2. [Flexsearch](#Flexsearch)
+        -   3.3.3. [Search function](#Searchfunction)
+        -   3.3.4. [search-worker.js](#search-worker.js)
+        -   3.3.5. [Web workers](#Webworkers)
+        -   3.3.6. [Breakdown](#Breakdown)
     -   3.4. [The search components](#Thesearchcomponents)
         -   3.4.1. [index](#index)
         -   3.4.2. [Search.svelte](#Search.svelte)
-        -   3.4.3. [Imports and props](#Importsandprops)
-        -   3.4.4. [Search form](#Searchform)
-    -   3.5. [SearchBox.svelte](#SearchBox.svelte)
+        -   3.4.3. [SearchBox.svelte](#SearchBox.svelte)
+
+<!-- vscode-markdown-toc-config
+	numbering=true
+	autoSave=true
+	/vscode-markdown-toc-config -->
+<!-- /vscode-markdown-toc -->
 
 ## 1. <a name='Overview'></a>Overview
 
@@ -453,7 +464,7 @@ function tree(breadcrumbs, blocks) {
 }
 ```
 
-#### Flexsearch
+#### 3.3.2. <a name='Flexsearch'></a>Flexsearch
 
 _search.js_ imports and sets up the flexsearch function. [Flexsearch]()https://github.com/nextapps-de/flexsearch is the fastest JS searching library and provides flexible search capabilities like multi-field search, phonetic transformations or partial matching. [Performance benchmarks](https://github.com/nextapps-de/flexsearch#performance-benchmark-ranking) are provided to back this up.
 
@@ -481,7 +492,7 @@ _Index_ has the following basic methods:
 
 There are futher options, for example using a [built-in tokenizer](https://github.com/nextapps-de/flexsearch#tokenizer-prefix-search) or [defining a custom tokenizer](https://github.com/nextapps-de/flexsearch#add-custom-tokenizer): `var index = new FlexSearch({ tokenize: function(str) { return str.split(/\s-\//g); } });` , which takes a string and returns an array of strings, and [encoders](https://github.com/nextapps-de/flexsearch#encoders), which affect memory requirement, query time and phonetic matches.
 
-#### Search function
+#### 3.3.3. <a name='Searchfunction'></a>Search function
 
 -   This search function uses _index_: `const Index = /** @type {import('flexsearch').Index} */ (flexsearch.Index) ?? flexsearch;`.
 -   `export let inited = false;` creates _inited_ to check whether a search has been initialized:
@@ -582,7 +593,7 @@ return {
 
 Note that child_parts is called recursively to construct child nodes in the tree structure. - `child_parts` is the array of unique breadcrumbs at the given depth - `[...breadcrumbs, part]` creates a new array containing the breadcrumbs at the given depth, and the breadcrumb at the given part - `descendants` is the array of blocks whose breadcrumbs array is shorter than or equal to the depth - `tree([...breadcrumbs, part], descendants)` then calls this recursively to construct child nodes in the tree structure
 
-#### search-worker.js
+#### 3.3.4. <a name='search-worker.js'></a>search-worker.js
 
 ```javascript:search-worker.js
 import { init, search, lookup } from './search.js';
@@ -620,7 +631,7 @@ addEventListener('message', async (event) => {
 
 This file is used bu SearchBox.svelte to create a [web worker](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers) that handles the search functionality. It listens for messages from the main thread, filters them by type, and responds with messages containing the results of the search.
 
-#### Web workers
+#### 3.3.5. <a name='Webworkers'></a>Web workers
 
 Web workers are a way to run JavaScript code in the background, without blocking the main thread. They are useful for running expensive operations, such as searching, without blocking the main thread. They are also useful for running code that is not needed immediately, such as code that is only needed when a user clicks a button. They communicate with the main thread via the [Worker interface postMessage() method and the onmessage event handler](https://developer.mozilla.org/en-US/docs/Web/API/Worker/postMessage).
 
@@ -631,7 +642,7 @@ This code fulfills MDN's definition of a web worker as:
 3. Communication: it communicates with the main thread through messages. The main thread posts messages to the worker using the postMessage() method, and the worker responds to messages via the onmessage event handler.
 4. Data Isolation: data is passed between the main thread and the worker using messages, and the data is copied rather than shared. This ensures data isolation and prevents direct manipulation of the DOM from the worker.
 
-#### Breakdown
+#### 3.3.6. <a name='Breakdown'></a>Breakdown
 
 -   `import { init, search, lookup } from './search.js';` imports the init, search, and lookup functions from search.js, which are used to initialize the search index, perform a search, and lookup a block by its id, respectively.
 -   `addEventListener('message', async (event) => {` adds an event listener to the worker that listens for messages from the main thread, and handles them asynchronously.
@@ -851,7 +862,7 @@ These styles are part of the Search.svelte component. I have split them out for 
 -   `<kbd>{navigator.platform === 'MacIntel' ? '⌘' : 'Ctrl'}</kbd> <kbd>K</kbd>` renders a keyboard shortcut. The first kbd element renders ⌘ if the platform is MacIntel, and Ctrl if it is not. The second kbd element renders K.
     -   This makes use of the [Navigator web API](https://developer.mozilla.org/en-US/docs/Web/API/Navigator), which represents the state and identity of the user agent. Specifically, if uses the [navigator.platform](https://developer.mozilla.org/en-US/docs/Web/API/NavigatorID/platform) property, to return the platform on which the browser is running.
 
-#### 3.5. <a name='SearchBox.svelte'></a>SearchBox.svelte
+#### 3.4.3. <a name='SearchBox.svelte'></a>SearchBox.svelte
 
 It says _Renders a search box as an overlay that can be used to search the documentation. It appears when the user clicks on the `Search` component or presses the corresponding keyboard shortcut_, which is true but there's a lot going on here! It creates a web worker using `search-worker.js` that handles a lot of the search functionality and instead this component focuses a lot on rendering.
 
@@ -1318,15 +1329,15 @@ As before, the styles are here and I won't discuss the CSS
 ##### Imports
 
 -   [afterNavigate is a sveltekit lifecycle function](https://kit.svelte.dev/docs/modules#$app-navigation-afternavigate) that runs the supplied callback when the current component mounts, and after navigation a new URL.
--   `overlay_open`, `search_query`, `search_recent` and `searching` are stores, already discussed above.
+-   `overlay_open`, `search_query`, `search_recent` and `searching` are stores, already discussed in the [nav.js](#nav.js) and [search.js](#search.js) sections.
 -   ```
     that schedules a callback to run as soon as the component is mounted on the page.
     ```
 -   [tick is a svelte lifecycle function](https://svelte.dev/docs/svelte#tick) that schedules a callback to run after the next time the component is updated.
--   `focusable_children` and `trap` are actions, discussed above.
+-   [focusable_children()](#focusable_children) and [trap()](#trap) are actions, discussed above.
 -   Icon is the [svelte icon](https://commons.wikimedia.org/wiki/File:Svelte_Logo.svg)
--   `SearchResults` is a component that formats the search results, discussed below
--   `SearchWorker` is `search-worker.js,` discussed above.
+-   `SearchResults` is a component that formats the search results, discussed below // TODO link
+-   `SearchWorker` is `search-worker.js,` discussed in the [search-worker.js section](<(#search-worker.js)>).
 
 Variables
 
@@ -1512,7 +1523,337 @@ The next is an [if expression](https://svelte.dev/docs/logic-blocks#if) which re
     -   Modal was defined as an HTMLElement in the script section.
     -   svelte's [bind:this directive](https://svelte.dev/docs/element-directives#bind-this) gets a reference to a DOM node.
 -   Next another on:keydown directive, listens for arrow up or arrow down key press events and gets the focusable children of the current target (`const group = focusable_children(e.currentTarget);`) and navigates through them using [focusable_children's next and prev](#nextandprevmethods) methods.
+-   finally it the [use directive](https://svelte.dev/docs/element-directives#use-action) calls the [trap()](#trap) function to trap focus within the modal.
 
+-   the next div is the actual search box:
+
+    ```javascript
+    <div class="search-box">
+    		<!-- svelte-ignore a11y-autofocus -->
+    		<input
+    			autofocus
+    			on:keydown={(e) => {
+    				if (e.key === 'Enter' && !e.isComposing) {
+    					/** @type {HTMLElement | undefined} */ (
+    						modal.querySelector('a[data-has-node]')
+    					)?.click();
+    				}
+    			}}
+    			on:input={(e) => {
+    				$search_query = e.currentTarget.value;
+    			}}
+    			value={$search_query}
+    			placeholder="Search"
+    			aria-describedby="search-description"
+    			aria-label="Search"
+    			spellcheck="false"
+    		/>
+    ```
+
+    -   `svelte-ignore a11y-autofocus` silences the [a11y-autofocus](https://svelte.dev/docs/accessibility-warnings#a11y-autofocus) warning, which specifies that autofocus should not be used.
+    -   `<input autofocus` creates an [input element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input) and autofocuses it when the modal is opened.
+    -   `on:keydown={(e) => { if (e.key === 'Enter' && !e.isComposing)` listens for keydown events and if the key is enter and the event is not composing (i.e. it is not part of a composition session) it clicks the first link with a data-has-node attribute. - [isComposing is an HTML input event](https://developer.mozilla.org/en-US/docs/Web/API/InputEvent/isComposing) that specifies whether the event is part of a composition session. - within the keydown event listener, `modal.querySelector('a[data-has-node]')`uses the [query selector API](https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector) to select the first link with a data-has-node attribute. - `data-has-node` is set by Search Result List TODO link component to indicate that the link has a node associated with it. - `)?.click();` if the query selector returns a link, it clicks it using the HTML element's [click() method](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/click).
+        -   `on:input={(e) => { $search_query = e.currentTarget.value; }}` listens for input events and sets the search query to the current target's value.
+        -   `value={$search_query}` sets the input's value to the search query store.
+        -   `placeholder="Search"` sets the input's placeholder to "Search".
+        -   `aria-describedby="search-description"` and `aria-label="Search"` set the aria description and label to "search-description" and _"Search"_ respectively. This links the input element to a hidden span element containing the text "Results will appear as you type" which is read by screen readers.
+        ````html
+        <span id="search-description" class="visually-hidden">
+        	<slot name="search-description">Results will update as you type</slot>
+        </span>
+        ``` - ```spellcheck="false"``` [turns off
+        spellcheck](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/spellcheck)
+        ````
+
+-   next is a close button that calls _close()_ on click.
+
+-   next is `<div class="results">`, still within the `<div class="search-box">`, modal, and `{#if $searching && ready}` expression.
+
+    ```javascript
+    {#if search?.query}
+    				<!-- svelte-ignore a11y-click-events-have-key-events -->
+    				<div class="results-container" on:click={() => ($searching = false)}>
+    					<SearchResults
+    						results={search.results}
+    						query={search.query}
+    						on:select={(e) => {
+    							navigate(e.detail.href);
+    						}}
+    					>
+    						<slot name="no-results" slot="no-results">No results</slot>
+    					</SearchResults>
+    				</div>
+    ```
+
+    If there is a search query, it creates a div with class "results-container", which displays the search results TODO link. Clicks on the container set searching to false (`on:click={() => ($searching = false)}`), and selecting a search result navigates to the search result's href (`on:select={(e) => {navigate(e.detail.href);}}`).
+
+    ```javascript
+    {:else}
+    	<h2 class="info" class:empty={recent_searches.length === 0}>
+    		<slot name="idle" has_recent_searches={recent_searches.length}>
+    			{recent_searches.length ? 'Recent searches' : 'No recent searches'}
+    		</slot>
+    	</h2>
+    ```
+
+    Here there are 2 outcomes, depending on whether recent_searches.length is greater than 0.
+
+    1.  No recent searches:
+
+        ```javascript
+        <h2 class="info empty">
+        	<slot name="idle" has_recent_searches={recent_searches.length}>
+        		No recent searches
+        	</slot>
+        </h2>
+        ```
+
+        As recent_searches.length is 0, the slot is rendered with the text "No recent searches" with minimal CSS. `Empty` is added to the class list using [svelte's class: directive](https://svelte.dev/docs/element-directives#class-name) and there is a [compound selector](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_selectors/Selector_structure#compound_selector) in the CSS for `.info.empty` that only shows a box with rounded corners. Note a compound selector is a sequence of simple selectors with no [combinator](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_selectors/Selectors_and_combinators#combinators) separating them, and is used to select elements that match all of the selectors. `.info.empty` comes after `.info` in the [CSS cascade](https://developer.mozilla.org/en-US/docs/Web/CSS/Cascade#cascading_order), and so is applied preferentially.
+
+    2.  There are recent searches:
+        ```javascript
+        <h2 class="info">
+        	<slot name="idle" has_recent_searches={recent_searches.length}>
+        		Recent searches
+        	</slot>
+        </h2>
+        ```
+
+    Here, `empty` is not added to the style list and so the h2 element is rendered with slot content. The slot content is now the text "Recent searches", as recent_searches.length is greater than 0.
+
+    Further, another [if expression](https://svelte.dev/docs/logic-blocks#if) displays a div containing results `{#if recent_searches.length}  <div class="results-container">`. This div contains an [unordered list](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/ul) containing the recent searches. Each item displays the category and title of the search result as a link. The link has an `on:click` event that calls `navigate(search.href)` and the delete button has an `on:click` event that removes the search from the recent searches list. Note that the delete button has an `aria-label` of "Delete" and an `aria-label` of "Delete" to make it accessible to screen readers, which is also used for styling using the CSS selector `button[aria-label='Delete']`. I like that the initial opacity is 0.1 and the [:hover](https://developer.mozilla.org/en-US/docs/Web/CSS/:hover) pseudo-class increases it to 1, rather than changing colour or adding a border.
+
+    ```javascript
+    <ul>
+    	{#each recent_searches as search, i}
+    		<!-- svelte-ignore a11y-mouse-events-have-key-events -->
+    		<li class="recent">
+    			<a on:click={() => navigate(search.href)} href={search.href}>
+    				<small>{search.breadcrumbs.join('/')}</small>
+    				<strong>{search.breadcrumbs.at(-1)}</strong>
+    			</a>
+
+    			<button
+    				aria-label="Delete"
+    				on:click={(e) => {
+    					$search_recent = $search_recent.filter((href) => href !== search.href);
+    					e.stopPropagation();
+    					e.preventDefault();
+    				}}
+    			>
+    				<Icon name="delete" />
+    			</button>
+    		</li>
+    	{/each}
+    </ul>
+    ```
+
+Another feature here is the on:click handler for the delete button calls both `e.stopPropagation();` and `e.preventDefault();` methods: - [stopPropogation()]https://developer.mozilla.org/en-US/docs/Web/API/Event/stopPropagation prevents the event from bubbling up the DOM tree, preventing any parent handlers from being notified of the event. - [preventDefault()](https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault). The [default behaviour of a button](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button) which isn't `submit` or `reset` is nothing, however this is a good practice to prevent any potential issues caused by changes in default behavior in the future and explicitly states the intentions regarding the button's behavior.
+
+-   finally there is:
+
+```javascript
+<div aria-live="assertive" class="visually-hidden">
+	{#if $searching && search?.results.length === 0}
+		<p><slot name="no-results">No results</slot></p>
+	{/if}
+</div>
+```
+
+This exists for assisitve technology users, and is a [visually hidden](https://www.scottohara.me/blog/2017/04/14/inclusively-hidden.html) div that is only visible to screen readers. It contains a paragraph element with the text "No results" if there are no search results. The CSS is:
+
+```css
+/* visually hidden, but accessible to assistive tech */
+.visually-hidden {
+	border: 0;
+	clip: rect(0 0 0 0);
+	height: auto;
+	margin: 0;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	width: 1px;
+	white-space: nowrap;
+}
+```
+
+The `aria-live="assertive"` attribute creates a [live region](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Live_Regions), which is a dynamic region which updates without page reload. An assertive live region will interrupt and announcement a screen reader is currently making.
+
+#### SearchResultList.svelte
+
+This component is used to display the search results. It is imported into [SearchBox.svelte](#343-searchboxsvelte) and displayed with `searching=true`, `ready=true` and `search.query` is [truthy](https://developer.mozilla.org/en-US/docs/Glossary/Truthy). It formats returned search results to display the title an excerpt of the content by category. The excerpt function takes the content and query as parameters, and returns the content with the query highlighted by wrapping it in [mark](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/mark) tag.
+
+```javascript
+<script>
+	import { createEventDispatcher } from 'svelte';
+
+	/** @type {import('./types').Tree[]} */
+	export let results;
+
+	/** @type {string} */
+	export let query;
+
+	const dispatch = createEventDispatcher();
+
+	/** @param {string} text */
+	function escape(text) {
+		return text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+	}
+
+	/**
+	 * @param {string} content
+	 * @param {string} query
+	 */
+	function excerpt(content, query) {
+		const index = content.toLowerCase().indexOf(query.toLowerCase());
+		if (index === -1) {
+			return escape(content.slice(0, 100));
+		}
+
+		const prefix = index > 20 ? `…${content.slice(index - 15, index)}` : content.slice(0, index);
+		const suffix = content.slice(
+			index + query.length,
+			index + query.length + (80 - (prefix.length + query.length))
+		);
+
+		return (
+			escape(prefix) +
+			`<mark>${escape(content.slice(index, index + query.length))}</mark>` +
+			escape(suffix)
+		);
+	}
+</script>
+
+<ul>
+	{#each results as result (result.href)}
+		<li>
+			<a
+				data-sveltekit-preload-data
+				href={result.href}
+				on:click={() => dispatch('select', { href: result.href })}
+				data-has-node={result.node ? true : undefined}
+			>
+				<strong>{@html excerpt(result.breadcrumbs[result.breadcrumbs.length - 1], query)}</strong>
+
+				{#if result.node?.content}
+					<span>{@html excerpt(result.node.content, query)}</span>
+				{/if}
+			</a>
+
+			{#if result.children.length > 0}
+				<svelte:self results={result.children} {query} on:select />
+			{/if}
+		</li>
+	{/each}
+</ul>
+```
+
+<details>
+<summary>
+</summary>
+Styles here
+```css
+<style>
+	ul {
+		position: relative;
+		margin: 0;
+	}
+
+    ul :global(ul) {
+    	margin-left: 0.8em !important;
+    	padding-left: 0em;
+    	border-left: 1px solid var(--sk-back-5);
+    }
+
+    li {
+    	list-style: none;
+    	margin-bottom: 1em;
+    }
+
+    li:last-child {
+    	margin-bottom: 0;
+    }
+
+    ul ul li {
+    	margin: 0;
+    }
+
+    a {
+    	display: block;
+    	text-decoration: none;
+    	line-height: 1;
+    	padding: 1rem;
+    }
+
+    a:hover {
+    	background: rgba(0, 0, 0, 0.05);
+    }
+
+    a:focus {
+    	background: var(--sk-theme-2);
+    	color: white;
+    	outline: none;
+    }
+
+    a strong,
+    a span {
+    	display: block;
+    	white-space: nowrap;
+    	line-height: 1;
+    	overflow: hidden;
+    	text-overflow: ellipsis;
+    }
+
+    a strong {
+    	font-size: 1.6rem;
+    	color: var(--sk-text-2);
+    }
+
+    a span {
+    	font-size: 1.2rem;
+    	color: #737373;
+    	margin: 0.4rem 0 0 0;
+    }
+
+    a :global(mark) {
+    	--highlight-color: rgba(255, 255, 0, 0.2);
+    }
+
+    a span :global(mark) {
+    	background: none;
+    	color: var(--sk-text-1);
+    	background: var(--highlight-color);
+    	outline: 2px solid var(--highlight-color);
+    	border-top: 2px solid var(--highlight-color);
+    	/* mix-blend-mode: darken; */
+    }
+
+    a:focus span {
+    	color: rgba(255, 255, 255, 0.6);
+    }
+
+    a:focus strong {
+    	color: white;
+    }
+
+    a:focus span :global(mark),
+    a:focus strong :global(mark) {
+    	--highlight-color: hsl(240, 8%, 54%);
+    	mix-blend-mode: lighten;
+    	color: white;
+    }
+
+    a strong :global(mark) {
+    	color: var(--sk-text-1);
+    	background: var(--highlight-color);
+    	outline: 2px solid var(--highlight-color);
+    	/* border-top: 2px solid var(--highlight-color); */
+    	border-radius: 1px;
+    }
+
+</style>
+```
+</details>
 h4 for file
 h5 for functions
 
