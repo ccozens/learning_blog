@@ -4,6 +4,7 @@ date: '2023-07-31'
 description: Notes on flexbox vs grid tutorial from Kevin Powell
 tags:
     - css
+    - notes
 ---
 
 # Flexbox vs grid

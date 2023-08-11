@@ -3,7 +3,7 @@ title: Context vs stores
 date: '2023-07-31'
 description: Summary of context vs stores in sveltekit
 tags:
-    - todo
+    - notes
     - sveltekit
     - stores
     - state

@@ -5,6 +5,7 @@ description: Tutorial on how to set up a python dev environment in Docker
 tags:
     - python
     - docker
+    - notes
 ---
 
 # Python dev in Docker

@@ -1,19 +1,14 @@
-> ---
->
-> title: Reconstructing sveltekit.dev's search
-> description: Learning by copying - a deep dive into the search functionality of sveltekit.dev
-> date: 2023-08-09
-> tags:
-
+---
+title: Reconstructing sveltekit.dev's search
+description: Learning by copying - a deep dive into the search functionality of sveltekit.dev
+date: 2023-08-09
+tags:
     - learning
     - sveltekit
     - search
     - keyboard
     - stores
-
 ---
-
-<!-- vscode-markdown-toc -->
 
 -   1. [Overview](#Overview)
 -   2. [What is it?](#Whatisit)
@@ -27,8 +22,6 @@
         -   3.2.3. [trap()](#trap)
     -   3.3. [Javascript files](#Javascriptfiles)
         -   3.3.1. [search.js](#search.js-1)
-        -   3.3.2. [Flexsearch](#Flexsearch)
-        -   3.3.3. [Search function](#Searchfunction)
     -   3.4. [The search components](#Thesearchcomponents)
         -   3.4.1. [index](#index)
         -   3.4.2. [Search.svelte](#Search.svelte)
@@ -36,21 +29,15 @@
         -   3.4.4. [Search form](#Searchform)
     -   3.5. [SearchBox.svelte](#SearchBox.svelte)
 
-<!-- vscode-markdown-toc-config
-	numbering=true
-	autoSave=true
-	/vscode-markdown-toc-config -->
-<!-- /vscode-markdown-toc --
-
-##  1. <a name='Overview'></a>Overview
+## 1. <a name='Overview'></a>Overview
 
 I'm a big fan of how the search function in [sveltekit.dev](sveltekit.dev) works. It's fast, it's keyboard accessible, and it's easy to use. I wanted to learn how it works, so I decided to deconstruct it. The code is available on [GitHub](https://github.com/sveltejs/site-kit/tree/master/packages/site-kit/src/lib/search), though svelte make a point of saying the [site-kit repo](https://github.com/sveltejs/site-kit) is a collection of components for their use, not a component library.
 
-##  2. <a name='Whatisit'></a>What is it?
+## 2. <a name='Whatisit'></a>What is it?
 
 The sveltekit search component is accessed via a search box in the website header or keyboard command. It opens a modal that uses [flexsearch](https://github.com/nextapps-de/flexsearch) to search the site's content. The search results are displayed in a list, which can be navigated with the keyboard. The search box is focused when the modal opens, and the search query is cleared when the modal closes.
 
-##  3. <a name='Thefiles'></a>The files
+## 3. <a name='Thefiles'></a>The files
 
 The search folder contains 8 files, 4 of which are Svelte components, 2 are JavaScript functions and finally an index file and a types file. Between them they import a store and an action, making 10 files in total. These are:
 
@@ -76,11 +63,11 @@ The search folder contains 8 files, 4 of which are Svelte components, 2 are Java
 
 The code is all in [JSDoc format](https://jsdoc.app/), which is compatible with JavaScript and TypeScript, and provides type safety without the overhead of TypeScript. This is a good intro to [JSDoc from Prisma](https://www.prisma.io/blog/type-safe-js-with-jsdoc-typeSaf3js).
 
-###  3.1. <a name='Thestores'></a>The stores
+### 3.1. <a name='Thestores'></a>The stores
 
 Note there is also an `index.js` file to simplify imports from the stores.
 
-####  3.1.1. <a name='nav.js'></a>nav.js
+#### 3.1.1. <a name='nav.js'></a>nav.js
 
 ```javascript:nav.js
 import { browser } from '$app/environment';
@@ -109,7 +96,7 @@ overlay_open.subscribe((value) => {
 This file contains four stores, all of which are simple [writable stores](https://svelte.dev/docs/svelte-store#writable) with default value `false`.
 It also contains logic that disables scrolling on the root element when the `overlay_open` store is set to `true`. `overlay_open.subscribe((value) => {` listens to changes in _overlay_open_'s value and, if set to _true_, disables scrolling on the root element by setting overflow to _hidden_. If _overlay_open_ emits a falsy value, the if statement will not execute and the overflow property of the _document.documentElement_ element will be set to an empty string, which enables scrolling on the root element of the document.
 
-####  3.1.2. <a name='search.js'></a>search.js
+#### 3.1.2. <a name='search.js'></a>search.js
 
 ```javascript:search.js
 import { persisted } from 'svelte-local-storage-store';
@@ -126,7 +113,7 @@ This files contains three stores:
 2. `search_query` - a string to hold the search query. This is also a simple [writable store](https://svelte.dev/docs/svelte-store#writable).
 3. `search_recent` is another [writable store](https://svelte.dev/docs/svelte-store#writable), this time with a wrapper from [svelte-local-storage-store](https://github.com/joshnuss/svelte-local-storage-store), which enables the store to be persisted to local storage, in this case with the key `svelte:recent-searches`.
 
-###  3.2. <a name='Theactions'></a>The actions
+### 3.2. <a name='Theactions'></a>The actions
 
 ```javascript:focus.js
 /** @param {HTMLElement} node */
@@ -210,7 +197,7 @@ export function trap(node, { reset_focus = true } = {}) {
 
 This file contains two functions, `focusable_children` and `trap`.
 
-####  3.2.1. <a name='focusable_children'></a>focusable_children()
+#### 3.2.1. <a name='focusable_children'></a>focusable_children()
 
 _focusable_children()_ is an [action](https://svelte.dev/docs#use_action) that takes a node and returns an object with three methods:
 
@@ -270,7 +257,7 @@ It takes in parameter _d_, and determines both the direction of travel and the n
 
 In short, update() takes a direction and updates the index of the current focusable element.
 
-####  3.2.2. <a name='nextandprevmethods'></a>next() and prev() methods
+#### 3.2.2. <a name='nextandprevmethods'></a>next() and prev() methods
 
 Similar ideas but in opposite directions!
 
@@ -312,7 +299,7 @@ The prev() method is similar, but:
 -   The loop ends at the second to last element in the array (`let i = reordered.length - 2`), because the last element is the element that currently has focus.
 -   The loop works backwards (`i -= 1`).
 
-####  3.2.3. <a name='trap'></a>trap()
+#### 3.2.3. <a name='trap'></a>trap()
 
 _trap()_ is a [svelte action](https://svelte.dev/docs#use_action) that enables keyboard navigation within a node, using either tab or shift+tab.
 
@@ -344,9 +331,9 @@ const handle_keydown = (e) => {
 
 [preventScroll is an optional parameter of the HTML focus() method](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus), and is a boolean that determines whether the browser should scroll the element into view if it is not already visible.
 
-###  3.3. <a name='Javascriptfiles'></a>Javascript files
+### 3.3. <a name='Javascriptfiles'></a>Javascript files
 
-####  3.3.1. <a name='search.js-1'></a>search.js
+#### 3.3.1. <a name='search.js-1'></a>search.js
 
 ```javascript:search.js
 import flexsearch from 'flexsearch';
@@ -466,7 +453,7 @@ function tree(breadcrumbs, blocks) {
 }
 ```
 
-####  3.3.2. <a name='Flexsearch'></a>Flexsearch
+#### Flexsearch
 
 _search.js_ imports and sets up the flexsearch function. [Flexsearch]()https://github.com/nextapps-de/flexsearch is the fastest JS searching library and provides flexible search capabilities like multi-field search, phonetic transformations or partial matching. [Performance benchmarks](https://github.com/nextapps-de/flexsearch#performance-benchmark-ranking) are provided to back this up.
 
@@ -494,7 +481,7 @@ _Index_ has the following basic methods:
 
 There are futher options, for example using a [built-in tokenizer](https://github.com/nextapps-de/flexsearch#tokenizer-prefix-search) or [defining a custom tokenizer](https://github.com/nextapps-de/flexsearch#add-custom-tokenizer): `var index = new FlexSearch({ tokenize: function(str) { return str.split(/\s-\//g); } });` , which takes a string and returns an array of strings, and [encoders](https://github.com/nextapps-de/flexsearch#encoders), which affect memory requirement, query time and phonetic matches.
 
-####  3.3.3. <a name='Searchfunction'></a>Search function
+#### Search function
 
 -   This search function uses _index_: `const Index = /** @type {import('flexsearch').Index} */ (flexsearch.Index) ?? flexsearch;`.
 -   `export let inited = false;` creates _inited_ to check whether a search has been initialized:
@@ -595,9 +582,72 @@ return {
 
 Note that child_parts is called recursively to construct child nodes in the tree structure. - `child_parts` is the array of unique breadcrumbs at the given depth - `[...breadcrumbs, part]` creates a new array containing the breadcrumbs at the given depth, and the breadcrumb at the given part - `descendants` is the array of blocks whose breadcrumbs array is shorter than or equal to the depth - `tree([...breadcrumbs, part], descendants)` then calls this recursively to construct child nodes in the tree structure
 
-###  3.4. <a name='Thesearchcomponents'></a>The search components
+#### search-worker.js
 
-####  3.4.1. <a name='index'></a>index
+```javascript:search-worker.js
+import { init, search, lookup } from './search.js';
+
+addEventListener('message', async (event) => {
+	const { type, payload } = event.data;
+
+	if (type === 'init') {
+		// Initialize the search index using the fetched content
+		const res = await fetch(`${payload.origin}/content.json`);
+		const { blocks } = await res.json();
+		init(blocks);
+
+		// Notify the main thread that the worker is ready
+		postMessage({ type: 'ready' });
+	}
+
+	if (type === 'query') {
+		// // Perform a search based on the provided query
+		const query = payload;
+		const results = search(query);
+
+		// Send the search results back to the main thread
+		postMessage({ type: 'results', payload: { results, query } });
+	}
+
+	if (type === 'recents') {
+		// Send the search results back to the main thread
+		const results = payload.map(lookup).filter(Boolean);
+		// Send the filtered recent results back to the main thread
+		postMessage({ type: 'recents', payload: results });
+	}
+});
+```
+
+This file is used bu SearchBox.svelte to create a [web worker](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers) that handles the search functionality. It listens for messages from the main thread, filters them by type, and responds with messages containing the results of the search.
+
+#### Web workers
+
+Web workers are a way to run JavaScript code in the background, without blocking the main thread. They are useful for running expensive operations, such as searching, without blocking the main thread. They are also useful for running code that is not needed immediately, such as code that is only needed when a user clicks a button. They communicate with the main thread via the [Worker interface postMessage() method and the onmessage event handler](https://developer.mozilla.org/en-US/docs/Web/API/Worker/postMessage).
+
+This code fulfills MDN's definition of a web worker as:
+
+1. Background execution: it executes in the background, separate from the main thread. This enables the worker to perform tasks without affecting the user interface.
+2. Interference-free: it can fetch data and process it, without blocking the main thread, and hence without blocking the user interface.
+3. Communication: it communicates with the main thread through messages. The main thread posts messages to the worker using the postMessage() method, and the worker responds to messages via the onmessage event handler.
+4. Data Isolation: data is passed between the main thread and the worker using messages, and the data is copied rather than shared. This ensures data isolation and prevents direct manipulation of the DOM from the worker.
+
+#### Breakdown
+
+-   `import { init, search, lookup } from './search.js';` imports the init, search, and lookup functions from search.js, which are used to initialize the search index, perform a search, and lookup a block by its id, respectively.
+-   `addEventListener('message', async (event) => {` adds an event listener to the worker that listens for messages from the main thread, and handles them asynchronously.
+-   `const { type, payload } = event.data;` extracts the type and payload from the message data.
+-   `if (type === 'init') {` initializes a worker if the type is _init_. The rest of this block fetches data from a specified origin (`` consr res = await fetch(`${payload.origin}/content.json`); ``), extracts the fetched data (`const { blocks } = await res.json();`), initializes the search index using the fetched data (`init(blocks);`), and informs the main thread that it is ready (`postMessage({ type: 'ready' });`).
+-   `if (type === 'query') {` initializes a worker if the type is _query_. The rest of this block performs a search based on the provided query (`const query = payload;`), and sends the search results back to the main thread (`postMessage({ type: 'results', payload: { results, query } });`).
+-   `if (type === 'recents') {` initializes a worker if the type is _recents_. The rest of this block filters the payload for (`const results = payload.map(lookup).filter(Boolean);`) and sends the filtered recent results back to the main thread (`postMessage({ type: 'recents', payload: results });`).
+    -   in more detail, the filter function:
+        -   maps the payload to the lookup function, which looks up a block by its id (here, the href string)
+        -   `payload` = the data received in the message from the main thread (here, an empty array on mount and then an array of search result href strings generated by SearchBox.svelte's navigate function)
+        -   `lookup` then returns the whole block using href as key
+        -   `filter(Boolean)` filters out any blocks that are not truthy (i.e. that are not found in the search index)
+
+### 3.4. <a name='Thesearchcomponents'></a>The search components
+
+#### 3.4.1. <a name='index'></a>index
 
 This is an index file that exports the search components and functions.
 
@@ -616,7 +666,7 @@ export { init, inited, lookup, search } from './search.js';
  */
 ```
 
-####  3.4.2. <a name='Search.svelte'></a>Search.svelte
+#### 3.4.2. <a name='Search.svelte'></a>Search.svelte
 
 This component is the form with a search input. On click, or keyboard shortcut, it opens the search overlay. Entering a search term will update the search_query and searching stores.
 
@@ -649,15 +699,14 @@ Renders a search widget which when clicked (or the corresponding keyboard shortc
 		spellcheck="false"
 	/>
 
-    {#if BROWSER}
-    	<div class="shortcut">
-    		<kbd>{navigator.platform === 'MacIntel' ? '⌘' : 'Ctrl'}</kbd> <kbd>K</kbd>
-    	</div>
-    {/if}
-
+	{#if BROWSER}
+		<div class="shortcut">
+			<kbd>{navigator.platform === 'MacIntel' ? '⌘' : 'Ctrl'}</kbd> <kbd>K</kbd>
+		</div>
+	{/if}
 </form>
 
-````
+```
 
 <details>
 <summary>Styles for Search.svelte</summary>
@@ -767,7 +816,7 @@ These styles are part of the Search.svelte component. I have split them out for 
 		}
 	}
 </style>
-````
+```
 
 </details>
 
