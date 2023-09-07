@@ -46,3 +46,7 @@ Some sites I've found useful and want to keep track of. Because who uses bookmar
 ## SYMBL
 
 [HTML codes for symbols](https://symbl.cc/en/)
+
+## molly
+
+[removefind and remove unused .svelte components in current project](https://github.com/renefournier/molly/tree/main)

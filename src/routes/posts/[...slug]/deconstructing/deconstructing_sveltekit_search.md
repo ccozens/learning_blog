@@ -10,6 +10,8 @@ tags:
     - stores
 ---
 
+<!-- svelte-ignore A11y: <a> element should have child content -->
+
 -   [1. Overview](#1-overview)
 -   [2. What is it?](#2-what-is-it)
 -   [3. The files](#3-the-files)
@@ -61,6 +63,7 @@ tags:
             -   [excerpt function](#excerpt-function)
             -   [HTML](#html)
         -   [3.4.5. SearchResults.svelte](#345-searchresultssvelte)
+    -   [types.d.ts](#typesdts)
 
 ## 1. <a name='Overview'></a>Overview
 
@@ -1907,7 +1910,6 @@ Styles here
 </style>
 ```
 </details>
-
 #### 3.4.5. <a name='SearchResults.svelte'></a>SearchResults.svelte
 
 This file renders a list of search results. It is used by [SearchBox.svelte](#343-searchboxsvelte) to display the results of a search query:
@@ -1948,10 +1950,7 @@ Renders a list of search results
 
 It accepts results and query as props, and renders a [SearchResultList](#searchresultlistsvelte) component if there are results, or a paragraph element with the text 'No results' if there is a query but there are are no results.
 
-h4 for file
-h5 for functions
-
-types
+### types.d.ts
 
 ```typescript: types.d.ts
 export interface Block {
