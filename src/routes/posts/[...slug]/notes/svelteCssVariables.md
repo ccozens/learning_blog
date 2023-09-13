@@ -202,3 +202,8 @@ Here, the slider is replaced with a component that takes a hue prop and uses it 
 	}
 </style>
 ```
+
+## For more
+
+-   [Jon Stodle's blog on CSS variables and svelte](https://blog.jonstodle.com/svelte-and-css-variables-is-a-match-made-in-heaven/)
+-

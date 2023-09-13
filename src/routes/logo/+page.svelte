@@ -91,8 +91,12 @@ circles
 	<text text-anchor="middle" x="50" y="21" font-size="12" fill="white">CC</text>
 </svg>
 
-<p>radialCircles</p>
-<div class="radialCircles" />
+<p>target</p>
+<svg class="target" viewBox="0 0 100 100">
+	<circle cx="50" cy="50" r="30" fill="#DC277F" />
+	<circle cx="50" cy="50" r="20" fill="#FE6100" />
+	<circle cx="50" cy="50" r="10" fill="#FFB000" />
+</svg>
 
 <style>
 	.drop {

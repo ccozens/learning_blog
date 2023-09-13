@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Analytics from '$lib/components/Analytics.svelte';
 	import Nav from '$lib/components/Nav.svelte';
 	import { page } from '$app/stores';
 
