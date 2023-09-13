@@ -6,9 +6,10 @@ tags:
     - levelup
     - sveltekit
     - stores
+    - loading indicator
 ---
 
-#[Stores](https://levelup.video/tutorials/sveltekit/sveltekit-stores)
+# [Stores video](https://levelup.video/tutorials/sveltekit/sveltekit-stores)
 
 [Sveltekit stores](https://kit.svelte.dev/docs/modules#$app-stores) are:
 

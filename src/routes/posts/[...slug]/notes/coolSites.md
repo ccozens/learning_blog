@@ -49,4 +49,9 @@ Some sites I've found useful and want to keep track of. Because who uses bookmar
 
 ## molly
 
-[removefind and remove unused .svelte components in current project](https://github.com/renefournier/molly/tree/main)
+[remove, find and remove unused .svelte components in current project](https://github.com/renefournier/molly/tree/main)
+
+## google analytics with sveltekit
+
+[how to from joyofcode](https://joyofcode.xyz/sveltekit-google-analytics)
+NB - need to go to sidebar -> Admin -> Create Property to get the tracking ID
