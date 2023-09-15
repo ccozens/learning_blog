@@ -12,6 +12,7 @@
 	const navItems = data.navItems;
 </script>
 
+<Analytics />
 <header>
 	<div class="signedInStatus">
 		<p class="nojs-show loaded">
